@@ -458,7 +458,7 @@ function populateModal(data) {
     document.getElementById('modalMotor').textContent = (data.cilindrada || '2000 CC').toUpperCase();
     document.getElementById('modalABS').textContent = data.aire === 'si' ? 'Sí' : 'No';
     document.getElementById('modalImage').src = data.imagen;
-    document.getElementById('modalDescripcion').textContent = data.descripcion || '';
+    document.getElementById('modalDescripcion').textContent = (data.descripcion || '').replace(/<!--[^>]*-->/g, '').replace(/<[^>]*>/g, '').trim();
     document.getElementById('reserveVehicleName').value = data.nombre;
 }
 

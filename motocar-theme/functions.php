@@ -244,7 +244,7 @@ function motocar_get_vehicle_data() {
     $data = array(
         'id'          => $vehicle_id,
         'nombre'      => $vehicle->post_title,
-        'descripcion' => $vehicle->post_content,
+        'descripcion' => wp_strip_all_tags(apply_filters('the_content', $vehicle->post_content)),
         'imagen'      => $thumbnail ?: '',
         'precio_dia'  => get_post_meta($vehicle_id, '_precio_dia', true),
         'precio_anterior' => get_post_meta($vehicle_id, '_precio_anterior', true),
