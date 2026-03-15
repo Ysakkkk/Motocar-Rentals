@@ -130,7 +130,9 @@
                 </div>
                 <div class="mc-search__group mc-search__group--disponibilidad">
                     <label class="mc-search__label">Disponibilidad</label>
-                    <input type="text" id="filterFechas" placeholder="Seleccionar fechas" readonly>
+                    <input type="text" id="filterFechas" name="fechas" placeholder="Seleccionar fechas" readonly>
+                    <input type="hidden" id="filterFechaInicio" name="fecha_inicio">
+                    <input type="hidden" id="filterFechaFin" name="fecha_fin">
                 </div>
                 <div class="mc-search__group mc-search__group--btn">
                     <button type="submit" class="mc-btn mc-btn--primary mc-btn--filter" id="filterBtn">

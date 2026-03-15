@@ -124,6 +124,14 @@ function motocar_vehicle_meta_boxes() {
         'normal',
         'high'
     );
+    add_meta_box(
+        'vehicle_availability',
+        'Fechas No Disponibles',
+        'motocar_availability_meta_callback',
+        'vehiculo',
+        'normal',
+        'default'
+    );
 }
 add_action('add_meta_boxes', 'motocar_vehicle_meta_boxes');
 
@@ -208,6 +216,55 @@ function motocar_vehicle_meta_callback($post) {
     <?php
 }
 
+function motocar_availability_meta_callback($post) {
+    $fechas_no_disponibles = get_post_meta($post->ID, '_fechas_no_disponibles', true);
+    if (!is_array($fechas_no_disponibles)) {
+        $fechas_no_disponibles = array();
+    }
+    ?>
+    <style>
+        .fechas-nd-container { margin-top: 10px; }
+        .fecha-nd-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; padding: 8px 12px; background: #f9f9f9; border-radius: 6px; }
+        .fecha-nd-row label { font-weight: 600; min-width: 50px; }
+        .fecha-nd-row input[type="date"] { padding: 6px 10px; border: 1px solid #ccc; border-radius: 4px; }
+        .fecha-nd-row input[type="text"] { padding: 6px 10px; border: 1px solid #ccc; border-radius: 4px; flex: 1; }
+        .fecha-nd-remove { background: #dc3545; color: #fff; border: none; border-radius: 4px; padding: 6px 12px; cursor: pointer; font-size: 13px; }
+        .fecha-nd-remove:hover { background: #c82333; }
+        #addFechaND { background: #0073aa; color: #fff; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; margin-top: 8px; font-size: 13px; }
+        #addFechaND:hover { background: #005a87; }
+    </style>
+    <p style="color: #666; margin-bottom: 10px;">Agrega los rangos de fechas en que este vehículo NO estará disponible (reservas, mantenimiento, etc.).</p>
+    <div class="fechas-nd-container" id="fechasNDContainer">
+        <?php foreach ($fechas_no_disponibles as $i => $rango) : ?>
+        <div class="fecha-nd-row">
+            <label>Desde:</label>
+            <input type="date" name="fecha_nd_inicio[]" value="<?php echo esc_attr($rango['inicio']); ?>">
+            <label>Hasta:</label>
+            <input type="date" name="fecha_nd_fin[]" value="<?php echo esc_attr($rango['fin']); ?>">
+            <label>Motivo:</label>
+            <input type="text" name="fecha_nd_motivo[]" value="<?php echo esc_attr($rango['motivo'] ?? ''); ?>" placeholder="Ej: Reservado, Mantenimiento">
+            <button type="button" class="fecha-nd-remove" onclick="this.parentElement.remove();">✕</button>
+        </div>
+        <?php endforeach; ?>
+    </div>
+    <button type="button" id="addFechaND">+ Agregar rango de fechas</button>
+    <script>
+    document.getElementById('addFechaND').addEventListener('click', function() {
+        var row = document.createElement('div');
+        row.className = 'fecha-nd-row';
+        row.innerHTML = '<label>Desde:</label>' +
+            '<input type="date" name="fecha_nd_inicio[]">' +
+            '<label>Hasta:</label>' +
+            '<input type="date" name="fecha_nd_fin[]">' +
+            '<label>Motivo:</label>' +
+            '<input type="text" name="fecha_nd_motivo[]" placeholder="Ej: Reservado, Mantenimiento">' +
+            '<button type="button" class="fecha-nd-remove" onclick="this.parentElement.remove();">✕</button>';
+        document.getElementById('fechasNDContainer').appendChild(row);
+    });
+    </script>
+    <?php
+}
+
 function motocar_save_vehicle_meta($post_id) {
     if (!isset($_POST['motocar_vehicle_nonce_field']) || !wp_verify_nonce($_POST['motocar_vehicle_nonce_field'], 'motocar_vehicle_nonce')) {
         return;
@@ -221,6 +278,28 @@ function motocar_save_vehicle_meta($post_id) {
         if (isset($_POST[$field])) {
             update_post_meta($post_id, '_' . $field, sanitize_text_field($_POST[$field]));
         }
+    }
+
+    // Guardar fechas no disponibles
+    if (isset($_POST['fecha_nd_inicio']) && is_array($_POST['fecha_nd_inicio'])) {
+        $fechas = array();
+        $inicios = $_POST['fecha_nd_inicio'];
+        $fines = $_POST['fecha_nd_fin'];
+        $motivos = $_POST['fecha_nd_motivo'];
+        for ($i = 0; $i < count($inicios); $i++) {
+            $inicio = sanitize_text_field($inicios[$i]);
+            $fin = sanitize_text_field($fines[$i]);
+            if (!empty($inicio) && !empty($fin)) {
+                $fechas[] = array(
+                    'inicio' => $inicio,
+                    'fin'    => $fin,
+                    'motivo' => sanitize_text_field($motivos[$i] ?? ''),
+                );
+            }
+        }
+        update_post_meta($post_id, '_fechas_no_disponibles', $fechas);
+    } else {
+        update_post_meta($post_id, '_fechas_no_disponibles', array());
     }
 }
 add_action('save_post_vehiculo', 'motocar_save_vehicle_meta');
@@ -271,7 +350,8 @@ function motocar_filter_vehicles() {
 
     $tipo = sanitize_text_field($_POST['tipo'] ?? '');
     $precio_rango = sanitize_text_field($_POST['precio_rango'] ?? '');
-    $modelo = sanitize_text_field($_POST['modelo_search'] ?? '');
+    $fecha_inicio = sanitize_text_field($_POST['fecha_inicio'] ?? '');
+    $fecha_fin = sanitize_text_field($_POST['fecha_fin'] ?? '');
 
     $args = array(
         'post_type'      => 'vehiculo',
@@ -329,6 +409,23 @@ function motocar_filter_vehicles() {
             );
         }
         wp_reset_postdata();
+
+        // Filtrar por disponibilidad de fechas
+        if (!empty($fecha_inicio) && !empty($fecha_fin)) {
+            $vehicles = array_filter($vehicles, function($v) use ($fecha_inicio, $fecha_fin) {
+                $fechas_nd = get_post_meta($v['id'], '_fechas_no_disponibles', true);
+                if (!is_array($fechas_nd) || empty($fechas_nd)) return true;
+                foreach ($fechas_nd as $rango) {
+                    if (empty($rango['inicio']) || empty($rango['fin'])) continue;
+                    // Hay conflicto si los rangos se solapan
+                    if ($fecha_inicio <= $rango['fin'] && $fecha_fin >= $rango['inicio']) {
+                        return false;
+                    }
+                }
+                return true;
+            });
+            $vehicles = array_values($vehicles);
+        }
 
         // Sort by subcategory hierarchy then price
         $subcat_order = array('moto' => 1, 'hatchback' => 2, 'sedan' => 3, 'camioneta' => 4);

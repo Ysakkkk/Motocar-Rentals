@@ -244,7 +244,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // Filter bar date picker
     const filterFechas = document.getElementById('filterFechas');
     if (filterFechas && typeof flatpickr !== 'undefined') {
-        flatpickr(filterFechas, fpConfig);
+        flatpickr(filterFechas, Object.assign({}, fpConfig, {
+            onChange: function(selectedDates) {
+                const inicioInput = document.getElementById('filterFechaInicio');
+                const finInput = document.getElementById('filterFechaFin');
+                if (selectedDates.length === 2) {
+                    const toYMD = d => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+                    inicioInput.value = toYMD(selectedDates[0]);
+                    finInput.value = toYMD(selectedDates[1]);
+                } else {
+                    inicioInput.value = '';
+                    finInput.value = '';
+                }
+            }
+        }));
     }
 
     // Modal date picker (initialized when modal opens — global for modal functions)
