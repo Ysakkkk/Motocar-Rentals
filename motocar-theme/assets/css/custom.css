@@ -675,16 +675,11 @@ ul {
 }
 
 .mc-catalogo__grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 28px;
     max-width: 1100px;
     margin: 0 auto;
-}
-
-.mc-catalogo__grid .mc-card {
-    width: calc((100% - 56px) / 3);
 }
 
 .mc-card {
