@@ -60,7 +60,8 @@ function motocar_scripts() {
     wp_enqueue_style('motocar-custom', get_template_directory_uri() . '/assets/css/custom.css', array(), '1.0');
 
     // JavaScript personalizado
-    wp_enqueue_script('motocar-main', get_template_directory_uri() . '/assets/js/main.js', array(), '1.0', true);
+    wp_enqueue_script('motocar-translations', get_template_directory_uri() . '/assets/js/translations.js', array(), '1.0', true);
+    wp_enqueue_script('motocar-main', get_template_directory_uri() . '/assets/js/main.js', array('motocar-translations'), '1.0', true);
 
     // Pasar datos de PHP a JS
     wp_localize_script('motocar-main', 'motocarData', array(

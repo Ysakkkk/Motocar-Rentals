@@ -73,12 +73,136 @@ document.addEventListener('DOMContentLoaded', function() {
     // ==========================================
     // LANGUAGE SWITCHER
     // ==========================================
-    document.querySelectorAll('.mc-lang-btn').forEach(btn => {
+    var currentLang = 'es';
+
+    // Store original Spanish text on first load
+    function storeOriginalText() {
+        document.querySelectorAll('[data-i18n]').forEach(function(el) {
+            if (!el.hasAttribute('data-i18n-es')) {
+                el.setAttribute('data-i18n-es', el.textContent);
+            }
+        });
+        document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
+            if (!el.hasAttribute('data-i18n-es-html')) {
+                el.setAttribute('data-i18n-es-html', el.innerHTML);
+            }
+        });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+            if (!el.hasAttribute('data-i18n-es-ph')) {
+                el.setAttribute('data-i18n-es-ph', el.placeholder);
+            }
+        });
+    }
+
+    function applyTranslations(lang) {
+        if (lang === 'es') {
+            // Restore original Spanish
+            document.querySelectorAll('[data-i18n-es]').forEach(function(el) {
+                el.textContent = el.getAttribute('data-i18n-es');
+            });
+            document.querySelectorAll('[data-i18n-es-html]').forEach(function(el) {
+                el.innerHTML = el.getAttribute('data-i18n-es-html');
+            });
+            document.querySelectorAll('[data-i18n-es-ph]').forEach(function(el) {
+                el.placeholder = el.getAttribute('data-i18n-es-ph');
+            });
+            // Restore card repeated elements
+            translateCardElements('es');
+            document.documentElement.lang = 'es';
+            return;
+        }
+
+        var t = (typeof MC_TRANSLATIONS !== 'undefined') ? MC_TRANSLATIONS[lang] : null;
+        if (!t) return;
+
+        // Translate data-i18n (textContent)
+        document.querySelectorAll('[data-i18n]').forEach(function(el) {
+            var key = el.getAttribute('data-i18n');
+            if (t[key]) el.textContent = t[key];
+        });
+
+        // Translate data-i18n-html (innerHTML)
+        document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
+            var key = el.getAttribute('data-i18n-html');
+            if (t[key]) el.innerHTML = t[key];
+        });
+
+        // Translate data-i18n-placeholder
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+            var key = el.getAttribute('data-i18n-placeholder');
+            if (t[key]) el.placeholder = t[key];
+        });
+
+        // Translate repeated card elements by class
+        translateCardElements(lang);
+
+        // Update html lang attribute
+        document.documentElement.lang = lang;
+    }
+
+    function translateCardElements(lang) {
+        var toEN = {
+            'Motor': 'Engine', 'Caja': 'Transmission', 'ABS': 'ABS', 'Aire': 'A/C',
+            'acondicionado': 'included', 'Automática': 'Automatic', 'Mecánica': 'Manual',
+            'Sí': 'Yes', 'No': 'No'
+        };
+        var toES = {};
+        Object.keys(toEN).forEach(function(k) { toES[toEN[k]] = k; });
+        var map = (lang === 'en') ? toEN : toES;
+
+        document.querySelectorAll('.mc-card__spec-label, .mc-card__spec-value').forEach(function(el) {
+            var text = el.textContent.trim();
+            if (map[text]) el.textContent = map[text];
+        });
+
+        // Card badges: "X Personas" <-> "X Passengers"
+        document.querySelectorAll('.mc-card__badge').forEach(function(badge) {
+            if (lang === 'en') {
+                badge.textContent = badge.textContent.replace('Personas', 'Passengers');
+            } else {
+                badge.textContent = badge.textContent.replace('Passengers', 'Personas');
+            }
+        });
+
+        // Card price "Desde" <-> "From"
+        document.querySelectorAll('.mc-card__price').forEach(function(el) {
+            if (lang === 'en') {
+                el.innerHTML = el.innerHTML.replace('Desde', 'From');
+            } else {
+                el.innerHTML = el.innerHTML.replace('From', 'Desde');
+            }
+        });
+
+        // Card buttons "Reserva Ahora" <-> "Book Now"
+        document.querySelectorAll('.mc-btn--card').forEach(function(btn) {
+            if (lang === 'en') {
+                btn.textContent = btn.textContent.replace('Reserva Ahora', 'Book Now');
+            } else {
+                btn.textContent = btn.textContent.replace('Book Now', 'Reserva Ahora');
+            }
+        });
+    }
+
+    // Store originals and apply listener
+    storeOriginalText();
+
+    document.querySelectorAll('.mc-lang-btn').forEach(function(btn) {
         btn.addEventListener('click', function() {
-            document.querySelectorAll('.mc-lang-btn').forEach(b => b.classList.remove('active'));
+            var lang = this.dataset.lang;
+            if (lang === currentLang) return;
+            document.querySelectorAll('.mc-lang-btn').forEach(function(b) { b.classList.remove('active'); });
             this.classList.add('active');
-            // Aquí se puede implementar la traducción
-            console.log('Idioma seleccionado:', this.dataset.lang);
+            currentLang = lang;
+            applyTranslations(lang);
+
+            // Update WhatsApp float link message
+            var waFloat = document.querySelector('.mc-whatsapp-float');
+            if (waFloat) {
+                var msg = (lang === 'en')
+                    ? 'Hello%20MotoCar%20Rentals!%20I%20want%20information%20about%20vehicle%20rental'
+                    : 'Hola%20MotoCar%20Rentals!%20Quiero%20información%20sobre%20alquiler%20de%20vehículos';
+                waFloat.href = 'https://wa.me/573202161156?text=' + msg;
+            }
         });
     });
 
@@ -513,6 +637,53 @@ document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         closeVehicleModal();
     }
+});
+
+// ==========================================
+// FAQ SECTION TOGGLE (show/hide all questions)
+// ==========================================
+var faqToggle = document.getElementById('faqToggle');
+var faqList = document.getElementById('faqList');
+if (faqToggle && faqList) {
+    faqToggle.addEventListener('click', function() {
+        var isOpen = faqList.classList.contains('open');
+        if (isOpen) {
+            faqList.classList.remove('open');
+            faqToggle.classList.remove('active');
+            faqToggle.setAttribute('aria-expanded', 'false');
+            // Close all open items too
+            document.querySelectorAll('.mc-faq__item.active').forEach(function(item) {
+                item.classList.remove('active');
+                item.querySelector('.mc-faq__question').setAttribute('aria-expanded', 'false');
+            });
+        } else {
+            faqList.classList.add('open');
+            faqToggle.classList.add('active');
+            faqToggle.setAttribute('aria-expanded', 'true');
+        }
+    });
+}
+
+// ==========================================
+// FAQ ACCORDION (individual questions)
+// ==========================================
+document.querySelectorAll('.mc-faq__question').forEach(function(button) {
+    button.addEventListener('click', function() {
+        var item = this.closest('.mc-faq__item');
+        var isActive = item.classList.contains('active');
+
+        // Close all items
+        document.querySelectorAll('.mc-faq__item.active').forEach(function(openItem) {
+            openItem.classList.remove('active');
+            openItem.querySelector('.mc-faq__question').setAttribute('aria-expanded', 'false');
+        });
+
+        // Open clicked item if it was closed
+        if (!isActive) {
+            item.classList.add('active');
+            this.setAttribute('aria-expanded', 'true');
+        }
+    });
 });
 
 // Format number (Colombian style)

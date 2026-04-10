@@ -1,94 +1,90 @@
-# 🚗 MotoCar Rentals - Guía Completa de Instalación en WordPress (Hostinger)
+# MotoCar Rentals — Guía de instalación en WordPress (Hostinger)
 
-> **Versión actualizada** con: cards con precios COP/USD, modal de cotización WhatsApp, galería de Rincones de Antioquia, tipografías Anton + Antic Didone, botones rectangulares redondeados.
+Esta guía cubre todo el proceso de instalación del tema en un hosting WordPress con Hostinger, desde la preparación de los archivos hasta la verificación final del sitio.
 
 ---
 
-## 📋 Estructura de archivos del tema
+## Estructura de archivos del tema
 
 ```
 motocar-theme/
-├── style.css                   ← Identificación del tema WP
+├── style.css                   ← Identificación del tema para WordPress
 ├── functions.php               ← CPT Vehículos, taxonomía, meta boxes, AJAX
-├── front-page.php              ← Template landing page completo (680 líneas)
-├── index.php                   ← Fallback requerido por WP
-├── screenshot.png              ← Vista previa del tema (1200x900 px)
+├── front-page.php              ← Template de la landing page
+├── index.php                   ← Fallback requerido por WordPress
+├── screenshot.png              ← Vista previa del tema (1200×900 px)
 └── assets/
     ├── css/
-    │   └── custom.css          ← Todos los estilos (~1725 líneas)
+    │   └── custom.css          ← Estilos completos del tema
     ├── js/
-    │   └── main.js             ← Sliders, modal, filtros, WhatsApp (~380 líneas)
-    └── img/                    ← Imágenes del tema (ver lista abajo)
+    │   ├── main.js             ← Sliders, modal, filtros, integración WhatsApp
+    │   └── translations.js     ← Traducciones español/inglés
+    └── img/                    ← Imágenes del tema (ver detalle abajo)
         ├── logo.png
         ├── flag-es.png / flag-en.png
         ├── slide-1.jpg ... slide-4.jpg
         ├── santa-fe.jpg, guatape.jpg, jardin.jpg, jerico.jpg
-        ├── brand-renault.png, brand-kia.png, etc.
+        ├── brand-renault.png, brand-kia.png, brand-volkswagen.png
+        ├── brand-yamaha.png, brand-toyota.png, brand-suzuki.png
         └── placeholder.jpg
 ```
 
-### Archivos que NO se suben a WordPress:
-- `preview.html` → Solo para previsualización local
-- `GUIA-INSTALACION.md` → Esta guía
-- Carpeta `Imágenes/` → Las fotos de vehículos se suben desde el admin de WP
+**Archivos que NO se suben a WordPress:**
+- `preview.html` — Solo sirve para previsualización local en el navegador.
+- `GUIA-INSTALACION.md` — Esta guía.
+- `README.md` — Documentación del proyecto.
+- Carpeta `Imágenes/` — Los recursos originales. Las fotos de vehículos se suben directamente desde el panel de WordPress.
 
 ---
 
-## 🖼️ PASO 1: Preparar las imágenes del tema
+## Paso 1 — Preparar las imágenes del tema
 
-Las imágenes del tema van en `motocar-theme/assets/img/`. Las fotos de vehículos **NO** van aquí (se suben desde WordPress).
+Todas las imágenes del tema van dentro de `motocar-theme/assets/img/`. Las fotos de cada vehículo no van aquí; esas se suben después desde el administrador de WordPress.
 
-### 1.1 Imágenes obligatorias
+### 1.1 Imágenes necesarias
 
-| Archivo | Qué es | Tamaño recomendado | De dónde sacarla |
-|---------|--------|--------------------|--------------------|
-| `logo.png` | Logo MotoCar (fondo transparente) | 200×60 px | Pide versión PNG con transparencia al diseñador |
-| `flag-es.png` | Bandera Colombia para selector idioma | 24×16 px | Buscar "flag icon Colombia 24px" |
-| `flag-en.png` | Bandera USA para selector idioma | 24×16 px | Buscar "flag icon USA 24px" |
-| `slide-1.jpg` | Hero slide 1 | 1920×900 px | Foto de un vehículo en paisaje antioqueño |
-| `slide-2.jpg` | Hero slide 2 | 1920×900 px | Otra foto atractiva |
-| `slide-3.jpg` | Hero slide 3 | 1920×900 px | Puede ser moto en carretera |
-| `slide-4.jpg` | Hero slide 4 | 1920×900 px | Paisaje con vehículo |
-| `santa-fe.jpg` | Santa Fé de Antioquia | 600×400 px | Foto del pueblo o puente de occidente |
-| `guatape.jpg` | Guatapé | 600×400 px | Piedra del Peñol o zócalos |
-| `jardin.jpg` | Jardín | 600×400 px | Parque o paisaje |
-| `jerico.jpg` | Jericó | 600×400 px | Vista del pueblo |
-| `brand-renault.png` | Logo Renault | 120×60 px | Google "Renault logo PNG transparent" |
-| `brand-kia.png` | Logo KIA | 120×60 px | Google "KIA logo PNG transparent" |
-| `brand-volkswagen.png` | Logo Volkswagen | 120×60 px | Igual |
-| `brand-yamaha.png` | Logo Yamaha | 120×60 px | Igual |
-| `placeholder.jpg` | Imagen por defecto | 600×400 px | Foto genérica de carro gris |
+| Archivo | Descripción | Tamaño recomendado |
+|---------|-------------|-------------------|
+| `logo.png` | Logo de MotoCar con fondo transparente | 200×60 px |
+| `flag-es.png` | Bandera de Colombia para el selector de idioma | 24×16 px |
+| `flag-en.png` | Bandera de Estados Unidos para el selector de idioma | 24×16 px |
+| `slide-1.jpg` a `slide-4.jpg` | Fotos para el hero slider | 1920×900 px |
+| `santa-fe.jpg` | Santa Fe de Antioquia | 600×400 px |
+| `guatape.jpg` | Guatapé | 600×400 px |
+| `jardin.jpg` | Jardín | 600×400 px |
+| `jerico.jpg` | Jericó | 600×400 px |
+| `brand-renault.png` | Logo de Renault | 120×60 px |
+| `brand-kia.png` | Logo de KIA | 120×60 px |
+| `brand-volkswagen.png` | Logo de Volkswagen | 120×60 px |
+| `brand-yamaha.png` | Logo de Yamaha | 120×60 px |
+| `brand-toyota.png` | Logo de Toyota | 120×60 px |
+| `brand-suzuki.png` | Logo de Suzuki | 120×60 px |
+| `placeholder.jpg` | Imagen por defecto cuando un vehículo no tiene foto | 600×400 px |
 
-### 1.2 Mejores prácticas para imágenes
+### 1.2 Recomendaciones para las imágenes
 
-| Aspecto | Recomendación |
-|---------|---------------|
-| **Formato** | `.webp` o `.jpg` para fotos, `.png` para logos con transparencia |
-| **Compresión** | Usa [TinyPNG](https://tinypng.com/) o [Squoosh](https://squoosh.app/) |
-| **Hero slides** | Máximo 200-300 KB cada una después de comprimir |
-| **Fotos de vehículos** | Máximo 150 KB, formato `.webp` preferido |
-| **Logos de marcas** | Máximo 20 KB |
-| **Nombres** | Siempre en **minúsculas**, sin espacios, sin tildes |
-| **Resolución** | 72 DPI es suficiente para web |
+- Usa `.webp` o `.jpg` para fotografías y `.png` para logos con transparencia.
+- Comprime todas las imágenes antes de subirlas con herramientas como [TinyPNG](https://tinypng.com/) o [Squoosh](https://squoosh.app/).
+- Los slides del hero no deberían superar los 200–300 KB cada uno después de comprimir.
+- Las fotos de vehículos idealmente deben pesar menos de 150 KB en formato `.webp`.
+- Los logos de marcas no deberían pasar de 20 KB.
+- Los nombres de archivo deben estar en minúsculas, sin espacios y sin tildes.
+- Una resolución de 72 DPI es suficiente para web.
 
-### 1.3 Imagen de captura del tema (`screenshot.png`)
+### 1.3 Captura del tema (screenshot.png)
 
-WordPress necesita un `screenshot.png` en la raíz del tema para mostrar la vista previa:
-- **Tamaño**: 1200×900 px exacto
-- **Formato**: PNG
-- Toma una captura de pantalla de tu `preview.html` y redimensiónala
-- Guárdala como `motocar-theme/screenshot.png`
+WordPress usa un archivo `screenshot.png` en la raíz del tema para mostrar una vista previa en el panel de administración. Si no lo tienes, toma una captura de pantalla de `preview.html`, redimensiónala a exactamente **1200×900 px**, guárdala como PNG y colócala en `motocar-theme/screenshot.png`.
 
 ---
 
-## 📦 PASO 2: Crear el archivo ZIP
+## Paso 2 — Crear el archivo ZIP
 
-1. Verifica que la carpeta `motocar-theme/` tiene **todas** las imágenes en `assets/img/`
-2. **Clic derecho** en la carpeta `motocar-theme` → **Comprimir en archivo ZIP**
-3. El archivo debe llamarse `motocar-theme.zip`
-4. ⚠️ **Importante**: Al abrir el ZIP, la primera carpeta debe ser `motocar-theme/`, no los archivos sueltos
+1. Asegúrate de que la carpeta `motocar-theme/` contiene todas las imágenes en `assets/img/`.
+2. Haz clic derecho sobre la carpeta `motocar-theme` y selecciona "Comprimir en archivo ZIP".
+3. Nómbralo `motocar-theme.zip`.
 
-### Verificar estructura del ZIP:
+Al abrir el ZIP, la estructura debe verse así (la carpeta `motocar-theme/` como raíz, no los archivos sueltos):
+
 ```
 motocar-theme.zip
 └── motocar-theme/
@@ -100,304 +96,275 @@ motocar-theme.zip
     └── assets/
         ├── css/custom.css
         ├── js/main.js
+        ├── js/translations.js
         └── img/(todas las imágenes)
 ```
 
 ---
 
-## 🚀 PASO 3: Subir e instalar el tema en Hostinger
+## Paso 3 — Subir e instalar el tema en Hostinger
 
-### 3.1 Acceder al admin de WordPress
-1. Ve a **Hostinger Panel** → **Websites** → tu sitio → **Admin Panel**
-   - O ve directamente a `https://tudominio.com/wp-admin`
-2. Inicia sesión con tus credenciales
+### 3.1 Acceder al panel de WordPress
+
+Entra al panel de administración desde **Hostinger Panel → Websites → tu sitio → Admin Panel**, o directamente desde `https://tudominio.com/wp-admin`.
 
 ### 3.2 Subir el tema
-1. Ve a **Apariencia** → **Temas**
-2. Clic en **Añadir nuevo tema** (botón arriba)
-3. Clic en **Subir tema**
-4. Clic en **Seleccionar archivo** → elige `motocar-theme.zip`
-5. Clic en **Instalar ahora**
-6. Espera a que termine → Clic en **Activar**
 
-### 3.3 Si el ZIP es muy grande para subir (>2MB)
-Usar el **Administrador de archivos de Hostinger**:
-1. Ve a **Hostinger Panel** → **Administrador de archivos**
-2. Navega a `public_html/wp-content/themes/`
-3. Sube `motocar-theme.zip` ahí
-4. Clic derecho → **Extraer**
-5. Vuelve a WP Admin → **Apariencia** → **Temas** → Activa "MotoCar Rentals"
+1. Ve a **Apariencia → Temas**.
+2. Haz clic en **Añadir nuevo tema** y luego en **Subir tema**.
+3. Selecciona el archivo `motocar-theme.zip` y haz clic en **Instalar ahora**.
+4. Cuando termine la instalación, haz clic en **Activar**.
+
+### 3.3 Si el archivo es demasiado grande para subir (más de 2 MB)
+
+En ese caso puedes usar el administrador de archivos de Hostinger:
+
+1. Ve a **Hostinger Panel → Administrador de archivos**.
+2. Navega hasta `public_html/wp-content/themes/`.
+3. Sube `motocar-theme.zip` y extráelo ahí (clic derecho → Extraer).
+4. Vuelve a WordPress, ve a **Apariencia → Temas** y activa "MotoCar Rentals".
 
 ---
 
-## ⚙️ PASO 4: Configuración inicial de WordPress
+## Paso 4 — Configuración inicial de WordPress
 
-### 4.1 Configurar página de inicio (CRÍTICO)
-1. Crea una página: ve a **Páginas** → **Añadir nueva** → Título: "Inicio" → **Publicar** (puede estar vacía)
-2. Ve a **Ajustes** → **Lectura**
-3. Selecciona **"Una página estática"**
-4. En **"Página de inicio"**: selecciona "Inicio"
-5. Clic en **Guardar cambios**
+### 4.1 Configurar la página de inicio
 
-> 💡 El tema usa `front-page.php` que WordPress carga automáticamente cuando hay una página estática configurada.
+Este paso es fundamental para que WordPress use el template `front-page.php` del tema:
 
-### 4.2 Configurar el Logo
-1. Ve a **Apariencia** → **Personalizar**
-2. Clic en **Identidad del sitio**
-3. Sube tu logo en **Logo del sitio**
-4. También puedes subir un **Icono del sitio (favicon)** aquí
-5. Clic en **Publicar**
+1. Ve a **Páginas → Añadir nueva**, ponle de título "Inicio" y publícala (puede estar vacía, el contenido lo genera el tema).
+2. Ve a **Ajustes → Lectura** y selecciona "Una página estática".
+3. En "Página de inicio" elige la página "Inicio" que acabas de crear.
+4. Guarda los cambios.
+
+### 4.2 Configurar el logo
+
+1. Ve a **Apariencia → Personalizar → Identidad del sitio**.
+2. Sube el logo en "Logo del sitio".
+3. Opcionalmente sube también un favicon en "Icono del sitio".
+4. Haz clic en **Publicar**.
 
 ### 4.3 Configurar los enlaces permanentes
-1. Ve a **Ajustes** → **Enlaces permanentes**
-2. Selecciona **"Nombre de la entrada"**
-3. Clic en **Guardar cambios**
-4. ⚠️ **Haz esto dos veces** (guardar dos veces) para que WordPress regenere las reglas de reescritura y el menú "Vehículos" aparezca.
+
+1. Ve a **Ajustes → Enlaces permanentes** y selecciona "Nombre de la entrada".
+2. Guarda los cambios **dos veces** (sí, dos). Esto hace que WordPress regenere las reglas de reescritura y que el menú "Vehículos" aparezca correctamente en el panel lateral.
 
 ---
 
-## 🚗 PASO 5: Crear los tipos de vehículo (taxonomías)
+## Paso 5 — Crear los tipos de vehículo
 
-Antes de crear vehículos, crea las categorías:
+Antes de agregar vehículos hay que crear las categorías del filtro:
 
-1. Ve a **Vehículos** → **Tipos de Vehículo** (en el menú lateral)
-2. Crea **"Carro"**:
-   - Nombre: `Carro`
-   - Slug: `carro` (se genera automático)
-   - Clic en **Añadir nuevo Tipo de Vehículo**
-3. Crea **"Moto"**:
-   - Nombre: `Moto`
-   - Slug: `moto`
-   - Clic en **Añadir nuevo Tipo de Vehículo**
+1. Ve a **Vehículos → Tipos de Vehículo** en el menú lateral.
+2. Crea la categoría "Carro" (el slug `carro` se genera automáticamente).
+3. Crea la categoría "Moto" (slug: `moto`).
 
-> 💡 Los slugs `carro` y `moto` son los que usa el filtro toggle en la landing page. Deben ser exactamente así.
+Es importante que los slugs sean exactamente `carro` y `moto` porque el filtro en la landing page depende de esos valores.
 
 ---
 
-## 🚙 PASO 6: Agregar vehículos (el corazón del sitio)
+## Paso 6 — Agregar vehículos
 
-En el admin de WP verás un nuevo menú **"Vehículos"** con ícono de carro 🚗.
+Al activar el tema aparece un nuevo menú **Vehículos** en el panel de administración.
 
-### 6.1 Para cada vehículo:
+### 6.1 Cómo agregar un vehículo
 
-1. Ve a **Vehículos** → **Agregar Vehículo**
-2. **Título**: Nombre del vehículo (ej: "KIA Sportage")
-3. **Contenido/Descripción**: Escribe una descripción atractiva del vehículo (1-2 párrafos). Esta aparece en el modal al hacer clic.
-4. **Imagen destacada** (columna derecha): Sube la foto principal del vehículo
-5. **Tipo de Vehículo** (columna derecha): Marca "Carro" o "Moto"
-6. **Datos del Vehículo** (debajo del editor): Llena TODOS los campos:
+1. Ve a **Vehículos → Agregar Vehículo**.
+2. Escribe el nombre del vehículo como título (por ejemplo: "KIA Sportage").
+3. En el campo de contenido, redacta una descripción breve del vehículo (1–2 párrafos). Este texto aparece en el modal cuando el usuario hace clic en "Reserva Ahora".
+4. En la columna derecha, sube la foto principal como **Imagen destacada** y marca el **Tipo de Vehículo** correspondiente (Carro o Moto).
+5. Debajo del editor aparece la sección **Datos del Vehículo**. Completa todos los campos:
 
-| Campo | Ejemplo Carro | Ejemplo Moto | Notas |
-|-------|--------------|--------------|-------|
-| Precio por día (COP) | `135000` | `75000` | Solo número, sin puntos ni $ |
-| Precio anterior (COP) | `180000` | `100000` | Para mostrar descuento (opcional) |
-| Modelo | `Sportage` | `FZ-250` | Nombre del modelo |
-| Año | `2025` | `2024` | Año del vehículo |
-| Transmisión | `automatica` | `manual` | Seleccionar del dropdown |
-| Pasajeros | `5` | `2` | Número de personas |
-| Combustible | `gasolina` | `gasolina` | Seleccionar del dropdown |
-| Aire Acondicionado | `si` | `no` | En motos muestra "ABS" en vez de "Aire" |
-| Cilindraje (CC) | `2000` | `250` | Solo número |
+| Campo | Ejemplo (Carro) | Ejemplo (Moto) | Nota |
+|-------|-----------------|-----------------|------|
+| Precio por día (COP) | 135000 | 75000 | Solo el número, sin puntos ni símbolo $ |
+| Precio anterior (COP) | 180000 | 100000 | Opcional, para mostrar descuento |
+| Modelo | Sportage | FZ-250 | Nombre del modelo |
+| Año | 2025 | 2024 | — |
+| Transmisión | automatica | manual | Seleccionar del dropdown |
+| Pasajeros | 5 | 2 | — |
+| Combustible | gasolina | gasolina | Seleccionar del dropdown |
+| Aire Acondicionado | si | no | En motos se muestra como "ABS" |
+| Cilindraje (CC) | 2000 | 250 | Solo el número |
 
-7. Clic en **Publicar**
+6. Haz clic en **Publicar**.
 
-### 6.2 Vehículos sugeridos para empezar
+### 6.2 Flota inicial sugerida
 
-| # | Nombre | Tipo | Precio/día | Año | Transmisión | Pasajeros | Motor | Aire/ABS |
-|---|--------|------|-----------|-----|-------------|-----------|-------|----------|
-| 1 | Kia Sportage | Carro | 135000 | 2025 | automatica | 5 | 2000 | si |
-| 2 | Volkswagen Gol | Carro | 135000 | 2024 | manual | 5 | 1600 | si |
-| 3 | Renault Logan | Carro | 95000 | 2023 | manual | 5 | 1600 | si |
-| 4 | Yamaha FZ-250 | Moto | 75000 | 2024 | manual | 2 | 250 | si |
-| 5 | Yamaha Aerox 155 | Moto | 55000 | 2024 | automatica | 2 | 155 | si |
+| Nombre | Tipo | Precio/día COP | Año | Transmisión | Pasajeros | Motor | Aire/ABS |
+|--------|------|----------------|-----|-------------|-----------|-------|----------|
+| Kia Sportage | Carro | 135.000 | 2025 | Automática | 5 | 2000 cc | Sí |
+| Volkswagen Gol | Carro | 135.000 | 2024 | Manual | 5 | 1600 cc | Sí |
+| Renault Logan | Carro | 95.000 | 2023 | Manual | 5 | 1600 cc | Sí |
+| Yamaha FZ-250 | Moto | 75.000 | 2024 | Manual | 2 | 250 cc | Sí |
+| Yamaha Aerox 155 | Moto | 55.000 | 2024 | Automática | 2 | 155 cc | Sí |
 
-### 6.3 Mejores prácticas para fotos de vehículos
+Mientras no haya al menos un vehículo publicado en WordPress, la landing muestra vehículos de demostración. Estos desaparecen automáticamente cuando se publican vehículos reales.
 
-| Aspecto | Recomendación |
-|---------|---------------|
-| **Ángulo** | Foto ¾ frontal (muestra frente y costado) |
-| **Fondo** | Fondo blanco o transparente (`.png`) es ideal |
-| **Tamaño** | 800×600 px mínimo, 1200×800 px ideal |
-| **Formato** | `.webp` (mejor compresión) o `.jpg` |
-| **Peso** | Máximo 150 KB después de comprimir |
-| **Consistencia** | Todas las fotos con estilo similar (misma perspectiva) |
+### 6.3 Consejos para las fotos de vehículos
 
-> 💡 **Truco**: Usa [remove.bg](https://www.remove.bg/) para quitar el fondo de las fotos de vehículos y guardar como PNG con transparencia. Se ve mucho más profesional en las tarjetas.
+- Usa un ángulo ¾ frontal que muestre tanto el frente como el costado del vehículo.
+- Un fondo blanco o transparente (PNG) se integra mucho mejor con el diseño de las tarjetas. Puedes usar [remove.bg](https://www.remove.bg/) para quitar fondos.
+- Tamaño mínimo de 800×600 px (ideal 1200×800 px).
+- Formato `.webp` cuando sea posible, o `.jpg` como alternativa.
+- Comprime cada foto para que no supere los 150 KB.
+- Procura que todas las fotos tengan un estilo visual consistente.
 
 ---
 
-## 📱 PASO 7: Configurar WhatsApp y datos de contacto
+## Paso 7 — Configurar WhatsApp y datos de contacto
 
 ### 7.1 Número de WhatsApp
 
-Debes cambiar el número placeholder `573001234567` por tu número real en **DOS lugares**:
+El número de WhatsApp debe actualizarse en dos archivos:
 
-**Archivo `assets/js/main.js`** — Busca esta línea:
+En `assets/js/main.js`, busca esta línea y reemplaza el número:
 ```javascript
 const phone = '573001234567';
 ```
-Cámbiala por tu número real con código de país (sin +, sin espacios):
-```javascript
-const phone = '57300XXXXXXX';
-```
+Usa tu número real con código de país, sin el signo + y sin espacios (ejemplo: `573202161156`).
 
-**Archivo `front-page.php`** — Busca el botón flotante de WhatsApp (cerca del final):
+En `front-page.php`, busca el botón flotante de WhatsApp que aparece cerca del final del archivo:
 ```html
 <a href="https://wa.me/573001234567?text=..."
 ```
-Cambia `573001234567` por tu número real.
+Cambia el número por el mismo que usaste arriba.
 
 ### 7.2 Datos de contacto
 
-En `front-page.php`, busca y cambia:
-
-| Buscar | Cambiar por |
-|--------|-------------|
-| `motocarrentals@gmail.com` | Tu email real |
-| `+57 300 123 4567` | Tu teléfono real |
-| `info@motocarrentals.com` | Tu email del footer |
-| Links de redes sociales (`href="#"`) | URLs reales de Facebook, Instagram, TikTok |
+En `front-page.php` encontrarás los datos de contacto que puedes personalizar: correo electrónico, teléfono, enlaces a redes sociales (Facebook, Instagram, TikTok) y dirección.
 
 ### 7.3 Tasa de cambio USD
 
-En `front-page.php`, el precio en USD se calcula automáticamente:
+El precio en dólares se calcula automáticamente a partir del precio en pesos. En `front-page.php`, busca el valor `3690` en esta línea:
 ```php
 $precio_usd = number_format($precio_dia / 3690, 2, ',', '.');
 ```
-Si necesitas actualizar la tasa de cambio, busca `3690` y cámbialo por la tasa actual.
+Actualízalo a la tasa de cambio vigente cuando lo necesites.
 
 ---
 
-## 🎨 PASO 8: Personalización visual
+## Paso 8 — Personalización visual
 
 ### 8.1 Cambiar colores
-En `assets/css/custom.css`, modifica las variables CSS al inicio:
+
+Los colores principales del sitio se controlan con variables CSS al inicio de `assets/css/custom.css`:
 ```css
 :root {
     --mc-primary: #F5A623;      /* Naranja principal */
-    --mc-primary-dark: #E09000; /* Naranja hover */
+    --mc-primary-dark: #E09000; /* Naranja en hover */
     --mc-secondary: #1A1A1A;   /* Negro */
 }
 ```
+Basta con cambiar estos valores para que el color se aplique en todo el sitio.
 
-### 8.2 Cambiar textos del Hero
-En `front-page.php`, busca:
+### 8.2 Cambiar textos del hero
+
+En `front-page.php`, busca la sección del hero y modifica el título:
 ```html
 <h1 class="mc-hero__title">
     ¡Alquila la emoción,<br>
     vive la experiencia!
 </h1>
 ```
+La versión en inglés se controla desde `assets/js/translations.js`, buscando la clave `hero_title`.
 
-### 8.3 Agregar o quitar slides del Hero
-En `front-page.php`, puedes agregar más `<div class="mc-hero__slide">` y sus correspondientes dots. También actualiza el contador en `main.js`.
+### 8.3 Modificar slides del hero
+
+Para agregar o quitar slides, edita la sección `mc-hero` en `front-page.php`. Cada slide es un `<div class="mc-hero__slide">` con su imagen de fondo. Recuerda agregar también el dot correspondiente y, si cambias la cantidad total, actualizar la lógica en `main.js`.
 
 ### 8.4 Cambiar los lugares de Antioquia
-En `front-page.php`, sección `mc-lugares`, cambia los nombres, descripciones e imágenes de cada slide.
+
+La galería de lugares turísticos está en la sección `mc-lugares` de `front-page.php`. Puedes cambiar los nombres, las descripciones y las imágenes de cada slide. Las traducciones al inglés de estos textos están en `translations.js`.
 
 ---
 
-## ⚡ PASO 9: Optimización para Hostinger (Mejores Prácticas)
+## Paso 9 — Optimización del sitio en Hostinger
 
-### 9.1 Caché con LiteSpeed (Hostinger incluye esto)
-1. Ve a **Hostinger Panel** → **Rendimiento** → **Caché**
-2. Activa **LiteSpeed Cache**
-3. En WP Admin instala el plugin **LiteSpeed Cache** si no está instalado
-4. Ve a **LiteSpeed Cache** → **General** → Activa todo
-5. Ve a **LiteSpeed Cache** → **Caché** → Activa "Habilitar caché"
+### 9.1 Caché con LiteSpeed
 
-### 9.2 SSL (HTTPS)
-1. Ve a **Hostinger Panel** → **Seguridad** → **SSL**
-2. Activa SSL gratuito (Let's Encrypt)
-3. Activa "Forzar HTTPS"
+Hostinger incluye soporte para LiteSpeed Cache. Para activarlo:
 
-### 9.3 Plugins recomendados (solo los necesarios)
-| Plugin | Para qué |
-|--------|----------|
-| **LiteSpeed Cache** | Caché y optimización (viene con Hostinger) |
-| **UpdraftPlus** | Backups automáticos |
-| **Wordfence** o **Sucuri** | Seguridad básica |
-| **WPForms Lite** | Si necesitas formulario de contacto adicional |
+1. Ve a **Hostinger Panel → Rendimiento → Caché** y actívalo.
+2. En WordPress, instala el plugin **LiteSpeed Cache** si no está ya instalado.
+3. Desde **LiteSpeed Cache → General**, activa todas las opciones disponibles.
+4. En **LiteSpeed Cache → Caché**, habilita la opción de caché.
 
-> ⚠️ **NO instales**: plugins de slider (ya tienes sliders propios), page builders (el tema ya tiene todo), plugins de SEO pesados al inicio.
+### 9.2 Certificado SSL
 
-### 9.4 Optimización de imágenes automática
-1. Instala **ShortPixel** o **Imagify** (versión gratuita)
-2. Comprime automáticamente todas las imágenes que subas
-3. Activa conversión a WebP
+1. En **Hostinger Panel → Seguridad → SSL**, activa el certificado gratuito de Let's Encrypt.
+2. Marca la opción de forzar HTTPS para que todo el tráfico vaya cifrado.
+
+### 9.3 Plugins recomendados
+
+Estos son los únicos plugins que realmente necesitas al inicio:
+
+| Plugin | Función |
+|--------|---------|
+| LiteSpeed Cache | Caché y optimización de rendimiento (ya viene con Hostinger) |
+| UpdraftPlus | Copias de seguridad automáticas |
+| Wordfence o Sucuri | Seguridad básica |
+| ShortPixel o Imagify | Compresión automática de imágenes y conversión a WebP |
+
+No instales plugins de slider, page builder ni plugins de SEO pesados. El tema ya trae todo lo necesario para funcionar.
 
 ---
 
-## 🔧 PASO 10: Verificación final (Checklist)
+## Paso 10 — Verificación final
 
-Después de instalar, verifica que todo funcione:
+Después de instalar y configurar todo, recorre esta lista para confirmar que el sitio funciona correctamente:
 
-- [ ] La landing page carga correctamente
+- [ ] La landing page carga sin errores
 - [ ] El logo aparece en el header
-- [ ] El hero slider cambia automáticamente (cada 5 segundos)
-- [ ] Los dots del hero funcionan al hacer clic
-- [ ] El menú de navegación funciona (scroll suave a cada sección)
-- [ ] El menú hamburguesa funciona en móvil
-- [ ] El toggle Carro/Moto filtra las tarjetas
-- [ ] Las tarjetas de vehículos muestran precio COP y USD
-- [ ] Al hacer clic en "Reserva Ahora" se abre el modal
-- [ ] El modal muestra la foto, specs y formulario de cotización
-- [ ] El botón "Ir a Cotizar" abre WhatsApp con los datos prellenados
-- [ ] La galería de Rincones de Antioquia funciona (flechas + dots)
-- [ ] El auto-avance de la galería funciona (cada 6 segundos)
+- [ ] El hero slider rota automáticamente cada 5 segundos y los dots funcionan
+- [ ] El menú de navegación hace scroll suave a cada sección
+- [ ] El menú hamburguesa funciona correctamente en móvil
+- [ ] El toggle Carro/Moto filtra las tarjetas de vehículos
+- [ ] Las tarjetas muestran precio en COP y USD
+- [ ] Al hacer clic en "Reserva Ahora" se abre el modal con la información del vehículo
+- [ ] El botón "Ir a Cotizar" abre WhatsApp con el mensaje prellenado
+- [ ] La galería de lugares de Antioquia funciona (flechas, dots y avance automático)
+- [ ] La sección de marcas muestra los 6 logos (Renault, KIA, Volkswagen, Yamaha, Toyota, Suzuki)
 - [ ] El botón flotante de WhatsApp funciona
-- [ ] Las redes sociales apuntan a los links correctos
-- [ ] El sitio se ve bien en móvil (probar en celular real)
+- [ ] Los enlaces de redes sociales apuntan a las cuentas correctas
+- [ ] El sitio se ve bien en un celular (probar en un dispositivo real)
 - [ ] Las imágenes cargan rápidamente
-- [ ] HTTPS está activo (candado verde en el navegador)
+- [ ] El candado verde de HTTPS está activo en el navegador
+- [ ] El selector de idioma cambia correctamente entre español e inglés
 
 ---
 
-## 💡 CÓMO FUNCIONA EL FLUJO DEL USUARIO
+## Flujo del usuario en el sitio
 
 ```
-1. Usuario llega al sitio
-   ↓
-2. Ve el Hero Slider con las 4 fotos rotando (5 seg)
-   ↓
-3. Puede filtrar: Toggle Carro/Moto + Transmisión + Disponibilidad
-   ↓
-4. Ve las tarjetas de vehículos con:
-   • Badge de pasajeros (esquina superior)
-   • Foto del vehículo
-   • Precio en COP y USD por día
-   • Specs (Motor | Caja | Aire/ABS)
-   ↓
-5. Hace clic en "Reserva Ahora"
-   ↓
-6. Se abre el MODAL con:
-   • Nombre + Año del vehículo (título Anton)
-   • Foto grande + Descripción
-   • Barra de specs (Motor, ABS, Pasajeros, Tipo)
-   • Formulario: Fechas, Lugar entrega/devolución, Horas
-   ↓
-7. Hace clic en "Ir a Cotizar" con ícono WhatsApp
-   ↓
-8. Se abre WhatsApp con mensaje prellenado:
-   "🚗 *COTIZACIÓN MOTOCAR RENTALS*
-    Vehículo: KIA Sportage
-    Fechas: 2025-01-15
-    Lugar Entrega: Aeropuerto
-    ..."
+1. El usuario llega a la página
+2. Ve el hero slider con 4 fotos que rotan automáticamente
+3. Puede filtrar vehículos por tipo (Carro/Moto), precio y disponibilidad
+4. Explora las tarjetas de vehículos con foto, precio (COP y USD) y especificaciones
+5. Hace clic en "Reserva Ahora" y se abre un modal con:
+   - Detalle completo del vehículo (foto, descripción, specs)
+   - Formulario para elegir fechas, lugar de entrega/devolución y horarios
+6. Al hacer clic en "Ir a Cotizar", se abre WhatsApp con un mensaje
+   prellenado con todos los datos de la cotización
 ```
 
-### Sin vehículos creados en WP:
-La landing muestra **5 vehículos demo** hardcodeados. Cuando publiques vehículos desde el admin, **automáticamente reemplazarán** los demo.
+Mientras no haya vehículos publicados en WordPress, la landing muestra 5 vehículos de demostración. Cuando se publique al menos un vehículo real desde el administrador, los demo se reemplazan automáticamente.
 
 ---
 
-## 🆘 Solución de problemas comunes
+## Solución de problemas
 
 | Problema | Solución |
 |----------|----------|
-| "No se ve el menú Vehículos" | Ve a **Ajustes → Enlaces permanentes** y dale **Guardar** dos veces |
-| "Las imágenes no cargan" | Verifica que los nombres en `assets/img/` coincidan exactamente (minúsculas, sin espacios) |
-| "El filtro no funciona" | Asegúrate de haber creado las taxonomías "Carro" y "Moto" con slugs `carro` y `moto` |
+| No aparece el menú "Vehículos" en el panel | Ve a **Ajustes → Enlaces permanentes** y guarda dos veces |
+| Las imágenes no cargan | Revisa que los nombres en `assets/img/` sean exactamente iguales (minúsculas, sin espacios) |
+| El filtro no funciona | Verifica que las taxonomías "Carro" y "Moto" existan con slugs `carro` y `moto` |
+| El modal no muestra datos del vehículo | Asegúrate de haber completado todos los campos en "Datos del Vehículo" |
+| Error 500 al activar el tema | Confirma que el hosting tenga PHP 7.4 o superior (idealmente 8.0+) |
+| Página en blanco | Ve a **Ajustes → Lectura** y configura una página estática como inicio |
+| Las fuentes no cargan | Las tipografías se sirven desde Google Fonts; verifica la conexión a internet |
+| WhatsApp no abre | Revisa que el número tenga el formato correcto: `57XXXXXXXXXX` sin + ni espacios |
+| Los vehículos demo no desaparecen | Publica al menos un vehículo real desde el administrador |
 | "El modal no muestra datos" | Verifica que llenaste TODOS los campos meta del vehículo |
 | "Error 500 al activar tema" | Verifica que tu Hostinger tenga PHP 7.4+ (idealmente 8.0+) |
 | "Página en blanco" | Ve a **Ajustes → Lectura** y configura "Una página estática" |
@@ -407,17 +374,18 @@ La landing muestra **5 vehículos demo** hardcodeados. Cuando publiques vehícul
 
 ---
 
-## 📂 Archivos para editar según lo que necesites
+## Referencia rápida de archivos
 
-| Quiero cambiar... | Archivo a editar |
-|-------------------|-----------------|
-| Textos, secciones, estructura HTML | `front-page.php` |
+| Necesitas cambiar... | Archivo |
+|---------------------|---------|
+| Textos, estructura HTML, secciones | `front-page.php` |
 | Colores, tamaños, tipografía, animaciones | `assets/css/custom.css` |
-| Sliders, modal, filtros, WhatsApp | `assets/js/main.js` |
-| Campos de vehículos, funciones PHP | `functions.php` |
-| Imágenes del hero/lugares/logos | `assets/img/` (reemplazar archivos) |
-| Fotos de vehículos | Desde WP Admin → Vehículos → Imagen destacada |
+| Sliders, modal, filtros, lógica de WhatsApp | `assets/js/main.js` |
+| Traducciones al inglés | `assets/js/translations.js` |
+| Campos de vehículos, funciones de WordPress | `functions.php` |
+| Imágenes del hero, lugares o logos de marcas | `assets/img/` (reemplazar archivos) |
+| Fotos de vehículos | Desde el panel de WordPress → Vehículos → Imagen destacada |
 
 ---
 
-**¡Listo! Tu sitio MotoCar Rentals está preparado para subir a WordPress.** 🎉
+Con esto el sitio de MotoCar Rentals queda listo para funcionar en WordPress.

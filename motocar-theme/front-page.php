@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
     <meta charset="<?php bloginfo('charset'); ?>">
@@ -33,7 +33,7 @@
                     <a href="https://www.tiktok.com/@motocar.rentals" target="_blank" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
                 </div>
                 <div class="mc-topbar__lang">
-                    <span class="mc-topbar__lang-label">Idioma</span>
+                    <span class="mc-topbar__lang-label" data-i18n="lang_label">Idioma</span>
                     <button class="mc-lang-btn active" data-lang="es" title="Español">
                         <img src="<?php echo get_template_directory_uri(); ?>/assets/img/flag-es.png" alt="Español">
                     </button>
@@ -62,10 +62,11 @@
 
             <nav class="mc-nav" id="mainNav">
                 <ul class="mc-nav__list">
-                    <li><a href="#inicio" class="mc-nav__link active">Inicio</a></li>
-                    <li><a href="#vehiculos" class="mc-nav__link">Vehículos</a></li>
-                    <li><a href="#lugares" class="mc-nav__link">Lugares de Interés</a></li>
-                    <li><a href="#nosotros" class="mc-nav__link">Nosotros</a></li>
+                    <li><a href="#inicio" class="mc-nav__link active" data-i18n="nav_inicio">Inicio</a></li>
+                    <li><a href="#vehiculos" class="mc-nav__link" data-i18n="nav_vehiculos">Vehículos</a></li>
+                    <li><a href="#lugares" class="mc-nav__link" data-i18n="nav_lugares">Lugares de Interés</a></li>
+                    <li><a href="#nosotros" class="mc-nav__link" data-i18n="nav_nosotros">Nosotros</a></li>
+                    <li><a href="#quienes-somos" class="mc-nav__link" data-i18n="nav_quienes">Quiénes Somos</a></li>
                 </ul>
             </nav>
 
@@ -90,7 +91,7 @@
     </div>
     <div class="mc-hero__overlay"></div>
     <div class="mc-hero__content">
-        <h1 class="mc-hero__title">
+        <h1 class="mc-hero__title" data-i18n-html="hero_title">
             ¡Alquila la emoción,<br>
             vive la experiencia!
         </h1>
@@ -111,31 +112,31 @@
         <div class="mc-search__box">
             <form class="mc-search__form" id="filterForm">
                 <div class="mc-search__group">
-                    <label class="mc-search__label">Tipo</label>
+                    <label class="mc-search__label" data-i18n="search_tipo">Tipo</label>
                     <div class="mc-toggle" id="tipoToggle">
-                        <button type="button" class="mc-toggle__btn active" data-value="carro">Carro</button>
-                        <button type="button" class="mc-toggle__btn" data-value="moto">Moto</button>
+                        <button type="button" class="mc-toggle__btn active" data-value="carro" data-i18n="search_carro">Carro</button>
+                        <button type="button" class="mc-toggle__btn" data-value="moto" data-i18n="search_moto">Moto</button>
                     </div>
                     <input type="hidden" name="tipo" id="filterTipo" value="carro">
                 </div>
                 <div class="mc-search__group">
-                    <label class="mc-search__label">Precio</label>
+                    <label class="mc-search__label" data-i18n="search_precio">Precio</label>
                     <select name="precio_rango" id="filterPrecio">
-                        <option value="">Todos los precios</option>
-                        <option value="0-80000">Hasta $80.000</option>
-                        <option value="80000-120000">$80.000 - $120.000</option>
-                        <option value="120000-200000">$120.000 - $200.000</option>
-                        <option value="200000-999999">Más de $200.000</option>
+                        <option value="" data-i18n="search_all_prices">Todos los precios</option>
+                        <option value="0-80000" data-i18n="search_hasta_80">Hasta $80.000</option>
+                        <option value="80000-120000" data-i18n="search_80_120">$80.000 - $120.000</option>
+                        <option value="120000-200000" data-i18n="search_120_200">$120.000 - $200.000</option>
+                        <option value="200000-999999" data-i18n="search_mas_200">Más de $200.000</option>
                     </select>
                 </div>
                 <div class="mc-search__group mc-search__group--disponibilidad">
-                    <label class="mc-search__label">Disponibilidad</label>
-                    <input type="text" id="filterFechas" name="fechas" placeholder="Seleccionar fechas" readonly>
+                    <label class="mc-search__label" data-i18n="search_disponibilidad">Disponibilidad</label>
+                    <input type="text" id="filterFechas" name="fechas" placeholder="Seleccionar fechas" data-i18n-placeholder="search_fechas_placeholder" readonly>
                     <input type="hidden" id="filterFechaInicio" name="fecha_inicio">
                     <input type="hidden" id="filterFechaFin" name="fecha_fin">
                 </div>
                 <div class="mc-search__group mc-search__group--btn">
-                    <button type="submit" class="mc-btn mc-btn--primary mc-btn--filter" id="filterBtn">
+                    <button type="submit" class="mc-btn mc-btn--primary mc-btn--filter" id="filterBtn" data-i18n="search_filtrar">
                         Filtrar
                     </button>
                 </div>
@@ -150,8 +151,8 @@
 <section class="mc-catalogo" id="vehiculos">
     <div class="mc-container">
         <div class="mc-section-header">
-            <h2 class="mc-section-title mc-section-title--script">Revisa nuestro catálogo</h2>
-            <p class="mc-section-subtitle">MotoCar tu mejor opción</p>
+            <h2 class="mc-section-title mc-section-title--script" data-i18n="catalog_title">Conoce nuestros vehículos</h2>
+            <p class="mc-section-subtitle" data-i18n="catalog_subtitle">Nuestra flota diversa incluye sedanes, SUV y camionetas, todos sometidos a rigurosas inspecciones y mantenimientos por profesionales, garantizando así los más altos estándares de calidad. Te invitamos a realizar tu reserva hoy mismo a través de nuestro sistema de reservas en línea.</p>
         </div>
 
         <div class="mc-catalogo__grid" id="vehiculosGrid">
@@ -354,8 +355,8 @@
 <section class="mc-reviews" id="resenas">
     <div class="mc-container">
         <div class="mc-section-header">
-            <h2 class="mc-section-title mc-section-title--script">Lo que dicen nuestros clientes</h2>
-            <p class="mc-section-subtitle">Reseñas verificadas de Google</p>
+            <h2 class="mc-section-title mc-section-title--script" data-i18n="reviews_title">Lo que dicen nuestros clientes</h2>
+            <p class="mc-section-subtitle" data-i18n="reviews_subtitle">Reseñas verificadas de Google</p>
         </div>
         <div class="mc-reviews__content">
             <?php
@@ -374,7 +375,7 @@
 <section class="mc-lugares" id="lugares">
     <div class="mc-container">
         <div class="mc-section-header">
-            <h2 class="mc-section-title mc-section-title--script">Rincones Únicos de<br>Antioquia</h2>
+            <h2 class="mc-section-title mc-section-title--script" data-i18n-html="lugares_title">Rincones Únicos de<br>Antioquia</h2>
         </div>
         <div class="mc-lugares__slider">
             <button class="mc-lugares__arrow mc-lugares__arrow--left" id="lugarPrev" aria-label="Anterior">
@@ -390,7 +391,7 @@
                         <div class="mc-lugares__info">
                             <h3 class="mc-lugares__name">Santa Fé de<br>Antioquia</h3>
                             <div class="mc-lugares__text">
-                                <p>Santa Fe de Antioquia es un encantador pueblo colonial, Monumento Nacional, famoso por sus calles empedradas, arquitectura conservada (siglos XVI-XVIII) y su cálido clima, ofreciendo un viaje al pasado con iglesias históricas, el emblemático Puente de Occidente, plazas coloniales y tradiciones como el tamarindo y la filigrana, ideal para disfrutar de cultura, historia y naturaleza cercana.</p>
+                                <p data-i18n="lugar_santa_fe">Santa Fe de Antioquia es un encantador pueblo colonial, Monumento Nacional, famoso por sus calles empedradas, arquitectura conservada (siglos XVI-XVIII) y su cálido clima, ofreciendo un viaje al pasado con iglesias históricas, el emblemático Puente de Occidente, plazas coloniales y tradiciones como el tamarindo y la filigrana, ideal para disfrutar de cultura, historia y naturaleza cercana.</p>
                             </div>
                         </div>
                     </div>
@@ -403,7 +404,7 @@
                         <div class="mc-lugares__info">
                             <h3 class="mc-lugares__name">Guatapé</h3>
                             <div class="mc-lugares__text">
-                                <p>Guatapé es famoso por la Piedra del Peñol, sus coloridas fachadas de zócalos y el embalse con vistas espectaculares. Ideal para deportes acuáticos, senderismo y disfrutar de la naturaleza.</p>
+                                <p data-i18n="lugar_guatape">Guatapé es famoso por la Piedra del Peñol, sus coloridas fachadas de zócalos y el embalse con vistas espectaculares. Ideal para deportes acuáticos, senderismo y disfrutar de la naturaleza.</p>
                             </div>
                         </div>
                     </div>
@@ -416,7 +417,7 @@
                         <div class="mc-lugares__info">
                             <h3 class="mc-lugares__name">Jardín</h3>
                             <div class="mc-lugares__text">
-                                <p>Jardín es un pueblo patrimonio de Colombia, rodeado de montañas verdes, cascadas y fincas cafeteras. Su parque principal, la Basílica Menor y la Cueva del Esplendor lo hacen un lugar mágico.</p>
+                                <p data-i18n="lugar_jardin">Jardín es un pueblo patrimonio de Colombia, rodeado de montañas verdes, cascadas y fincas cafeteras. Su parque principal, la Basílica Menor y la Cueva del Esplendor lo hacen un lugar mágico.</p>
                             </div>
                         </div>
                     </div>
@@ -429,7 +430,7 @@
                         <div class="mc-lugares__info">
                             <h3 class="mc-lugares__name">Jericó</h3>
                             <div class="mc-lugares__text">
-                                <p>Jericó es la cuna de la Santa Laura Montoya, un pueblo de calles empinadas, balcones coloniales y paisajes cafeteros. Su riqueza cultural y miradores naturales lo hacen imperdible.</p>
+                                <p data-i18n="lugar_jerico">Jericó es la cuna de la Santa Laura Montoya, un pueblo de calles empinadas, balcones coloniales y paisajes cafeteros. Su riqueza cultural y miradores naturales lo hacen imperdible.</p>
                             </div>
                         </div>
                     </div>
@@ -470,15 +471,15 @@
 
             <!-- Columna derecha - Servicios -->
             <div class="mc-about__services">
-                <h2 class="mc-section-title">Conócenos</h2>
+                <h2 class="mc-section-title" data-i18n="about_title">Conócenos</h2>
                 <div class="mc-services__list">
                     <div class="mc-service">
                         <div class="mc-service__icon">
                             <i class="fas fa-headset"></i>
                         </div>
                         <div class="mc-service__content">
-                            <h4>Atención personalizada</h4>
-                            <p>Te brindamos un servicio directo y personalizado para que tu experiencia sea única.</p>
+                            <h4 data-i18n="srv_atencion_title">Atención personalizada</h4>
+                            <p data-i18n="srv_atencion_desc">Te brindamos un servicio directo y personalizado para que tu experiencia sea única.</p>
                         </div>
                     </div>
 
@@ -487,8 +488,8 @@
                             <i class="fas fa-clock"></i>
                         </div>
                         <div class="mc-service__content">
-                            <h4>Disponibilidad 24/7</h4>
-                            <p>Estamos disponibles las 24 horas, los 7 días de la semana para ti.</p>
+                            <h4 data-i18n="srv_247_title">Disponibilidad 24/7</h4>
+                            <p data-i18n="srv_247_desc">Estamos disponibles las 24 horas, los 7 días de la semana para ti.</p>
                         </div>
                     </div>
 
@@ -497,8 +498,8 @@
                             <i class="fas fa-truck"></i>
                         </div>
                         <div class="mc-service__content">
-                            <h4>Servicio a domicilio</h4>
-                            <p>Llevamos y recogemos el vehículo donde lo necesites sin costo adicional.</p>
+                            <h4 data-i18n="srv_domicilio_title">Servicio a domicilio</h4>
+                            <p data-i18n="srv_domicilio_desc">Llevamos y recogemos el vehículo donde lo necesites sin costo adicional.</p>
                         </div>
                     </div>
 
@@ -507,11 +508,349 @@
                             <i class="fas fa-user-tie"></i>
                         </div>
                         <div class="mc-service__content">
-                            <h4>Conductor elegido</h4>
-                            <p>Si prefieres, te asignamos un conductor profesional para tu viaje.</p>
+                            <h4 data-i18n="srv_conductor_title">Conductor elegido</h4>
+                            <p data-i18n="srv_conductor_desc">Si prefieres, te asignamos un conductor profesional para tu viaje.</p>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+<!-- ==========================================
+     PREGUNTAS FRECUENTES (FAQ)
+     ========================================== -->
+    <div class="mc-faq" id="faq">
+        <div class="mc-container">
+            <button class="mc-faq__toggle" id="faqToggle" aria-expanded="false">
+                <div class="mc-faq__toggle-text">
+                    <h2 class="mc-section-title mc-section-title--script" data-i18n="faq_title">Preguntas Frecuentes</h2>
+                    <p class="mc-section-subtitle" data-i18n="faq_subtitle">Resuelve tus dudas antes de reservar</p>
+                </div>
+                <div class="mc-faq__toggle-icon">
+                    <i class="fas fa-plus"></i>
+                </div>
+            </button>
+
+        <div class="mc-faq__list" id="faqList">
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q1">¿Cuáles son los procedimientos que debo seguir en el caso de accidente?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a1">
+                    <p>En caso de un accidente con el auto o motocicleta alquilado, es crucial informar el incidente de inmediato a MotoCar Rentals llamando al número <strong>+57 3202161156</strong>.</p>
+                    <p>Se debe registrar el reporte de la ocurrencia en el organismo correspondiente y presentarlo en un plazo máximo de 48 horas en una agencia de MotoCar Rentals. Además, es necesario completar el Aviso de Reporte de Siniestro en nuestra agencia.</p>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q2">¿Qué pasa si se genera una foto multa mientras rento un vehículo con MotoCar Rentals?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a2">
+                    <p>Si durante tu renta se generó una fotomulta, puedes consultar la evidencia en la página web del organismo de tránsito donde ocurrió la infracción. Para aprovechar los descuentos disponibles, debes hacer el cambio de contraventor dentro del tiempo estipulado, tomar el curso de sensibilización (si aplica) y realizar el pago a través del SIMIT o directamente en el organismo de tránsito donde se emitió la fotomulta.</p>
+                    <p>Cuando MotoCar Rentals sea notificado, te enviaremos un correo con los documentos necesarios para hacer el cambio de contraventor. Si sabes que cometiste una infracción y no recibes el aviso, escríbenos a <strong>motocarrentals@gmail.com</strong> y te enviaremos la información.</p>
+                    <p>Si el pago no se realiza dentro del plazo, MotoCar Rentals SAS lo cobrará automáticamente a la tarjeta de crédito registrada en tu contrato. Por favor, mantén activa tu tarjeta. De lo contrario, no podrás volver a utilizar el servicio hasta que realices el pago.</p>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q3">¿Cuáles son los procedimientos a seguir en el caso de hurto o robo del auto o motocicleta?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a3">
+                    <p>Notificar de inmediato a las autoridades a través de los canales designados y presentar una denuncia ante la Fiscalía en caso de un incidente. Debes ampliar la denuncia a MotoCar Rentals al número <strong>+57 3202161156</strong> y enviar los documentos de respaldo a la agencia donde retiraste el vehículo en un plazo de cuarenta y ocho (48) horas desde el suceso.</p>
+                    <p>La falta de cumplimiento de este procedimiento podría resultar en la pérdida de las coberturas contratadas. Además, se requiere entregar las constancias necesarias de la Fiscalía en casos de hurto.</p>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q4">¿Qué es necesario para alquilar un vehículo o motocicleta?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a4">
+                    <ul>
+                        <li><strong>Licencia de Conducir Válida:</strong> Es necesario presentar una licencia de conducir válida y en vigencia al momento de realizar el alquiler. Asegúrate de que tu licencia esté en buen estado y cumpla con los requisitos colombianos.</li>
+                        <li><strong>Tarjeta de Crédito:</strong> Se requiere una tarjeta de crédito a nombre del titular de la reserva para cubrir el depósito de seguridad. La tarjeta debe tener suficiente límite de crédito para cubrir posibles cargos adicionales. No se acepta otro método para el pago del carro.</li>
+                        <li><strong>Edad Mínima:</strong> Debes cumplir con la edad mínima requerida para alquilar un vehículo, en Colombia es 18 años.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q5">¿El responsable por el alquiler del auto puede pasar la conducción a otra persona?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a5">
+                    <p>Sí. En el momento de la apertura del contrato de alquiler del vehículo, el cliente puede autorizar por un valor extra el número de personas que desee para conducir el auto alquilado, desde que estos conductores obedezcan a los requisitos mínimos establecidos por MotoCar Rentals.</p>
+                    <p>Te invitamos a revisar las condiciones detalladas al momento de hacer tu reserva o contactarnos para obtener información específica sobre tus necesidades de alquiler.</p>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q6">¿Es necesario pagar por el combustible utilizado en el alquiler de un auto?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a6">
+                    <p>El vehículo o la motocicleta se entregará con el tanque lleno, se debe devolver en el mismo nivel, de lo contrario se hará un cobro por el combustible faltante al momento de la devolución del vehículo.</p>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q7">¿Cómo se hace la reserva para alquilar un auto o una moto?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a7">
+                    <p>Se recomienda realizar una reserva previa a través de nuestro sitio web <strong>motocarrentals.com.co</strong> o a través de nuestro centro de Reservas MotoCar vía WhatsApp <strong>+57 3202161156</strong>.</p>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q8">¿Qué es el Pico y Placa en Medellín?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a8">
+                    <p>El Pico y Placa es una medida de restricción de circulación que se aplica a carros y motocicletas en el área metropolitana del Valle de Aburrá. Aplica en los municipios de Medellín, Bello, Envigado, Sabaneta, Itagüí, La Estrella, Caldas, Barbosa, Girardota y Copacabana.</p>
+                    <p>La restricción se aplica de lunes a viernes, entre las 5:00 a.m. y las 8:00 p.m., y no se aplica en festivos. Las vías exentas, donde se permite circular sin importar la placa, son la Autopista Sur, la Avenida Regional, la Vía Las Palmas, la Avenida 33 y la Transversal de la Montaña.</p>
+                    <p>Es importante respetar la restricción, ya que las infracciones conllevan multas y posible inmovilización del vehículo.</p>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q9">¿Es posible alquilar un vehículo o motocicleta con la licencia de conductor extranjera?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a9">
+                    <p>Si eres extranjero, se requiere documentación adicional como pasaporte, identificación oficial u otros documentos. Los colombianos residentes en el exterior deben presentar licencia de conducir colombiana vigente.</p>
+                    <p>La excepción se dará en los casos en los que este ciudadano colombiano no haya tenido licencia del país en mención en ningún momento. Para estos casos se deberá tramitar la homologación de la licencia extranjera ante las entidades de tránsito de Colombia.</p>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q10">¿Qué hago para reprogramar o cancelar mi reserva?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a10">
+                    <p>Puedes comunicarte a nuestra central de reservas vía WhatsApp <strong>+57 320 216 1156</strong>.</p>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q11">¿Qué es cambio de contraventor?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a11">
+                    <p>Es el trámite que te permite asumir la responsabilidad de una fotomulta generada mientras conducías un vehículo rentado. Es necesario realizar este proceso si quieres acceder a los descuentos ofrecidos por el organismo de tránsito.</p>
+                    <p><strong>Importante:</strong> Si la fotomulta fue en Bogotá, no es necesario hacer el cambio de contraventor. Solo debes acercarte con tu documento de identidad y licencia a la Secretaría Distrital de Movilidad o consultar su página web donde fue impuesta la fotomulta para completar el proceso.</p>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q12">¿Cuál es el plazo máximo para la devolución?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a12">
+                    <p>Asegúrate de devolver el vehículo en la fecha y hora acordadas para evitar cargos adicionales por retrasos. Comunica cualquier cambio en los planes de devolución con antelación a través de la Central de Reservas vía WhatsApp <strong>+57 320 216 1156</strong>.</p>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q13">Si no tengo tarjeta de crédito, ¿alguien puede presentarla por mí en otra ciudad o en otra agencia?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a13">
+                    <p>El nombre del tarjetahabiente debe verse reflejado en la tarjeta de crédito. Otra persona puede presentar la tarjeta siempre y cuando esté en el momento de la entrega del vehículo.</p>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q14">¿Cuáles son las protecciones ofrecidas en el alquiler?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a14">
+                    <p>Ofrecemos la cobertura básica obligatoria que ampara el vehículo, con un deducible del 10% según la categoría.</p>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q15">¿Cuáles deben ser las condiciones de devolución del auto o la motocicleta?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a15">
+                    <p>El auto o la motocicleta debe ser entregado en las mismas condiciones que fue retirado: con el depósito de combustible completo, en estado físico igual al verificado en el check-in de entrega y limpio lo suficiente para conferir el estado de la carrocería.</p>
+                    <p>Si el vehículo presenta un faltante de combustible, se procederá con el cobro. Esta tarifa es superior a la de una estación de servicio, ya que incluye otros costos como la movilización, seguros, etc.</p>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q16">Al alquilar un auto o motocicleta, ¿cuáles son los adicionales ofrecidos en MotoCar?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a16">
+                    <p><strong>Auto:</strong> Silla de bebé, upgrade, devolución en otra ciudad, protección contra terceros, lucro cesante, porta celular y conductor adicional.</p>
+                    <p><strong>Motocicleta:</strong> Conductor adicional, upgrade, devolución en otra ciudad, protección contra terceros, lucro cesante, porta celular e impermeables.</p>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q17">¿Qué incluye al rentar una motocicleta en MotoCar?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a17">
+                    <p>Cuando alquilas una de nuestras motocicletas te incluye dos cascos certificados, dos chalecos reflectivos y los documentos del automotor.</p>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q18">¿Qué requisitos debo cumplir para alquilar un vehículo?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a18">
+                    <p>Los documentos que solicitamos a la hora de alquilar uno de nuestros vehículos son:</p>
+                    <ol>
+                        <li>Cédula o Pasaporte (si es Extranjero)</li>
+                        <li>Licencia de Conducción (Vigente)</li>
+                        <li>Tarjeta de Crédito (Visa-Mastercard) con un cupo mínimo de $1'500.000 COP</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q19">¿Cuáles son las tarifas de alquiler?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a19">
+                    <p>Las tarifas varían según la temporada y están sujetas a términos y condiciones.</p>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q20">¿Qué se incluye en el precio del alquiler?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a20">
+                    <p>Tiempo y kilometraje ilimitado, servicio en carretera 24 horas.</p>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q21">¿Qué opciones de seguro hay disponibles?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a21">
+                    <p>Exoneración de daños al vehículo y exoneración de daños a terceros. Estas exoneraciones están sujetas a términos y condiciones específicos y puede requerir el pago de una tarifa adicional.</p>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q22">¿Cómo puedo reservar un vehículo?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a22">
+                    <p>Por medio de nuestros canales habilitados:</p>
+                    <ul>
+                        <li>Página Web</li>
+                        <li>Nuestras redes sociales: Instagram, Facebook o vía WhatsApp</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q23">¿Puedo cancelar o modificar mi reserva?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a23">
+                    <p>Sí, puedes modificar o cancelar con mínimo 24 horas de anticipación sin incurrir en cargos adicionales, siempre y cuando no sea una reservación pre-pagada.</p>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q24">¿Qué debo hacer si tengo un accidente con el vehículo de alquiler?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a24">
+                    <p>Debe contactarse por medio de nuestros números de atención al cliente o vía WhatsApp indicándonos el incidente para enviar la asistencia vial.</p>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q25">¿Desde qué edad se puede alquilar un vehículo?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a25">
+                    <p>El alquiler está disponible para conductores mayores de 20 hasta los 75 años.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+
+<!-- ==========================================
+     QUIÉNES SOMOS
+     ========================================== -->
+<section class="mc-quienes" id="quienes-somos">
+    <div class="mc-container">
+        <div class="mc-section-header">
+            <h2 class="mc-section-title mc-section-title--script" data-i18n="quienes_title">Quiénes Somos</h2>
+            <p class="mc-section-subtitle" data-i18n="quienes_subtitle">Conoce nuestra historia y compromiso</p>
+        </div>
+
+        <div class="mc-quienes__intro">
+            <p data-i18n-html="quienes_intro1">Desde el <strong>2023</strong>, somos una empresa dedicada al alquiler de vehículos de alta gama, ofreciendo una experiencia única en movilidad y proporcionando una amplia flota que abarca desde motocicletas hasta automóviles Sedan y SUV de última generación.</p>
+            <p data-i18n-html="quienes_intro2">Nuestro fin es superar las expectativas de nuestros clientes, ofreciendo no solo vehículos de alto rendimiento, sino también un servicio excepcional. Nos comprometemos a brindar <strong>comodidad, satisfacción y seguridad</strong> en cada trayecto, convirtiendo cada viaje en una experiencia inolvidable.</p>
+            <p data-i18n="quienes_intro3">Nuestro equipo altamente capacitado está disponible para asesorarte en la elección del vehículo perfecto según tus necesidades y preferencias. Además, estamos comprometidos a brindar un servicio personalizado que se adapte a tus expectativas y supere tus requerimientos.</p>
+            <p data-i18n="quienes_intro4">La excelencia es nuestro estándar, y trabajamos incansablemente para garantizar que cada detalle, desde la reserva hasta la devolución del vehículo, se lleve a cabo de manera impecable.</p>
+            <p class="mc-quienes__highlight" data-i18n-html="quienes_highlight">Descubre un nuevo nivel de alquiler de vehículos de alta gama en <strong>Motocar Rentals</strong>. ¡Bienvenido a la excelencia en movilidad!</p>
+        </div>
+
+        <div class="mc-quienes__feature">
+            <div class="mc-quienes__feature-icon">
+                <i class="fas fa-road"></i>
+                <i class="fas fa-headset"></i>
+            </div>
+            <p data-i18n-html="quienes_feature">Nuestro servicio de alquiler incluye <strong>kilometraje ilimitado</strong> y <strong>asistencia en carretera las 24 horas</strong> del día, los 7 días de la semana. Esto significa que puede viajar sin preocupaciones por la distancia recorrida y contar con la tranquilidad de saber que estaremos disponibles para ayudarlo en cualquier momento durante su viaje.</p>
+        </div>
+
+        <div class="mc-quienes__mv">
+            <div class="mc-quienes__mv-card">
+                <div class="mc-quienes__mv-icon">
+                    <i class="fas fa-bullseye"></i>
+                </div>
+                <h3 data-i18n="quienes_mision_title">Misión</h3>
+                <p data-i18n="quienes_mision">Motocar Rentals es una compañía que facilita la movilidad de las personas, especialmente a la población antioqueña y a los turistas que visitan el país, ofreciendo servicios de renta de vehículos confiables y eficientes, respaldado por un equipo comprometido con la satisfacción y seguridad de sus usuarios, demostrados en la excelencia operativa y la atención personalizada.</p>
+            </div>
+            <div class="mc-quienes__mv-card">
+                <div class="mc-quienes__mv-icon">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <h3 data-i18n="quienes_vision_title">Visión</h3>
+                <p data-i18n="quienes_vision">Motocar Rentals será al 2028 la empresa líder en el sector de renta de vehículos en el Oriente Antioqueño, reconocida por la calidad de nuestros servicios, la diversidad de nuestra flota y la excelencia en la atención al cliente. Aspirando a contribuir con el desarrollo económico, turístico y social de la región, manteniendo altos estándares de sostenibilidad.</p>
             </div>
         </div>
     </div>
@@ -535,6 +874,12 @@
             <div class="mc-brands__item">
                 <img src="<?php echo get_template_directory_uri(); ?>/assets/img/brand-yamaha.png" alt="Yamaha">
             </div>
+            <div class="mc-brands__item">
+                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/brand-toyota.png" alt="Toyota">
+            </div>
+            <div class="mc-brands__item">
+                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/brand-suzuki.png" alt="Suzuki">
+            </div>
         </div>
     </div>
 </section>
@@ -554,14 +899,14 @@
                 </div>
             </div>
             <div class="mc-footer__col">
-                <h4>Servicios 24/7</h4>
+                <h4 data-i18n="footer_servicios">Servicios 24/7</h4>
                 <ul>
                     <li><i class="fas fa-phone"></i> +57 320 216 1156</li>
                     <li><i class="fas fa-envelope"></i> motocarrentals@gmail.com</li>
                 </ul>
             </div>
             <div class="mc-footer__col">
-                <h4>Contáctanos</h4>
+                <h4 data-i18n="footer_contactanos">Contáctanos</h4>
                 <div class="mc-footer__social">
                     <a href="https://www.facebook.com/p/MotoCar-Rentals-61558707917054/" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
                     <a href="https://www.instagram.com/motocar_rentals/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
@@ -570,15 +915,15 @@
                 </div>
             </div>
             <div class="mc-footer__col">
-                <h4>¿Quieres que te contactemos?</h4>
+                <h4 data-i18n="footer_contactar_title">¿Quieres que te contactemos?</h4>
                 <form class="mc-footer__form">
-                    <input type="email" placeholder="Tu correo electrónico" required>
-                    <button type="submit" class="mc-btn mc-btn--primary mc-btn--sm">Enviar</button>
+                    <input type="email" placeholder="Tu correo electrónico" data-i18n-placeholder="footer_email_placeholder" required>
+                    <button type="submit" class="mc-btn mc-btn--primary mc-btn--sm" data-i18n="footer_enviar">Enviar</button>
                 </form>
             </div>
         </div>
         <div class="mc-footer__bottom">
-            <p>&copy; <?php echo date('Y'); ?> MotoCar Rentals. Todos los derechos reservados.</p>
+            <p>&copy; <?php echo date('Y'); ?> MotoCar Rentals. <span data-i18n="footer_derechos">Todos los derechos reservados.</span></p>
         </div>
     </div>
 </footer>
@@ -614,28 +959,28 @@
                         </button>
                         <div class="mc-modal__specs-list">
                             <div class="mc-modal__spec-item">
-                                <span class="mc-modal__spec-title">MOTOR</span>
+                                <span class="mc-modal__spec-title" data-i18n="modal_motor">MOTOR</span>
                                 <div class="mc-modal__spec-detail">
                                     <i class="fas fa-engine"></i>
                                     <span id="modalMotor">2000 CC</span>
                                 </div>
                             </div>
                             <div class="mc-modal__spec-item">
-                                <span class="mc-modal__spec-title">ABS</span>
+                                <span class="mc-modal__spec-title" data-i18n="modal_abs">ABS</span>
                                 <div class="mc-modal__spec-detail">
                                     <span class="mc-modal__spec-abs">(ABS)</span>
                                     <span id="modalABS">Sí</span>
                                 </div>
                             </div>
                             <div class="mc-modal__spec-item">
-                                <span class="mc-modal__spec-title">PASAJEROS</span>
+                                <span class="mc-modal__spec-title" data-i18n="modal_pasajeros">PASAJEROS</span>
                                 <div class="mc-modal__spec-detail">
                                     <i class="fas fa-users"></i>
                                     <span id="modalPasajeros">5</span>
                                 </div>
                             </div>
                             <div class="mc-modal__spec-item">
-                                <span class="mc-modal__spec-title">TIPO</span>
+                                <span class="mc-modal__spec-title" data-i18n="modal_tipo">TIPO</span>
                                 <div class="mc-modal__spec-detail">
                                     <i class="fas fa-cog"></i>
                                     <span id="modalTransmision">Automática</span>
@@ -654,35 +999,35 @@
                         <input type="hidden" name="vehicle_name" id="reserveVehicleName">
 
                         <div class="mc-cotizar__field">
-                            <label>Definir Fechas de renta</label>
-                            <input type="text" id="modalFechas" placeholder="Seleccionar fechas" readonly required>
+                            <label data-i18n="modal_fechas_label">Definir Fechas de renta</label>
+                            <input type="text" id="modalFechas" placeholder="Seleccionar fechas" data-i18n-placeholder="modal_fechas_placeholder" readonly required>
                         </div>
 
                         <div class="mc-cotizar__field">
-                            <label>Lugar de Entrega</label>
-                            <input type="text" name="lugar_entrega" placeholder="Elegir Lugar...">
+                            <label data-i18n="modal_entrega_label">Lugar de Entrega</label>
+                            <input type="text" name="lugar_entrega" placeholder="Elegir Lugar..." data-i18n-placeholder="modal_entrega_placeholder">
                         </div>
 
                         <div class="mc-cotizar__field">
-                            <label>Lugar de Devolución</label>
-                            <input type="text" name="lugar_devolucion" placeholder="Elegir Lugar...">
+                            <label data-i18n="modal_devolucion_label">Lugar de Devolución</label>
+                            <input type="text" name="lugar_devolucion" placeholder="Elegir Lugar..." data-i18n-placeholder="modal_devolucion_placeholder">
                         </div>
 
                         <div class="mc-cotizar__field">
-                            <label>Hora de Entrega</label>
+                            <label data-i18n="modal_hora_entrega">Hora de Entrega</label>
                             <div class="mc-cotizar__time">
                                 <input type="time" name="hora_entrega" value="11:10">
                             </div>
                         </div>
 
                         <div class="mc-cotizar__field">
-                            <label>Hora de Devolución</label>
+                            <label data-i18n="modal_hora_devolucion">Hora de Devolución</label>
                             <div class="mc-cotizar__time">
                                 <input type="time" name="hora_devolucion" value="11:10">
                             </div>
                         </div>
 
-                        <button type="submit" class="mc-btn mc-btn--primary mc-btn--cotizar">
+                        <button type="submit" class="mc-btn mc-btn--primary mc-btn--cotizar" data-i18n-html="modal_cotizar_btn">
                             Ir a Cotizar <i class="fab fa-whatsapp"></i>
                         </button>
                     </form>
