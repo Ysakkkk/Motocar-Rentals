@@ -544,6 +544,54 @@ document.addEventListener('DOMContentLoaded', function() {
             window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
         });
     }
+
+    // ==========================================
+    // FAQ SECTION TOGGLE (show/hide all questions)
+    // ==========================================
+    var faqToggle = document.getElementById('faqToggle');
+    var faqList = document.getElementById('faqList');
+    if (faqToggle && faqList) {
+        faqToggle.addEventListener('click', function() {
+            var isOpen = faqList.classList.contains('open');
+            if (isOpen) {
+                faqList.classList.remove('open');
+                faqToggle.classList.remove('active');
+                faqToggle.setAttribute('aria-expanded', 'false');
+                // Close all open items too
+                document.querySelectorAll('.mc-faq__item.active').forEach(function(item) {
+                    item.classList.remove('active');
+                    item.querySelector('.mc-faq__question').setAttribute('aria-expanded', 'false');
+                });
+            } else {
+                faqList.classList.add('open');
+                faqToggle.classList.add('active');
+                faqToggle.setAttribute('aria-expanded', 'true');
+            }
+        });
+    }
+
+    // ==========================================
+    // FAQ ACCORDION (individual questions)
+    // ==========================================
+    document.querySelectorAll('.mc-faq__question').forEach(function(button) {
+        button.addEventListener('click', function() {
+            var item = this.closest('.mc-faq__item');
+            var isActive = item.classList.contains('active');
+
+            // Close all items
+            document.querySelectorAll('.mc-faq__item.active').forEach(function(openItem) {
+                openItem.classList.remove('active');
+                openItem.querySelector('.mc-faq__question').setAttribute('aria-expanded', 'false');
+            });
+
+            // Open clicked item if it was closed
+            if (!isActive) {
+                item.classList.add('active');
+                this.setAttribute('aria-expanded', 'true');
+            }
+        });
+    });
+
 });
 
 // ==========================================
@@ -637,53 +685,6 @@ document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         closeVehicleModal();
     }
-});
-
-// ==========================================
-// FAQ SECTION TOGGLE (show/hide all questions)
-// ==========================================
-var faqToggle = document.getElementById('faqToggle');
-var faqList = document.getElementById('faqList');
-if (faqToggle && faqList) {
-    faqToggle.addEventListener('click', function() {
-        var isOpen = faqList.classList.contains('open');
-        if (isOpen) {
-            faqList.classList.remove('open');
-            faqToggle.classList.remove('active');
-            faqToggle.setAttribute('aria-expanded', 'false');
-            // Close all open items too
-            document.querySelectorAll('.mc-faq__item.active').forEach(function(item) {
-                item.classList.remove('active');
-                item.querySelector('.mc-faq__question').setAttribute('aria-expanded', 'false');
-            });
-        } else {
-            faqList.classList.add('open');
-            faqToggle.classList.add('active');
-            faqToggle.setAttribute('aria-expanded', 'true');
-        }
-    });
-}
-
-// ==========================================
-// FAQ ACCORDION (individual questions)
-// ==========================================
-document.querySelectorAll('.mc-faq__question').forEach(function(button) {
-    button.addEventListener('click', function() {
-        var item = this.closest('.mc-faq__item');
-        var isActive = item.classList.contains('active');
-
-        // Close all items
-        document.querySelectorAll('.mc-faq__item.active').forEach(function(openItem) {
-            openItem.classList.remove('active');
-            openItem.querySelector('.mc-faq__question').setAttribute('aria-expanded', 'false');
-        });
-
-        // Open clicked item if it was closed
-        if (!isActive) {
-            item.classList.add('active');
-            this.setAttribute('aria-expanded', 'true');
-        }
-    });
 });
 
 // Format number (Colombian style)

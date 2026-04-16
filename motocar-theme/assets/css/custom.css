@@ -2353,3 +2353,117 @@ ul {
         font-size: 1.8rem;
     }
 }
+
+/* ==========================================
+   WORDPRESS COMPATIBILITY OVERRIDES
+   Previene que wp-block-library y estilos
+   por defecto de WP rompan FAQ y Quiénes Somos
+   ========================================== */
+
+/* FAQ: Reset de estilos WordPress */
+.mc-faq__answer p,
+.mc-faq__answer ul,
+.mc-faq__answer ol,
+.mc-faq__answer li {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-family: var(--mc-font-topbar);
+    font-size: 0.93rem;
+    color: var(--mc-gray-600);
+    line-height: 1.8;
+}
+
+.mc-faq__answer ul,
+.mc-faq__answer ol {
+    padding-left: 20px;
+}
+
+.mc-faq__answer ul {
+    list-style: disc;
+}
+
+.mc-faq__answer ol {
+    list-style: decimal;
+}
+
+.mc-faq__answer li {
+    list-style: inherit;
+    padding-left: 4px;
+}
+
+.mc-faq__answer p:last-child,
+.mc-faq__answer ul:last-child,
+.mc-faq__answer ol:last-child {
+    margin-bottom: 0;
+}
+
+.mc-faq__answer strong {
+    font-weight: 700;
+    color: var(--mc-gray-800);
+}
+
+/* Quiénes Somos: Reset de estilos WordPress */
+.mc-quienes p,
+.mc-quienes ul,
+.mc-quienes ol,
+.mc-quienes li {
+    margin-top: 0;
+}
+
+.mc-quienes strong {
+    font-weight: 700;
+}
+
+/* Prevenir que WP admin bar rompa sticky header */
+.admin-bar .mc-topbar {
+    top: 32px;
+}
+
+.admin-bar .mc-header {
+    top: calc(32px + var(--mc-topbar-height));
+}
+
+@media (max-width: 782px) {
+    .admin-bar .mc-topbar {
+        top: 46px;
+    }
+    .admin-bar .mc-header {
+        top: calc(46px + var(--mc-topbar-height));
+    }
+}
+
+/* Asegurar que el botón toggle del FAQ tenga aspecto correcto en WP */
+.mc-faq__toggle,
+.mc-faq__question {
+    font-family: var(--mc-font-topbar);
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+}
+
+.mc-faq__toggle:focus,
+.mc-faq__question:focus {
+    outline: 2px solid var(--mc-primary);
+    outline-offset: -2px;
+}
+
+/* Prevenir que estilos de bloques WP afecten la sección */
+.mc-faq .mc-section-title,
+.mc-faq .mc-section-subtitle,
+.mc-quienes .mc-section-title,
+.mc-quienes .mc-section-subtitle {
+    margin-top: 0;
+}
+
+/* Asegurar visibilidad del FAQ toggle en WordPress */
+body .mc-faq__list {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+}
+
+body .mc-faq__list.open {
+    max-height: 5000px;
+    opacity: 1;
+    overflow: visible;
+}
