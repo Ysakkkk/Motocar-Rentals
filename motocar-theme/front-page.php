@@ -16,9 +16,9 @@
     <div class="mc-container">
         <div class="mc-topbar__inner">
             <div class="mc-topbar__info">
-                <a href="https://maps.google.com/?q=Aeropuerto+Jose+Maria+Cordova" target="_blank" class="mc-topbar__item">
+                <a href="https://www.google.com/maps/place/MotoCar+Rentals/@6.1762,-75.435,1576m/data=!3m1!1e3!4m6!3m5!1s0x8e469d8d8761cbb1:0xcf88fa157645f16d!8m2!3d6.1755508!4d-75.4348712!16s%2Fg%2F11y2tz0l_5" target="_blank" class="mc-topbar__item">
                     <i class="fas fa-map-marker-alt"></i>
-                    <span>Aeropuerto José María Córdova</span>
+                    <span data-i18n="topbar_location">Rionegro, Antioquia</span>
                 </a>
                 <a href="mailto:motocarrentals@gmail.com" class="mc-topbar__item">
                     <i class="fas fa-envelope"></i>
@@ -85,9 +85,9 @@
 <section class="mc-hero" id="inicio">
     <div class="mc-hero__slider" id="heroSlider">
         <div class="mc-hero__slide active" style="background-image: url('<?php echo get_template_directory_uri(); ?>/assets/img/slide-1.webp');"></div>
-        <div class="mc-hero__slide" style="background-image: url('<?php echo get_template_directory_uri(); ?>/assets/img/slide-2.jpeg');"></div>
-        <div class="mc-hero__slide" style="background-image: url('<?php echo get_template_directory_uri(); ?>/assets/img/slide-3.jpg');"></div>
-        <div class="mc-hero__slide" style="background-image: url('<?php echo get_template_directory_uri(); ?>/assets/img/slide-4.jpeg');"></div>
+        <div class="mc-hero__slide" style="background-image: url('<?php echo get_template_directory_uri(); ?>/assets/img/slide-2.webp');"></div>
+        <div class="mc-hero__slide" style="background-image: url('<?php echo get_template_directory_uri(); ?>/assets/img/slide-3.webp');"></div>
+        <div class="mc-hero__slide" style="background-image: url('<?php echo get_template_directory_uri(); ?>/assets/img/slide-4.webp');"></div>
     </div>
     <div class="mc-hero__overlay"></div>
     <div class="mc-hero__content">
@@ -105,250 +105,308 @@
 </section>
 
 <!-- ==========================================
-     BUSCADOR / FILTRO
+     VEHICLE CATEGORIES
      ========================================== -->
-<section class="mc-search">
-    <div class="mc-container">
-        <div class="mc-search__box">
-            <form class="mc-search__form" id="filterForm">
-                <div class="mc-search__group">
-                    <label class="mc-search__label" data-i18n="search_tipo">Tipo</label>
-                    <div class="mc-toggle" id="tipoToggle">
-                        <button type="button" class="mc-toggle__btn active" data-value="carro" data-i18n="search_carro">Carro</button>
-                        <button type="button" class="mc-toggle__btn" data-value="moto" data-i18n="search_moto">Moto</button>
-                    </div>
-                    <input type="hidden" name="tipo" id="filterTipo" value="carro">
-                </div>
-                <div class="mc-search__group">
-                    <label class="mc-search__label" data-i18n="search_precio">Precio</label>
-                    <select name="precio_rango" id="filterPrecio">
-                        <option value="" data-i18n="search_all_prices">Todos los precios</option>
-                        <option value="0-80000" data-i18n="search_hasta_80">Hasta $80.000</option>
-                        <option value="80000-120000" data-i18n="search_80_120">$80.000 - $120.000</option>
-                        <option value="120000-200000" data-i18n="search_120_200">$120.000 - $200.000</option>
-                        <option value="200000-999999" data-i18n="search_mas_200">Más de $200.000</option>
-                    </select>
-                </div>
-                <div class="mc-search__group mc-search__group--disponibilidad">
-                    <label class="mc-search__label" data-i18n="search_disponibilidad">Disponibilidad</label>
-                    <input type="text" id="filterFechas" name="fechas" placeholder="Seleccionar fechas" data-i18n-placeholder="search_fechas_placeholder" readonly>
-                    <input type="hidden" id="filterFechaInicio" name="fecha_inicio">
-                    <input type="hidden" id="filterFechaFin" name="fecha_fin">
-                </div>
-                <div class="mc-search__group mc-search__group--btn">
-                    <button type="submit" class="mc-btn mc-btn--primary mc-btn--filter" id="filterBtn" data-i18n="search_filtrar">
-                        Filtrar
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</section>
-
-<!-- ==========================================
-     CATÁLOGO DE VEHÍCULOS
-     ========================================== -->
-<section class="mc-catalogo" id="vehiculos">
+<section class="mc-categories" id="vehiculos">
     <div class="mc-container">
         <div class="mc-section-header">
-            <h2 class="mc-section-title mc-section-title--script" data-i18n="catalog_title">Conoce nuestros vehículos</h2>
-            <p class="mc-section-subtitle" data-i18n="catalog_subtitle">Nuestra flota diversa incluye sedanes, SUV y camionetas, todos sometidos a rigurosas inspecciones y mantenimientos por profesionales, garantizando así los más altos estándares de calidad. Te invitamos a realizar tu reserva hoy mismo a través de nuestro sistema de reservas en línea.</p>
+            <h2 class="mc-section-title mc-section-title--script" data-i18n="catalog_title">Nuestra Flota</h2>
+            <p class="mc-section-subtitle" data-i18n="catalog_subtitle">Elige tu vehículo ideal entre nuestras categorías</p>
         </div>
 
-        <div class="mc-catalogo__grid" id="vehiculosGrid">
+        <!-- FILTROS -->
+        <div class="mc-filter">
+            <div class="mc-filter__group">
+                <label class="mc-filter__label" data-i18n="filter_type">Tipo de vehículo</label>
+                <div class="mc-filter__buttons">
+                    <button class="mc-filter__btn active" data-filter="all" data-i18n="filter_all">Todos</button>
+                    <button class="mc-filter__btn" data-filter="carro" data-i18n="filter_cars"><i class="fas fa-car"></i> Carros</button>
+                    <button class="mc-filter__btn" data-filter="moto" data-i18n="filter_motos"><i class="fas fa-motorcycle"></i> Motos</button>
+                </div>
+            </div>
+            <div class="mc-filter__group">
+                <label class="mc-filter__label" data-i18n="filter_availability">Disponibilidad</label>
+                <div class="mc-filter__flow">
+                    <div class="mc-filter__panel">
+                        <p class="mc-filter__panel-title" data-i18n="filter_pickup_block">Recogida</p>
+                        <div class="mc-filter__panel-grid">
+                            <div class="mc-filter__date-field">
+                                <i class="fas fa-calendar-alt"></i>
+                                <input type="text" id="filterPickup" placeholder="Fecha de recogida" data-i18n-placeholder="filter_pickup" readonly>
+                            </div>
+                            <div class="mc-filter__time-field">
+                                <i class="fas fa-clock"></i>
+                                <select id="filterPickupTime">
+                                    <option value="" data-i18n="filter_pickup_time">Hora recogida</option>
+                                    <?php for ($hour = 0; $hour < 24; $hour++) : ?>
+                                        <?php $time_value = sprintf('%02d:00', $hour); ?>
+                                        <option value="<?php echo esc_attr($time_value); ?>" <?php selected($time_value, '10:00'); ?>><?php echo esc_html($time_value); ?></option>
+                                    <?php endfor; ?>
+                                </select>
+                            </div>
+                            <div class="mc-filter__location-field mc-filter__field--full">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <select id="filterPickupLocation" required>
+                                    <option value="" data-i18n="filter_pickup_location" selected disabled hidden>Lugar de retirada</option>
+                                    <option value="rionegro-airport" data-i18n="location_rionegro_airport">Mall Terranova</option>
+                                    <option value="other" data-i18n="location_other">Otro</option>
+                                </select>
+                            </div>
+                            <div class="mc-filter__other-field mc-filter__field--full" id="filterPickupLocationOtherWrap" hidden>
+                                <i class="fas fa-pen"></i>
+                                <input type="text" id="filterPickupLocationOther" placeholder="¿Cuál lugar?" data-i18n-placeholder="filter_location_other_placeholder">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mc-filter__panel">
+                        <p class="mc-filter__panel-title" data-i18n="filter_return_block">Devolución</p>
+                        <div class="mc-filter__panel-grid">
+                            <div class="mc-filter__date-field">
+                                <i class="fas fa-calendar-alt"></i>
+                                <input type="text" id="filterReturn" placeholder="Fecha de devolución" data-i18n-placeholder="filter_return" readonly>
+                            </div>
+                            <div class="mc-filter__time-field">
+                                <i class="fas fa-clock"></i>
+                                <select id="filterReturnTime">
+                                    <option value="" data-i18n="filter_return_time">Hora devolución</option>
+                                    <?php for ($hour = 0; $hour < 24; $hour++) : ?>
+                                        <?php $time_value = sprintf('%02d:00', $hour); ?>
+                                        <option value="<?php echo esc_attr($time_value); ?>" <?php selected($time_value, '10:00'); ?>><?php echo esc_html($time_value); ?></option>
+                                    <?php endfor; ?>
+                                </select>
+                            </div>
+                            <div class="mc-filter__location-field mc-filter__field--full">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <select id="filterReturnLocation" required>
+                                    <option value="" data-i18n="filter_return_location" selected disabled hidden>Lugar de devolución</option>
+                                    <option value="rionegro-airport" data-i18n="location_rionegro_airport">Mall Terranova</option>
+                                    <option value="other" data-i18n="location_other">Otro</option>
+                                </select>
+                            </div>
+                            <div class="mc-filter__other-field mc-filter__field--full" id="filterReturnLocationOtherWrap" hidden>
+                                <i class="fas fa-pen"></i>
+                                <input type="text" id="filterReturnLocationOther" placeholder="¿Cuál lugar?" data-i18n-placeholder="filter_location_other_placeholder">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mc-filter__actions">
+                    <button type="button" class="mc-filter__reset" id="filterReset" data-i18n="filter_reset">
+                        <i class="fas fa-rotate-left"></i> Reiniciar filtros
+                    </button>
+                </div>
+                <p class="mc-filter__hint" data-i18n="filter_hint"><i class="fas fa-info-circle"></i> Selecciona las fechas para calcular un precio estimado en COP y USD al ver los vehículos.</p>
+            </div>
+        </div>
+
+        <div class="mc-categories__grid">
             <?php
-            $vehicles = new WP_Query(array(
-                'post_type'      => 'vehiculo',
-                'posts_per_page' => -1,
-                'post_status'    => 'publish',
-                'meta_key'       => '_precio_dia',
-                'orderby'        => 'meta_value_num',
-                'order'          => 'ASC',
+            // Get categories from WP taxonomy
+            $cat_terms = get_terms(array(
+                'taxonomy'   => 'categoria_vehiculo',
+                'hide_empty' => false,
+                'orderby'    => 'slug',
+                'order'      => 'ASC',
             ));
 
-            // Sort by subcategory hierarchy then price
-            $subcat_order = array('moto' => 1, 'hatchback' => 2, 'sedan' => 3, 'camioneta' => 4);
-            $sorted_posts = array();
-            if ($vehicles->have_posts()) {
-                while ($vehicles->have_posts()) {
-                    $vehicles->the_post();
-                    $sorted_posts[] = array(
-                        'post'  => get_post(),
-                        'subcat' => get_post_meta(get_the_ID(), '_subcategoria', true),
-                        'precio' => (int) get_post_meta(get_the_ID(), '_precio_dia', true),
-                    );
-                }
-                wp_reset_postdata();
-                usort($sorted_posts, function($a, $b) use ($subcat_order) {
-                    $oa = $subcat_order[$a['subcat']] ?? 99;
-                    $ob = $subcat_order[$b['subcat']] ?? 99;
-                    if ($oa !== $ob) return $oa - $ob;
-                    return $a['precio'] - $b['precio'];
-                });
-            }
+            $cat_order = array('motos' => 1, 'economy' => 2, 'compact' => 3, 'suv' => 4);
+            $cat_icons = array(
+                'economy' => 'fas fa-car',
+                'compact' => 'fas fa-car-side',
+                'suv'     => 'fas fa-shuttle-van',
+                'motos'   => 'fas fa-motorcycle',
+            );
+            $cat_types = array(
+                'economy' => 'carro',
+                'compact' => 'carro',
+                'suv'     => 'carro',
+                'motos'   => 'moto',
+            );
+            $cat_labels = array(
+                'economy' => array('name' => 'Carro Económico', 'desc' => 'Volkswagen Gol o similar'),
+                'compact' => array('name' => 'Carro Compacto', 'desc' => 'Renault Logan o similar'),
+                'suv'     => array('name' => 'SUV Compacto', 'desc' => 'Kia Seltos o similar'),
+                'motos'   => array('name' => 'Motocicletas', 'desc' => 'Yamaha FZ 150 o similar'),
+            );
 
-            if (!empty($sorted_posts)) :
-                foreach ($sorted_posts as $item) :
-                    setup_postdata($item['post']);
-                    $id = $item['post']->ID;
-                    $precio_dia = get_post_meta($id, '_precio_dia', true);
-                    $modelo = get_post_meta($id, '_modelo', true);
-                    $ano = get_post_meta($id, '_ano', true);
-                    $transmision = get_post_meta($id, '_transmision', true);
-                    $pasajeros = get_post_meta($id, '_pasajeros', true);
-                    $cilindrada = get_post_meta($id, '_cilindrada', true);
-                    $aire = get_post_meta($id, '_aire_acondicionado', true);
-                    $subcategoria = get_post_meta($id, '_subcategoria', true);
-                    $tipos = wp_get_post_terms($id, 'tipo_vehiculo', array('fields' => 'slugs'));
-                    $tipo_class = !empty($tipos) ? $tipos[0] : '';
-                    $thumbnail = get_the_post_thumbnail_url($id, 'medium');
-                    $precio_usd = $precio_dia ? number_format($precio_dia / 3690, 2, ',', '.') : '0';
-                    $es_moto = ($tipo_class === 'moto');
+            if (!empty($cat_terms) && !is_wp_error($cat_terms)) :
+                // Sort by defined order
+                usort($cat_terms, function($a, $b) use ($cat_order) {
+                    $oa = $cat_order[$a->slug] ?? 99;
+                    $ob = $cat_order[$b->slug] ?? 99;
+                    return $oa - $ob;
+                });
+
+                foreach ($cat_terms as $cat) :
+                    $display_name = $cat_labels[$cat->slug]['name'] ?? $cat->name;
+                    $display_desc = $cat_labels[$cat->slug]['desc'] ?? $cat->description;
+                    // Get vehicles in this category for carousel images
+                    $cat_vehicles = new WP_Query(array(
+                        'post_type'      => 'vehiculo',
+                        'posts_per_page' => 6,
+                        'post_status'    => 'publish',
+                        'tax_query'      => array(array(
+                            'taxonomy' => 'categoria_vehiculo',
+                            'field'    => 'slug',
+                            'terms'    => $cat->slug,
+                        )),
+                        'meta_key'       => '_precio_dia',
+                        'orderby'        => 'meta_value_num',
+                        'order'          => 'ASC',
+                    ));
+
+                    $images = array();
+                    $vehicle_names = array();
+                    if ($cat_vehicles->have_posts()) {
+                        while ($cat_vehicles->have_posts()) {
+                            $cat_vehicles->the_post();
+                            $thumb = get_the_post_thumbnail_url(get_the_ID(), 'medium');
+                            if ($thumb) {
+                                $images[] = $thumb;
+                                $vehicle_names[] = get_the_title();
+                            }
+                        }
+                        wp_reset_postdata();
+                    }
+
+                    $icon = $cat_icons[$cat->slug] ?? 'fas fa-car';
+                    $from_price = '';
+                    if ($cat_vehicles->have_posts()) {
+                        // Get minimum price
+                        $min_query = new WP_Query(array(
+                            'post_type' => 'vehiculo', 'posts_per_page' => 1, 'post_status' => 'publish',
+                            'tax_query' => array(array('taxonomy' => 'categoria_vehiculo', 'field' => 'slug', 'terms' => $cat->slug)),
+                            'meta_key' => '_precio_dia', 'orderby' => 'meta_value_num', 'order' => 'ASC',
+                        ));
+                        if ($min_query->have_posts()) {
+                            $min_query->the_post();
+                            $min_price = get_post_meta(get_the_ID(), '_precio_dia', true);
+                            if ($min_price) $from_price = 'Desde $' . number_format($min_price, 0, ',', '.') . ' COP/día';
+                            wp_reset_postdata();
+                        }
+                    }
             ?>
-                <div class="mc-card" data-vehicle-id="<?php echo $id; ?>" data-tipo="<?php echo esc_attr($tipo_class); ?>" data-subcategoria="<?php echo esc_attr($subcategoria); ?>" data-precio="<?php echo esc_attr($precio_dia); ?>">
-                    <span class="mc-card__badge"><?php echo esc_html($pasajeros ?: '5'); ?> Personas</span>
-                    <h3 class="mc-card__title"><?php the_title(); ?></h3>
-                    <div class="mc-card__image">
-                        <?php if ($thumbnail) : ?>
-                            <img src="<?php echo esc_url($thumbnail); ?>" alt="<?php the_title(); ?>" loading="lazy">
-                        <?php else : ?>
-                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/placeholder.jpg" alt="<?php the_title(); ?>" loading="lazy">
+                <div class="mc-catcard" data-category="<?php echo esc_attr($cat->slug); ?>" data-type="<?php echo esc_attr($cat_types[$cat->slug] ?? 'carro'); ?>">
+                    <div class="mc-catcard__carousel" data-carousel>
+                        <div class="mc-catcard__slides">
+                            <?php if (!empty($images)) : ?>
+                                <?php foreach ($images as $i => $img) : ?>
+                                    <div class="mc-catcard__slide <?php echo $i === 0 ? 'active' : ''; ?>">
+                                        <img src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr($vehicle_names[$i] ?? $display_name); ?>" loading="lazy">
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else : ?>
+                                <div class="mc-catcard__slide active">
+                                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/placeholder.jpg" alt="<?php echo esc_attr($display_name); ?>" loading="lazy">
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        <?php if (count($images) > 1) : ?>
+                            <button class="mc-catcard__arrow mc-catcard__arrow--left" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+                            <button class="mc-catcard__arrow mc-catcard__arrow--right" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
+                            <div class="mc-catcard__dots">
+                                <?php for ($d = 0; $d < count($images); $d++) : ?>
+                                    <span class="mc-catcard__dot <?php echo $d === 0 ? 'active' : ''; ?>" data-index="<?php echo $d; ?>"></span>
+                                <?php endfor; ?>
+                            </div>
                         <?php endif; ?>
                     </div>
-                    <div class="mc-card__pricing">
-                        <?php if ($precio_dia) : ?>
-                            <span class="mc-card__price">Desde $<?php echo number_format($precio_dia, 0, ',', '.'); ?> <small>COP/día</small></span>
-                            <span class="mc-card__price-usd">$<?php echo $precio_usd; ?> <small>USD/día</small></span>
-                        <?php endif; ?>
+                    <div class="mc-catcard__info">
+                        <div class="mc-catcard__badge"><i class="<?php echo esc_attr($icon); ?>"></i></div>
+                        <h3 class="mc-catcard__title"><?php echo esc_html($display_name); ?></h3>
+                        <p class="mc-catcard__desc"><?php echo esc_html($display_desc); ?></p>
+                        <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('<?php echo esc_attr($cat->slug); ?>', '<?php echo esc_js($display_name); ?>')">
+                            Ver Detalles
+                        </button>
                     </div>
-                    <div class="mc-card__specs">
-                        <div class="mc-card__spec">
-                            <span class="mc-card__spec-label">Motor</span>
-                            <span class="mc-card__spec-value"><?php echo esc_html($cilindrada ?: '2000 cc'); ?></span>
-                        </div>
-                        <div class="mc-card__spec">
-                            <span class="mc-card__spec-label">Caja</span>
-                            <span class="mc-card__spec-value"><?php echo ucfirst(esc_html($transmision ?: 'Mecánica')); ?></span>
-                        </div>
-                        <div class="mc-card__spec">
-                            <span class="mc-card__spec-label"><?php echo $es_moto ? 'ABS' : 'Aire'; ?></span>
-                            <span class="mc-card__spec-value"><?php echo $es_moto ? 'Sí' : 'acondicionado'; ?></span>
-                        </div>
-                    </div>
-                    <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openVehicleModal(<?php echo $id; ?>)">
-                        Reserva Ahora
-                    </button>
                 </div>
             <?php
                 endforeach;
-                wp_reset_postdata();
             else :
             ?>
-                <!-- VEHÍCULOS DE DEMO (orden: Motos, Hatchbacks, Sedan, Camionetas — por precio) -->
-                <div class="mc-card" data-vehicle-id="demo-5" data-tipo="moto" data-subcategoria="moto" data-precio="55000">
-                    <span class="mc-card__badge">2 Personas</span>
-                    <h3 class="mc-card__title">Yamaha Aerox</h3>
-                    <div class="mc-card__image">
-                        <img src="<?php echo get_template_directory_uri(); ?>/assets/img/aerox.png" alt="Yamaha Aerox" loading="lazy">
-                    </div>
-                    <div class="mc-card__pricing">
-                        <span class="mc-card__price">Desde $80.000 <small>COP/día</small></span>
-                        <span class="mc-card__price-usd">$21,70 <small>USD/día</small></span>
-                    </div>
-                    <div class="mc-card__specs">
-                        <div class="mc-card__spec"><span class="mc-card__spec-label">Motor</span><span class="mc-card__spec-value">155 cc</span></div>
-                        <div class="mc-card__spec"><span class="mc-card__spec-label">Caja</span><span class="mc-card__spec-value">Automática</span></div>
-                        <div class="mc-card__spec"><span class="mc-card__spec-label">ABS</span><span class="mc-card__spec-value">Sí</span></div>
-                    </div>
-                    <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openVehicleModalDemo('Yamaha Aerox', '2024', 'Automática', '2', 'Gasolina', 'No', '155 cc', '80000', '<?php echo get_template_directory_uri(); ?>/assets/img/aerox.png', 'La Yamaha Aerox 155 es un scooter deportivo, ágil y moderno.')">
-                        Reserva Ahora
-                    </button>
-                </div>
+                <!-- DEMO CATEGORIES (no vehicles in WP yet) -->
+                <?php
+                $demo_categories = array(
+                    array(
+                        'slug'  => 'motos',
+                        'name'  => 'Motocicletas',
+                        'desc'  => 'Yamaha FZ 150 o similar',
+                        'icon'  => 'fas fa-motorcycle',
+                        'vehicles' => array(
+                            array('name' => 'Yamaha Aerox', 'img' => 'aerox.png', 'price' => '80,000', 'motor' => '155 cc', 'trans' => 'Automática', 'ac' => 'N/A', 'pax' => '2', 'luggage' => 'N/A'),
+                            array('name' => 'Yamaha FZ-250', 'img' => 'fz250.png', 'price' => '100,000', 'motor' => '250 cc', 'trans' => 'Manual', 'ac' => 'N/A', 'pax' => '2', 'luggage' => 'N/A'),
+                        ),
+                    ),
+                    array(
+                        'slug'  => 'economy',
+                        'name'  => 'Carro Económico',
+                        'desc'  => 'Volkswagen Gol o similar',
+                        'icon'  => 'fas fa-car',
+                        'vehicles' => array(
+                            array('name' => 'Volkswagen Gol', 'img' => 'volkswagen.png', 'price' => '150,000', 'motor' => '1600 cc', 'trans' => 'Manual', 'ac' => 'Sí', 'pax' => '5', 'luggage' => '2 medianas'),
+                        ),
+                    ),
+                    array(
+                        'slug'  => 'compact',
+                        'name'  => 'Carro Compacto',
+                        'desc'  => 'Renault Logan o similar',
+                        'icon'  => 'fas fa-car-side',
+                        'vehicles' => array(
+                            array('name' => 'Renault Logan', 'img' => 'renault-logan.png', 'price' => '200,000', 'motor' => '1600 cc', 'trans' => 'Manual', 'ac' => 'Sí', 'pax' => '5', 'luggage' => '2 grandes, 1 mediana'),
+                        ),
+                    ),
+                    array(
+                        'slug'  => 'suv',
+                        'name'  => 'SUV Compacto',
+                        'desc'  => 'Kia Seltos o similar',
+                        'icon'  => 'fas fa-shuttle-van',
+                        'vehicles' => array(
+                            array('name' => 'Kia Sportage', 'img' => 'kia-sportage.png', 'price' => '200,000', 'motor' => '2000 cc', 'trans' => 'Automática', 'ac' => 'Sí', 'pax' => '5', 'luggage' => '2 grandes, 1 mediana'),
+                        ),
+                    ),
+                );
 
-                <div class="mc-card" data-vehicle-id="demo-4" data-tipo="moto" data-subcategoria="moto" data-precio="75000">
-                    <span class="mc-card__badge">2 Personas</span>
-                    <h3 class="mc-card__title">Fz - 250</h3>
-                    <div class="mc-card__image">
-                        <img src="<?php echo get_template_directory_uri(); ?>/assets/img/fz250.png" alt="FZ-250" loading="lazy">
+                foreach ($demo_categories as $dcat) :
+                ?>
+                <div class="mc-catcard" data-category="<?php echo esc_attr($dcat['slug']); ?>" data-type="<?php echo esc_attr($dcat['slug'] === 'motos' ? 'moto' : 'carro'); ?>">
+                    <div class="mc-catcard__carousel" data-carousel>
+                        <div class="mc-catcard__slides">
+                            <?php foreach ($dcat['vehicles'] as $vi => $veh) : ?>
+                                <div class="mc-catcard__slide <?php echo $vi === 0 ? 'active' : ''; ?>">
+                                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/<?php echo esc_attr($veh['img']); ?>" alt="<?php echo esc_attr($veh['name']); ?>" loading="lazy">
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <?php if (count($dcat['vehicles']) > 1) : ?>
+                            <button class="mc-catcard__arrow mc-catcard__arrow--left" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+                            <button class="mc-catcard__arrow mc-catcard__arrow--right" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
+                            <div class="mc-catcard__dots">
+                                <?php for ($d = 0; $d < count($dcat['vehicles']); $d++) : ?>
+                                    <span class="mc-catcard__dot <?php echo $d === 0 ? 'active' : ''; ?>" data-index="<?php echo $d; ?>"></span>
+                                <?php endfor; ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
-                    <div class="mc-card__pricing">
-                        <span class="mc-card__price">Desde $100.000 <small>COP/día</small></span>
-                        <span class="mc-card__price-usd">$27,10 <small>USD/día</small></span>
+                    <div class="mc-catcard__info">
+                        <div class="mc-catcard__badge"><i class="<?php echo esc_attr($dcat['icon']); ?>"></i></div>
+                        <h3 class="mc-catcard__title"><?php echo esc_html($dcat['name']); ?></h3>
+                        <p class="mc-catcard__desc"><?php echo esc_html($dcat['desc']); ?></p>
+                        <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('<?php echo esc_attr($dcat['slug']); ?>', '<?php echo esc_js($dcat['name']); ?>')">
+                            Ver Detalles
+                        </button>
                     </div>
-                    <div class="mc-card__specs">
-                        <div class="mc-card__spec"><span class="mc-card__spec-label">Motor</span><span class="mc-card__spec-value">250 cc</span></div>
-                        <div class="mc-card__spec"><span class="mc-card__spec-label">Caja</span><span class="mc-card__spec-value">Mecánica</span></div>
-                        <div class="mc-card__spec"><span class="mc-card__spec-label">ABS</span><span class="mc-card__spec-value">Sí</span></div>
-                    </div>
-                    <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openVehicleModalDemo('Yamaha FZ-250', '2024', 'Manual', '2', 'Gasolina', 'No', '250 cc', '100000', '<?php echo get_template_directory_uri(); ?>/assets/img/fz250.png', 'La Yamaha FZ-250 es una moto deportiva con excelente rendimiento.')">
-                        Reserva Ahora
-                    </button>
                 </div>
+                <?php endforeach; ?>
 
-                <div class="mc-card" data-vehicle-id="demo-3" data-tipo="carro" data-subcategoria="sedan" data-precio="95000">
-                    <span class="mc-card__badge">5 Personas</span>
-                    <h3 class="mc-card__title">Renault Logan</h3>
-                    <div class="mc-card__image">
-                        <img src="<?php echo get_template_directory_uri(); ?>/assets/img/renault-logan.png" alt="Renault Logan" loading="lazy">
-                    </div>
-                    <div class="mc-card__pricing">
-                        <span class="mc-card__price">Desde $200.000 <small>COP/día</small></span>
-                        <span class="mc-card__price-usd">$54,20 <small>USD/día</small></span>
-                    </div>
-                    <div class="mc-card__specs">
-                        <div class="mc-card__spec"><span class="mc-card__spec-label">Motor</span><span class="mc-card__spec-value">1600 cc</span></div>
-                        <div class="mc-card__spec"><span class="mc-card__spec-label">Caja</span><span class="mc-card__spec-value">Mecánica</span></div>
-                        <div class="mc-card__spec"><span class="mc-card__spec-label">Aire</span><span class="mc-card__spec-value">acondicionado</span></div>
-                    </div>
-                    <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openVehicleModalDemo('Renault Logan', '2024', 'Manual', '5', 'Gasolina', 'Sí', '1600 cc', '200000', '<?php echo get_template_directory_uri(); ?>/assets/img/renault-logan.png', 'El Renault Logan es un sedán confiable y económico.')">
-                        Reserva Ahora
-                    </button>
-                </div>
-
-                <div class="mc-card" data-vehicle-id="demo-2" data-tipo="carro" data-subcategoria="sedan" data-precio="135000">
-                    <span class="mc-card__badge">5 Personas</span>
-                    <h3 class="mc-card__title">Volkswagen</h3>
-                    <div class="mc-card__image">
-                        <img src="<?php echo get_template_directory_uri(); ?>/assets/img/volkswagen.png" alt="Volkswagen" loading="lazy">
-                    </div>
-                    <div class="mc-card__pricing">
-                        <span class="mc-card__price">Desde $200.000 <small>COP/día</small></span>
-                        <span class="mc-card__price-usd">$54,20 <small>USD/día</small></span>
-                    </div>
-                    <div class="mc-card__specs">
-                        <div class="mc-card__spec"><span class="mc-card__spec-label">Motor</span><span class="mc-card__spec-value">2000 cc</span></div>
-                        <div class="mc-card__spec"><span class="mc-card__spec-label">Caja</span><span class="mc-card__spec-value">Mecánica</span></div>
-                        <div class="mc-card__spec"><span class="mc-card__spec-label">Aire</span><span class="mc-card__spec-value">acondicionado</span></div>
-                    </div>
-                    <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openVehicleModalDemo('Volkswagen', '2024', 'Manual', '5', 'Gasolina', 'Sí', '2000 cc', '200000', '<?php echo get_template_directory_uri(); ?>/assets/img/volkswagen.png', 'El Volkswagen ofrece confort, seguridad y eficiencia.')">
-                        Reserva Ahora
-                    </button>
-                </div>
-
-                <div class="mc-card" data-vehicle-id="demo-1" data-tipo="carro" data-subcategoria="camioneta" data-precio="135000">
-                    <span class="mc-card__badge">5 Personas</span>
-                    <h3 class="mc-card__title">Kia Sportage</h3>
-                    <div class="mc-card__image">
-                        <img src="<?php echo get_template_directory_uri(); ?>/assets/img/kia-sportage.png" alt="Kia Sportage" loading="lazy">
-                    </div>
-                    <div class="mc-card__pricing">
-                        <span class="mc-card__price">Desde $200.000 <small>COP/día</small></span>
-                        <span class="mc-card__price-usd">$54,20 <small>USD/día</small></span>
-                    </div>
-                    <div class="mc-card__specs">
-                        <div class="mc-card__spec"><span class="mc-card__spec-label">Motor</span><span class="mc-card__spec-value">2000 cc</span></div>
-                        <div class="mc-card__spec"><span class="mc-card__spec-label">Caja</span><span class="mc-card__spec-value">Mecánica</span></div>
-                        <div class="mc-card__spec"><span class="mc-card__spec-label">Aire</span><span class="mc-card__spec-value">acondicionado</span></div>
-                    </div>
-                    <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openVehicleModalDemo('Kia Sportage', '2025', 'Automática', '5', 'Gasolina', 'Sí', '2000 cc', '200000', '<?php echo get_template_directory_uri(); ?>/assets/img/kia-sportage.png', 'La Kia Sportage es una SUV que combina diseño moderno, buen espacio interior y tecnología.')">
-                        Reserva Ahora
-                    </button>
-                </div>
+                <!-- Hidden demo data for modal -->
+                <script>
+                var DEMO_VEHICLES = <?php echo json_encode($demo_categories); ?>;
+                </script>
             <?php endif; ?>
         </div>
     </div>
 </section>
-
 <!-- ==========================================
      RESEÑAS DE GOOGLE
      ========================================== -->
@@ -404,7 +462,7 @@
                         <div class="mc-lugares__info">
                             <h3 class="mc-lugares__name">Guatapé</h3>
                             <div class="mc-lugares__text">
-                                <p data-i18n="lugar_guatape">Guatapé es famoso por la Piedra del Peñol, sus coloridas fachadas de zócalos y el embalse con vistas espectaculares. Ideal para deportes acuáticos, senderismo y disfrutar de la naturaleza.</p>
+                                <p data-i18n="lugar_guatape">Guatapé es famoso por la Piedra del Peñol, sus coloridas fachadas de zócalos y el embalse con vistas espectaculares. Es uno de los destinos turísticos más visitados de Antioquia, ideal para deportes acuáticos, senderismo y disfrutar de la naturaleza.</p>
                             </div>
                         </div>
                     </div>
@@ -417,7 +475,7 @@
                         <div class="mc-lugares__info">
                             <h3 class="mc-lugares__name">Jardín</h3>
                             <div class="mc-lugares__text">
-                                <p data-i18n="lugar_jardin">Jardín es un pueblo patrimonio de Colombia, rodeado de montañas verdes, cascadas y fincas cafeteras. Su parque principal, la Basílica Menor y la Cueva del Esplendor lo hacen un lugar mágico.</p>
+                                <p data-i18n="lugar_jardin">Jardín es un pueblo patrimonio de Colombia, rodeado de montañas verdes, cascadas y fincas cafeteras. Su parque principal, la Basílica Menor y la Cueva del Esplendor lo hacen un lugar mágico lleno de encanto paisa.</p>
                             </div>
                         </div>
                     </div>
@@ -430,7 +488,7 @@
                         <div class="mc-lugares__info">
                             <h3 class="mc-lugares__name">Jericó</h3>
                             <div class="mc-lugares__text">
-                                <p data-i18n="lugar_jerico">Jericó es la cuna de la Santa Laura Montoya, un pueblo de calles empinadas, balcones coloniales y paisajes cafeteros. Su riqueza cultural y miradores naturales lo hacen imperdible.</p>
+                                <p data-i18n="lugar_jerico">Jericó es la cuna de la Santa Laura Montoya, un pueblo de calles empinadas, balcones coloniales y paisajes cafeteros. Su riqueza cultural, museos y miradores naturales lo hacen un destino imperdible del suroeste antioqueño.</p>
                             </div>
                         </div>
                     </div>
@@ -495,7 +553,7 @@
 
                     <div class="mc-service">
                         <div class="mc-service__icon">
-                            <i class="fas fa-truck"></i>
+                            <i class="fas fa-shuttle-van"></i>
                         </div>
                         <div class="mc-service__content">
                             <h4 data-i18n="srv_domicilio_title">Servicio a domicilio</h4>
@@ -907,6 +965,10 @@
             </div>
             <div class="mc-footer__col">
                 <h4 data-i18n="footer_contactanos">Contáctanos</h4>
+                <a href="https://www.google.com/maps/place/MotoCar+Rentals/@6.1762,-75.435,1576m/data=!3m1!1e3!4m6!3m5!1s0x8e469d8d8761cbb1:0xcf88fa157645f16d!8m2!3d6.1755508!4d-75.4348712!16s%2Fg%2F11y2tz0l_5" target="_blank" class="mc-footer__location-link">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Mall Terranova</span>
+                </a>
                 <div class="mc-footer__social">
                     <a href="https://www.facebook.com/p/MotoCar-Rentals-61558707917054/" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
                     <a href="https://www.instagram.com/motocar_rentals/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
@@ -929,110 +991,28 @@
 </footer>
 
 <!-- ==========================================
-     MODAL DE DETALLE / RESERVA
+     CATEGORY DETAIL MODAL
      ========================================== -->
-<div class="mc-modal" id="vehicleModal">
-    <div class="mc-modal__overlay" onclick="closeVehicleModal()"></div>
-    <div class="mc-modal__content">
-        <button class="mc-modal__close" onclick="closeVehicleModal()" aria-label="Cerrar">
+<div class="mc-catmodal" id="categoryModal">
+    <div class="mc-catmodal__overlay" onclick="closeCategoryModal()"></div>
+    <div class="mc-catmodal__content">
+        <button class="mc-catmodal__close" onclick="closeCategoryModal()" aria-label="Close">
             <i class="fas fa-times"></i>
         </button>
-        <div class="mc-modal__body">
-            <div class="mc-modal__layout">
-                <!-- Columna izquierda: vehículo -->
-                <div class="mc-modal__left">
-                    <h2 class="mc-modal__title" id="modalTitle">KIA SELTOS 2025</h2>
-
-                    <div class="mc-modal__info-row">
-                        <div class="mc-modal__image">
-                            <img id="modalImage" src="" alt="Vehículo">
-                        </div>
-                        <div class="mc-modal__description">
-                            <p id="modalDescripcion"></p>
-                        </div>
-                    </div>
-
-                    <!-- Specs bar -->
-                    <div class="mc-modal__specs-bar">
-                        <button class="mc-modal__specs-arrow" id="specsLeft" aria-label="Anterior">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <div class="mc-modal__specs-list">
-                            <div class="mc-modal__spec-item">
-                                <span class="mc-modal__spec-title" data-i18n="modal_motor">MOTOR</span>
-                                <div class="mc-modal__spec-detail">
-                                    <i class="fas fa-engine"></i>
-                                    <span id="modalMotor">2000 CC</span>
-                                </div>
-                            </div>
-                            <div class="mc-modal__spec-item">
-                                <span class="mc-modal__spec-title" data-i18n="modal_abs">ABS</span>
-                                <div class="mc-modal__spec-detail">
-                                    <span class="mc-modal__spec-abs">(ABS)</span>
-                                    <span id="modalABS">Sí</span>
-                                </div>
-                            </div>
-                            <div class="mc-modal__spec-item">
-                                <span class="mc-modal__spec-title" data-i18n="modal_pasajeros">PASAJEROS</span>
-                                <div class="mc-modal__spec-detail">
-                                    <i class="fas fa-users"></i>
-                                    <span id="modalPasajeros">5</span>
-                                </div>
-                            </div>
-                            <div class="mc-modal__spec-item">
-                                <span class="mc-modal__spec-title" data-i18n="modal_tipo">TIPO</span>
-                                <div class="mc-modal__spec-detail">
-                                    <i class="fas fa-cog"></i>
-                                    <span id="modalTransmision">Automática</span>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="mc-modal__specs-arrow" id="specsRight" aria-label="Siguiente">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Columna derecha: formulario cotización -->
-                <div class="mc-modal__right">
-                    <form class="mc-cotizar-form" id="reservationForm">
-                        <input type="hidden" name="vehicle_name" id="reserveVehicleName">
-
-                        <div class="mc-cotizar__field">
-                            <label data-i18n="modal_fechas_label">Definir Fechas de renta</label>
-                            <input type="text" id="modalFechas" placeholder="Seleccionar fechas" data-i18n-placeholder="modal_fechas_placeholder" readonly required>
-                        </div>
-
-                        <div class="mc-cotizar__field">
-                            <label data-i18n="modal_entrega_label">Lugar de Entrega</label>
-                            <input type="text" name="lugar_entrega" placeholder="Elegir Lugar..." data-i18n-placeholder="modal_entrega_placeholder">
-                        </div>
-
-                        <div class="mc-cotizar__field">
-                            <label data-i18n="modal_devolucion_label">Lugar de Devolución</label>
-                            <input type="text" name="lugar_devolucion" placeholder="Elegir Lugar..." data-i18n-placeholder="modal_devolucion_placeholder">
-                        </div>
-
-                        <div class="mc-cotizar__field">
-                            <label data-i18n="modal_hora_entrega">Hora de Entrega</label>
-                            <div class="mc-cotizar__time">
-                                <input type="time" name="hora_entrega" value="11:10">
-                            </div>
-                        </div>
-
-                        <div class="mc-cotizar__field">
-                            <label data-i18n="modal_hora_devolucion">Hora de Devolución</label>
-                            <div class="mc-cotizar__time">
-                                <input type="time" name="hora_devolucion" value="11:10">
-                            </div>
-                        </div>
-
-                        <button type="submit" class="mc-btn mc-btn--primary mc-btn--cotizar" data-i18n-html="modal_cotizar_btn">
-                            Ir a Cotizar <i class="fab fa-whatsapp"></i>
-                        </button>
-                    </form>
-                </div>
-            </div>
+        <h2 class="mc-catmodal__title" id="catModalTitle">Category</h2>
+        <div class="mc-catmodal__dates-hint" id="catModalDatesHint" style="display:none;">
+            <i class="fas fa-calendar-alt"></i>
+            <span data-i18n="modal_dates_hint">Selecciona fechas en los filtros para ver el precio estimado en COP y USD de cada vehículo.</span>
+        </div>
+        <div class="mc-catmodal__grid" id="catModalGrid">
+            <!-- Vehicle cards injected via JS -->
+        </div>
+        <div class="mc-catmodal__cta">
+            <i class="fab fa-whatsapp mc-catmodal__cta-icon"></i>
+            <p class="mc-catmodal__cta-text" data-i18n="modal_cta_text">¿No ves el vehículo ideal? Te conseguimos una opción en minutos.</p>
+            <a id="catModalWhatsApp" href="#" class="mc-btn mc-btn--whatsapp mc-catmodal__cta-btn" target="_blank" data-i18n-html="modal_cta_btn">
+                <i class="fab fa-whatsapp"></i> Buscar disponibilidad por WhatsApp
+            </a>
         </div>
     </div>
 </div>

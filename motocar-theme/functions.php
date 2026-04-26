@@ -114,33 +114,92 @@ function motocar_register_vehicles() {
 
     register_post_type('vehiculo', $args);
 
-    // Taxonomía: Tipo de vehículo (Carro / Moto)
-    register_taxonomy('tipo_vehiculo', 'vehiculo', array(
+    // Taxonomía: Categoría de vehículo
+    register_taxonomy('categoria_vehiculo', 'vehiculo', array(
         'labels' => array(
-            'name' => 'Tipo de Vehículo',
-            'singular_name' => 'Tipo',
+            'name'          => 'Categoría de Vehículo',
+            'singular_name' => 'Categoría',
+            'menu_name'     => 'Categorías',
+            'all_items'     => 'Todas las Categorías',
+            'edit_item'     => 'Editar Categoría',
+            'add_new_item'  => 'Agregar Categoría',
         ),
         'hierarchical' => true,
         'show_in_rest' => true,
+        'show_admin_column' => true,
     ));
 }
 add_action('init', 'motocar_register_vehicles');
+
+// ==========================================
+// CREAR CATEGORÍAS POR DEFECTO AL ACTIVAR TEMA
+// ==========================================
+function motocar_create_default_categories() {
+    $categories = array(
+        'economy'  => array('name' => 'Carro Económico', 'desc' => 'Volkswagen Gol o similar'),
+        'compact'  => array('name' => 'Carro Compacto',  'desc' => 'Renault Logan o similar'),
+        'suv'      => array('name' => 'SUV Compacto',    'desc' => 'Kia Seltos o similar'),
+        'motos'    => array('name' => 'Motocicletas',    'desc' => 'Yamaha FZ 150 o similar'),
+    );
+    foreach ($categories as $slug => $cat) {
+        $existing_term = get_term_by('slug', $slug, 'categoria_vehiculo');
+        if (!$existing_term) {
+            wp_insert_term($cat['name'], 'categoria_vehiculo', array(
+                'slug'        => $slug,
+                'description' => $cat['desc'],
+            ));
+            continue;
+        }
+
+        $needs_name_update = $existing_term->name !== $cat['name'];
+        $needs_desc_update = $existing_term->description !== $cat['desc'];
+
+        if ($needs_name_update || $needs_desc_update) {
+            wp_update_term($existing_term->term_id, 'categoria_vehiculo', array(
+                'name'        => $cat['name'],
+                'description' => $cat['desc'],
+            ));
+        }
+    }
+}
+add_action('after_switch_theme', 'motocar_create_default_categories');
+// Also run on init to ensure categories exist
+add_action('init', function() {
+    if (did_action('after_switch_theme')) return;
+    motocar_create_default_categories();
+}, 20);
 
 // ==========================================
 // META BOXES PARA VEHÍCULOS
 // ==========================================
 function motocar_vehicle_meta_boxes() {
     add_meta_box(
+        'vehicle_category_info',
+        '⚠️ IMPORTANTE — Categoría del Vehículo',
+        'motocar_category_info_callback',
+        'vehiculo',
+        'side',
+        'high'
+    );
+    add_meta_box(
         'vehicle_details',
-        'Detalles del Vehículo',
+        '🚗 Detalles del Vehículo',
         'motocar_vehicle_meta_callback',
         'vehiculo',
         'normal',
         'high'
     );
     add_meta_box(
+        'vehicle_gallery',
+        '📸 Galería de Imágenes',
+        'motocar_gallery_meta_callback',
+        'vehiculo',
+        'normal',
+        'high'
+    );
+    add_meta_box(
         'vehicle_availability',
-        'Fechas No Disponibles',
+        '📅 Fechas No Disponibles',
         'motocar_availability_meta_callback',
         'vehiculo',
         'normal',
@@ -148,6 +207,37 @@ function motocar_vehicle_meta_boxes() {
     );
 }
 add_action('add_meta_boxes', 'motocar_vehicle_meta_boxes');
+
+// Info box para categoría
+function motocar_category_info_callback($post) {
+    ?>
+    <div style="background: #fff3cd; border: 1px solid #ffc107; border-radius: 6px; padding: 12px; margin-bottom: 10px;">
+        <p style="margin: 0 0 8px; font-weight: 700; color: #856404;">⚠️ Asigna una categoría al vehículo</p>
+        <p style="margin: 0; font-size: 12px; color: #856404;">
+            Selecciona la categoría en el panel <strong>"Categoría de Vehículo"</strong> de la derecha.
+            <br><br>
+            <strong>Categorías disponibles:</strong><br>
+            • <strong>Economy Car</strong> — Vehículos económicos<br>
+            • <strong>Compact Car</strong> — Sedanes compactos<br>
+            • <strong>Compact SUV</strong> — Camionetas y SUVs<br>
+            • <strong>Motorcycles</strong> — Motos
+        </p>
+    </div>
+    <div style="background: #d1ecf1; border: 1px solid #17a2b8; border-radius: 6px; padding: 12px;">
+        <p style="margin: 0 0 8px; font-weight: 700; color: #0c5460;">📸 Requisitos de Imágenes</p>
+        <p style="margin: 0; font-size: 12px; color: #0c5460;">
+            <strong>Imagen Destacada (obligatoria):</strong><br>
+            • Resolución mínima: 800×500px<br>
+            • Fondo transparente (PNG) recomendado<br>
+            • Vista lateral del vehículo<br><br>
+            <strong>Galería (2-4 imágenes):</strong><br>
+            • Interior, ángulo frontal, trasero<br>
+            • Resolución mínima: 600×400px<br>
+            • Formatos: JPG, PNG, WebP
+        </p>
+    </div>
+    <?php
+}
 
 function motocar_vehicle_meta_callback($post) {
     wp_nonce_field('motocar_vehicle_nonce', 'motocar_vehicle_nonce_field');
@@ -161,44 +251,48 @@ function motocar_vehicle_meta_callback($post) {
     $combustible = get_post_meta($post->ID, '_combustible', true);
     $aire_acondicionado = get_post_meta($post->ID, '_aire_acondicionado', true);
     $cilindrada = get_post_meta($post->ID, '_cilindrada', true);
-    $subcategoria = get_post_meta($post->ID, '_subcategoria', true);
+    $maletas = get_post_meta($post->ID, '_maletas', true);
     ?>
     <style>
         .vehicle-meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .vehicle-meta-field { margin-bottom: 10px; }
         .vehicle-meta-field label { display: block; font-weight: bold; margin-bottom: 5px; }
         .vehicle-meta-field input, .vehicle-meta-field select { width: 100%; padding: 8px; }
+        .vehicle-meta-field .field-hint { font-size: 11px; color: #666; margin-top: 3px; }
     </style>
     <div class="vehicle-meta-grid">
         <div class="vehicle-meta-field">
-            <label>Precio por día (COP):</label>
-            <input type="number" name="precio_dia" value="<?php echo esc_attr($precio_dia); ?>" placeholder="Ej: 135000">
+            <label>💲 Precio por día (COP) *</label>
+            <input type="number" name="precio_dia" value="<?php echo esc_attr($precio_dia); ?>" placeholder="Ej: 135000" required>
+            <p class="field-hint">Precio actual que se muestra al cliente</p>
         </div>
         <div class="vehicle-meta-field">
-            <label>Precio anterior (COP) - para tachar:</label>
+            <label>💲 Precio anterior (COP) — tachado:</label>
             <input type="number" name="precio_anterior" value="<?php echo esc_attr($precio_anterior); ?>" placeholder="Ej: 180000">
+            <p class="field-hint">Déjalo vacío si no hay descuento</p>
         </div>
         <div class="vehicle-meta-field">
-            <label>Modelo:</label>
+            <label>🚘 Modelo:</label>
             <input type="text" name="modelo" value="<?php echo esc_attr($modelo); ?>" placeholder="Ej: Sportage">
         </div>
         <div class="vehicle-meta-field">
-            <label>Año:</label>
+            <label>📅 Año:</label>
             <input type="number" name="ano" value="<?php echo esc_attr($ano); ?>" placeholder="Ej: 2024">
         </div>
         <div class="vehicle-meta-field">
-            <label>Transmisión:</label>
+            <label>⚙️ Transmisión *</label>
             <select name="transmision">
+                <option value="">— Seleccionar —</option>
                 <option value="manual" <?php selected($transmision, 'manual'); ?>>Manual</option>
-                <option value="automatica" <?php selected($transmision, 'automatica'); ?>>Automática</option>
+                <option value="automatica" <?php selected($transmision, 'automatica'); ?>>Automatic</option>
             </select>
         </div>
         <div class="vehicle-meta-field">
-            <label>Pasajeros:</label>
-            <input type="number" name="pasajeros" value="<?php echo esc_attr($pasajeros); ?>" placeholder="Ej: 5">
+            <label>👥 Pasajeros *</label>
+            <input type="number" name="pasajeros" value="<?php echo esc_attr($pasajeros); ?>" placeholder="Ej: 5" min="1" max="12">
         </div>
         <div class="vehicle-meta-field">
-            <label>Combustible:</label>
+            <label>⛽ Combustible:</label>
             <select name="combustible">
                 <option value="gasolina" <?php selected($combustible, 'gasolina'); ?>>Gasolina</option>
                 <option value="diesel" <?php selected($combustible, 'diesel'); ?>>Diésel</option>
@@ -207,26 +301,94 @@ function motocar_vehicle_meta_callback($post) {
             </select>
         </div>
         <div class="vehicle-meta-field">
-            <label>Aire Acondicionado:</label>
+            <label>❄️ Aire Acondicionado:</label>
             <select name="aire_acondicionado">
                 <option value="si" <?php selected($aire_acondicionado, 'si'); ?>>Sí</option>
                 <option value="no" <?php selected($aire_acondicionado, 'no'); ?>>No</option>
             </select>
         </div>
         <div class="vehicle-meta-field">
-            <label>Cilindraje (cc) - para motos:</label>
-            <input type="text" name="cilindrada" value="<?php echo esc_attr($cilindrada); ?>" placeholder="Ej: 250cc">
+            <label>🔧 Motor / Cilindraje:</label>
+            <input type="text" name="cilindrada" value="<?php echo esc_attr($cilindrada); ?>" placeholder="Ej: 2000 cc ó 250 cc">
+            <p class="field-hint">Para carros: 1600cc, 2000cc. Para motos: 150cc, 250cc</p>
         </div>
         <div class="vehicle-meta-field">
-            <label>Subcategoría (para ordenamiento):</label>
-            <select name="subcategoria">
-                <option value="moto" <?php selected($subcategoria, 'moto'); ?>>Moto</option>
-                <option value="hatchback" <?php selected($subcategoria, 'hatchback'); ?>>Hatchback</option>
-                <option value="sedan" <?php selected($subcategoria, 'sedan'); ?>>Sedán</option>
-                <option value="camioneta" <?php selected($subcategoria, 'camioneta'); ?>>Camioneta</option>
-            </select>
+            <label>🧳 Capacidad Maletas:</label>
+            <input type="text" name="maletas" value="<?php echo esc_attr($maletas); ?>" placeholder="Ej: 2 large, 1 medium">
+            <p class="field-hint">Descripción de capacidad de equipaje</p>
         </div>
     </div>
+    <?php
+}
+
+// Gallery meta box
+function motocar_gallery_meta_callback($post) {
+    wp_enqueue_media();
+    $gallery = get_post_meta($post->ID, '_vehicle_gallery', true);
+    $gallery_ids = !empty($gallery) ? explode(',', $gallery) : array();
+    ?>
+    <style>
+        .gallery-preview { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0; }
+        .gallery-preview .gallery-thumb { width: 120px; height: 80px; object-fit: cover; border-radius: 6px; border: 2px solid #ddd; }
+        .gallery-preview .gallery-item { position: relative; }
+        .gallery-preview .gallery-remove { position: absolute; top: -6px; right: -6px; background: #dc3545; color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-size: 12px; line-height: 1; }
+    </style>
+    <div style="background: #f0f6fc; border: 1px solid #0073aa; border-radius: 6px; padding: 12px; margin-bottom: 14px;">
+        <p style="margin: 0; font-size: 12px; color: #0c5460;">
+            📸 Agrega 2-4 imágenes adicionales del vehículo (interior, otros ángulos, detalles).<br>
+            Estas imágenes aparecerán en el carrusel de la categoría y en el detalle del vehículo.<br>
+            <strong>La Imagen Destacada</strong> (panel derecho) será la imagen principal del vehículo.
+        </p>
+    </div>
+    <input type="hidden" name="vehicle_gallery" id="vehicle_gallery" value="<?php echo esc_attr($gallery); ?>">
+    <div class="gallery-preview" id="galleryPreview">
+        <?php foreach ($gallery_ids as $img_id) :
+            $img_url = wp_get_attachment_image_url(intval($img_id), 'thumbnail');
+            if ($img_url) : ?>
+            <div class="gallery-item" data-id="<?php echo esc_attr($img_id); ?>">
+                <img src="<?php echo esc_url($img_url); ?>" class="gallery-thumb">
+                <button type="button" class="gallery-remove" onclick="mcRemoveGalleryImage(this)">×</button>
+            </div>
+        <?php endif; endforeach; ?>
+    </div>
+    <button type="button" class="button button-secondary" id="addGalleryImages">+ Add Gallery Images</button>
+    <script>
+    (function() {
+        var frame;
+        document.getElementById('addGalleryImages').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (frame) { frame.open(); return; }
+            frame = wp.media({ title: 'Select Gallery Images', multiple: true, library: { type: 'image' } });
+            frame.on('select', function() {
+                var attachments = frame.state().get('selection').toJSON();
+                var input = document.getElementById('vehicle_gallery');
+                var preview = document.getElementById('galleryPreview');
+                var ids = input.value ? input.value.split(',') : [];
+                attachments.forEach(function(att) {
+                    if (ids.indexOf(String(att.id)) === -1) {
+                        ids.push(att.id);
+                        var div = document.createElement('div');
+                        div.className = 'gallery-item';
+                        div.setAttribute('data-id', att.id);
+                        var url = att.sizes && att.sizes.thumbnail ? att.sizes.thumbnail.url : att.url;
+                        div.innerHTML = '<img src="' + url + '" class="gallery-thumb"><button type="button" class="gallery-remove" onclick="mcRemoveGalleryImage(this)">×</button>';
+                        preview.appendChild(div);
+                    }
+                });
+                input.value = ids.join(',');
+            });
+            frame.open();
+        });
+    })();
+    function mcRemoveGalleryImage(btn) {
+        var item = btn.parentElement;
+        var id = item.getAttribute('data-id');
+        var input = document.getElementById('vehicle_gallery');
+        var ids = input.value.split(',').filter(function(i) { return i !== id; });
+        input.value = ids.join(',');
+        item.remove();
+    }
+    </script>
     <?php
 }
 
@@ -286,12 +448,17 @@ function motocar_save_vehicle_meta($post_id) {
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
     if (!current_user_can('edit_post', $post_id)) return;
 
-    $fields = array('precio_dia', 'precio_anterior', 'modelo', 'ano', 'transmision', 'pasajeros', 'combustible', 'aire_acondicionado', 'cilindrada', 'subcategoria');
+    $fields = array('precio_dia', 'precio_anterior', 'modelo', 'ano', 'transmision', 'pasajeros', 'combustible', 'aire_acondicionado', 'cilindrada', 'maletas');
 
     foreach ($fields as $field) {
         if (isset($_POST[$field])) {
             update_post_meta($post_id, '_' . $field, sanitize_text_field($_POST[$field]));
         }
+    }
+
+    // Gallery
+    if (isset($_POST['vehicle_gallery'])) {
+        update_post_meta($post_id, '_vehicle_gallery', sanitize_text_field($_POST['vehicle_gallery']));
     }
 
     // Guardar fechas no disponibles
@@ -319,6 +486,78 @@ function motocar_save_vehicle_meta($post_id) {
 add_action('save_post_vehiculo', 'motocar_save_vehicle_meta');
 
 // ==========================================
+// AJAX: OBTENER VEHÍCULOS POR CATEGORÍA
+// ==========================================
+function motocar_get_category_vehicles() {
+    check_ajax_referer('motocar_nonce', 'nonce');
+
+    $category_slug = sanitize_text_field($_POST['category'] ?? '');
+    if (empty($category_slug)) {
+        wp_send_json_error('Missing category');
+    }
+
+    $args = array(
+        'post_type'      => 'vehiculo',
+        'posts_per_page' => -1,
+        'post_status'    => 'publish',
+        'tax_query'      => array(
+            array(
+                'taxonomy' => 'categoria_vehiculo',
+                'field'    => 'slug',
+                'terms'    => $category_slug,
+            ),
+        ),
+        'meta_key'       => '_precio_dia',
+        'orderby'        => 'meta_value_num',
+        'order'          => 'ASC',
+    );
+
+    $query = new WP_Query($args);
+    $vehicles = array();
+
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            $id = get_the_ID();
+            $thumbnail = get_the_post_thumbnail_url($id, 'large');
+            $gallery_raw = get_post_meta($id, '_vehicle_gallery', true);
+            $gallery_images = array();
+            if (!empty($gallery_raw)) {
+                $gids = explode(',', $gallery_raw);
+                foreach ($gids as $gid) {
+                    $url = wp_get_attachment_image_url(intval($gid), 'medium');
+                    if ($url) $gallery_images[] = $url;
+                }
+            }
+
+            $vehicles[] = array(
+                'id'              => $id,
+                'nombre'          => get_the_title(),
+                'descripcion'     => wp_strip_all_tags(apply_filters('the_content', get_the_content())),
+                'imagen'          => $thumbnail ?: '',
+                'gallery'         => $gallery_images,
+                'precio_dia'      => get_post_meta($id, '_precio_dia', true),
+                'precio_anterior' => get_post_meta($id, '_precio_anterior', true),
+                'modelo'          => get_post_meta($id, '_modelo', true),
+                'ano'             => get_post_meta($id, '_ano', true),
+                'transmision'     => get_post_meta($id, '_transmision', true),
+                'pasajeros'       => get_post_meta($id, '_pasajeros', true),
+                'combustible'     => get_post_meta($id, '_combustible', true),
+                'aire'            => get_post_meta($id, '_aire_acondicionado', true),
+                'cilindrada'      => get_post_meta($id, '_cilindrada', true),
+                'maletas'         => get_post_meta($id, '_maletas', true),
+                'fechas_no_disponibles' => (array) (get_post_meta($id, '_fechas_no_disponibles', true) ?: array()),
+            );
+        }
+        wp_reset_postdata();
+    }
+
+    wp_send_json_success($vehicles);
+}
+add_action('wp_ajax_get_category_vehicles', 'motocar_get_category_vehicles');
+add_action('wp_ajax_nopriv_get_category_vehicles', 'motocar_get_category_vehicles');
+
+// ==========================================
 // AJAX: OBTENER DATOS DEL VEHÍCULO
 // ==========================================
 function motocar_get_vehicle_data() {
@@ -332,7 +571,6 @@ function motocar_get_vehicle_data() {
     }
 
     $thumbnail = get_the_post_thumbnail_url($vehicle_id, 'large');
-    $tipos = wp_get_post_terms($vehicle_id, 'tipo_vehiculo', array('fields' => 'names'));
 
     $data = array(
         'id'          => $vehicle_id,
@@ -348,113 +586,13 @@ function motocar_get_vehicle_data() {
         'combustible' => get_post_meta($vehicle_id, '_combustible', true),
         'aire'        => get_post_meta($vehicle_id, '_aire_acondicionado', true),
         'cilindrada'  => get_post_meta($vehicle_id, '_cilindrada', true),
-        'tipo'        => !empty($tipos) ? $tipos[0] : '',
+        'maletas'     => get_post_meta($vehicle_id, '_maletas', true),
     );
 
     wp_send_json_success($data);
 }
 add_action('wp_ajax_get_vehicle', 'motocar_get_vehicle_data');
 add_action('wp_ajax_nopriv_get_vehicle', 'motocar_get_vehicle_data');
-
-// ==========================================
-// AJAX: FILTRAR VEHÍCULOS
-// ==========================================
-function motocar_filter_vehicles() {
-    check_ajax_referer('motocar_nonce', 'nonce');
-
-    $tipo = sanitize_text_field($_POST['tipo'] ?? '');
-    $precio_rango = sanitize_text_field($_POST['precio_rango'] ?? '');
-    $fecha_inicio = sanitize_text_field($_POST['fecha_inicio'] ?? '');
-    $fecha_fin = sanitize_text_field($_POST['fecha_fin'] ?? '');
-
-    $args = array(
-        'post_type'      => 'vehiculo',
-        'posts_per_page' => -1,
-        'post_status'    => 'publish',
-    );
-
-    // Filtro por tipo (carro/moto)
-    if (!empty($tipo)) {
-        $args['tax_query'] = array(
-            array(
-                'taxonomy' => 'tipo_vehiculo',
-                'field'    => 'slug',
-                'terms'    => $tipo,
-            ),
-        );
-    }
-
-    // Filtro por rango de precio
-    if (!empty($precio_rango)) {
-        $rango = explode('-', $precio_rango);
-        if (count($rango) === 2) {
-            $args['meta_query'][] = array(
-                'key'     => '_precio_dia',
-                'value'   => array(intval($rango[0]), intval($rango[1])),
-                'type'    => 'NUMERIC',
-                'compare' => 'BETWEEN',
-            );
-        }
-    }
-
-    $query = new WP_Query($args);
-    $vehicles = array();
-
-    if ($query->have_posts()) {
-        while ($query->have_posts()) {
-            $query->the_post();
-            $id = get_the_ID();
-            $thumbnail = get_the_post_thumbnail_url($id, 'medium');
-            $tipos = wp_get_post_terms($id, 'tipo_vehiculo', array('fields' => 'names'));
-
-            $vehicles[] = array(
-                'id'          => $id,
-                'nombre'      => get_the_title(),
-                'imagen'      => $thumbnail ?: '',
-                'precio_dia'  => get_post_meta($id, '_precio_dia', true),
-                'precio_anterior' => get_post_meta($id, '_precio_anterior', true),
-                'modelo'      => get_post_meta($id, '_modelo', true),
-                'ano'         => get_post_meta($id, '_ano', true),
-                'transmision' => get_post_meta($id, '_transmision', true),
-                'pasajeros'   => get_post_meta($id, '_pasajeros', true),
-                'tipo'        => !empty($tipos) ? $tipos[0] : '',
-                'subcategoria' => get_post_meta($id, '_subcategoria', true),
-                'cilindrada'  => get_post_meta($id, '_cilindrada', true),
-            );
-        }
-        wp_reset_postdata();
-
-        // Filtrar por disponibilidad de fechas
-        if (!empty($fecha_inicio) && !empty($fecha_fin)) {
-            $vehicles = array_filter($vehicles, function($v) use ($fecha_inicio, $fecha_fin) {
-                $fechas_nd = get_post_meta($v['id'], '_fechas_no_disponibles', true);
-                if (!is_array($fechas_nd) || empty($fechas_nd)) return true;
-                foreach ($fechas_nd as $rango) {
-                    if (empty($rango['inicio']) || empty($rango['fin'])) continue;
-                    // Hay conflicto si los rangos se solapan
-                    if ($fecha_inicio <= $rango['fin'] && $fecha_fin >= $rango['inicio']) {
-                        return false;
-                    }
-                }
-                return true;
-            });
-            $vehicles = array_values($vehicles);
-        }
-
-        // Sort by subcategory hierarchy then price
-        $subcat_order = array('moto' => 1, 'hatchback' => 2, 'sedan' => 3, 'camioneta' => 4);
-        usort($vehicles, function($a, $b) use ($subcat_order) {
-            $oa = $subcat_order[$a['subcategoria']] ?? 99;
-            $ob = $subcat_order[$b['subcategoria']] ?? 99;
-            if ($oa !== $ob) return $oa - $ob;
-            return intval($a['precio_dia']) - intval($b['precio_dia']);
-        });
-    }
-
-    wp_send_json_success($vehicles);
-}
-add_action('wp_ajax_filter_vehicles', 'motocar_filter_vehicles');
-add_action('wp_ajax_nopriv_filter_vehicles', 'motocar_filter_vehicles');
 
 // ==========================================
 // SHORTCODE: Si se necesita insertar catálogo en otra página

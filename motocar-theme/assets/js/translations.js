@@ -6,6 +6,7 @@ var MC_TRANSLATIONS = {
     en: {
         // Topbar
         lang_label: 'Language',
+        topbar_location: 'Rionegro, Antioquia',
 
         // Nav
         nav_inicio: 'Home',
@@ -17,35 +18,33 @@ var MC_TRANSLATIONS = {
         // Hero
         hero_title: 'Rent the thrill,<br>live the experience!',
 
-        // Search / Filter
-        search_tipo: 'Type',
-        search_carro: 'Car',
-        search_moto: 'Motorcycle',
-        search_precio: 'Price',
-        search_all_prices: 'All prices',
-        search_hasta_80: 'Up to $80,000',
-        search_80_120: '$80,000 - $120,000',
-        search_120_200: '$120,000 - $200,000',
-        search_mas_200: 'Over $200,000',
-        search_disponibilidad: 'Availability',
-        search_fechas_placeholder: 'Select dates',
-        search_filtrar: 'Filter',
+        // Search / Filter (removed - now category-based)
 
-        // Catalog
-        catalog_title: 'Meet our vehicles',
-        catalog_subtitle: 'Our diverse fleet includes sedans, SUVs and trucks, all subject to rigorous inspections and professional maintenance, ensuring the highest quality standards. We invite you to make your reservation today through our online booking system.',
-        card_personas: 'Passengers',
-        card_desde: 'From',
-        card_motor: 'Engine',
-        card_caja: 'Transmission',
-        card_abs: 'ABS',
-        card_aire: 'A/C',
-        card_aire_value: 'included',
-        card_automatica: 'Automatic',
-        card_mecanica: 'Manual',
-        card_reserva: 'Book Now',
-        card_si: 'Yes',
-        card_no: 'No',
+        // Catalog / Fleet
+        catalog_title: 'Our Fleet',
+        catalog_subtitle: 'Choose your perfect ride from our vehicle categories',
+        card_show_details: 'Show Details',
+
+        // Filters
+        filter_type: 'Vehicle type',
+        filter_reset: 'Reset filters',
+        filter_all: 'All',
+        filter_cars: 'Cars',
+        filter_motos: 'Motorcycles',
+        filter_availability: 'Availability',
+        filter_pickup_block: 'Pick-up',
+        filter_return_block: 'Return',
+        filter_pickup: 'Pick-up date',
+        filter_return: 'Return date',
+        filter_pickup_time: 'Pick-up time',
+        filter_return_time: 'Return time',
+        filter_pickup_location: 'Pick-up location',
+        filter_return_location: 'Return location',
+        filter_location_other_placeholder: 'Which place?',
+        location_rionegro_airport: 'Terranova Mall',
+        location_other: 'Other',
+        filter_hint: 'Select dates to calculate an estimated price in COP and USD when viewing vehicles.',
+        modal_dates_hint: 'Select dates in the filters to see the estimated price in COP and USD for each vehicle.',
 
         // Lugares
         lugares_title: 'Unique Spots in<br>Antioquia',
@@ -181,29 +180,15 @@ var MC_TRANSLATIONS = {
         footer_enviar: 'Send',
         footer_email_placeholder: 'Your email address',
 
-        // Modal
-        modal_motor: 'ENGINE',
-        modal_abs: 'ABS',
-        modal_pasajeros: 'PASSENGERS',
-        modal_tipo: 'TYPE',
-        modal_fechas_label: 'Set Rental Dates',
-        modal_fechas_placeholder: 'Select dates',
-        modal_entrega_label: 'Pick-up Location',
-        modal_entrega_placeholder: 'Choose Location...',
-        modal_devolucion_label: 'Return Location',
-        modal_devolucion_placeholder: 'Choose Location...',
-        modal_hora_entrega: 'Pick-up Time',
-        modal_hora_devolucion: 'Return Time',
-        modal_cotizar: 'Get a Quote',
-        modal_cotizar_btn: 'Get a Quote <i class="fab fa-whatsapp"></i>',
-        modal_entrega_placeholder: 'Choose Location...',
-        modal_devolucion_placeholder: 'Choose Location...',
-
         // Reviews
         reviews_title: 'What our clients say',
         reviews_subtitle: 'Verified Google reviews',
 
         // WhatsApp message
-        whatsapp_msg: 'Hello MotoCar Rentals! I want information about vehicle rental'
+        whatsapp_msg: 'Hello MotoCar Rentals! I want information about vehicle rental',
+
+        // Modal CTA
+        modal_cta_text: "Can't find the ideal vehicle? We'll get you one in minutes.",
+        modal_cta_btn: '<i class="fab fa-whatsapp"></i> Check availability on WhatsApp'
     }
 };

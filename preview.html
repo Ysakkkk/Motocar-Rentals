@@ -26,9 +26,9 @@
     <div class="mc-container">
         <div class="mc-topbar__inner">
             <div class="mc-topbar__info">
-                <a href="https://maps.google.com/?q=Aeropuerto+Jose+Maria+Cordova" target="_blank" class="mc-topbar__item">
+                <a href="https://www.google.com/maps/place/MotoCar+Rentals/@6.1762,-75.435,1576m/data=!3m1!1e3!4m6!3m5!1s0x8e469d8d8761cbb1:0xcf88fa157645f16d!8m2!3d6.1755508!4d-75.4348712!16s%2Fg%2F11y2tz0l_5" target="_blank" class="mc-topbar__item">
                     <img src="motocar-theme/assets/img/icon-location.png" alt="Ubicación" class="mc-topbar__item-icon">
-                    <span>Aeropuerto José María Córdova</span>
+                    <span data-i18n="topbar_location">Rionegro, Antioquia</span>
                 </a>
                 <a href="mailto:motocarrentals@gmail.com" class="mc-topbar__item">
                     <img src="motocar-theme/assets/img/icon-email.png" alt="Correo" class="mc-topbar__item-icon">
@@ -83,9 +83,9 @@
 <section class="mc-hero" id="inicio">
     <div class="mc-hero__slider" id="heroSlider">
         <div class="mc-hero__slide active" style="background-image: url('motocar-theme/assets/img/slide-1.webp');"></div>
-        <div class="mc-hero__slide" style="background-image: url('motocar-theme/assets/img/slide-2.jpeg');"></div>
-        <div class="mc-hero__slide" style="background-image: url('motocar-theme/assets/img/slide-3.jpg');"></div>
-        <div class="mc-hero__slide" style="background-image: url('motocar-theme/assets/img/slide-4.jpeg');"></div>
+        <div class="mc-hero__slide" style="background-image: url('motocar-theme/assets/img/slide-2.webp');"></div>
+        <div class="mc-hero__slide" style="background-image: url('motocar-theme/assets/img/slide-3.webp');"></div>
+        <div class="mc-hero__slide" style="background-image: url('motocar-theme/assets/img/slide-4.webp');"></div>
     </div>
     <div class="mc-hero__overlay"></div>
     <div class="mc-hero__content">
@@ -102,202 +102,261 @@
     </div>
 </section>
 
-<!-- BUSCADOR -->
-<section class="mc-search">
-    <div class="mc-container">
-        <div class="mc-search__box">
-            <form class="mc-search__form" id="filterForm">
-                <div class="mc-search__group">
-                    <label class="mc-search__label" data-i18n="search_tipo">Tipo</label>
-                    <div class="mc-toggle" id="tipoToggle">
-                        <button type="button" class="mc-toggle__btn active" data-value="carro" data-i18n="search_carro">Carro</button>
-                        <button type="button" class="mc-toggle__btn" data-value="moto" data-i18n="search_moto">Moto</button>
-                    </div>
-                    <input type="hidden" name="tipo" id="filterTipo" value="carro">
-                </div>
-                <div class="mc-search__group">
-                    <label class="mc-search__label" data-i18n="search_precio">Precio</label>
-                    <select name="precio_rango" id="filterPrecio">
-                        <option value="" data-i18n="search_all_prices">Todos los precios</option>
-                        <option value="0-80000" data-i18n="search_hasta_80">Hasta $80.000</option>
-                        <option value="80000-120000" data-i18n="search_80_120">$80.000 - $120.000</option>
-                        <option value="120000-200000" data-i18n="search_120_200">$120.000 - $200.000</option>
-                        <option value="200000-999999" data-i18n="search_mas_200">Más de $200.000</option>
-                    </select>
-                </div>
-                <div class="mc-search__group mc-search__group--disponibilidad">
-                    <label class="mc-search__label" data-i18n="search_disponibilidad">Disponibilidad</label>
-                    <input type="text" id="filterFechas" placeholder="Seleccionar fechas" data-i18n-placeholder="search_fechas_placeholder" readonly>
-                </div>
-                <div class="mc-search__group mc-search__group--btn">
-                    <button type="submit" class="mc-btn mc-btn--primary mc-btn--filter" id="filterBtn" data-i18n="search_filtrar">
-                        Filtrar
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</section>
-
-<!-- CATÁLOGO -->
-<section class="mc-catalogo" id="vehiculos">
+<!-- VEHICLE CATEGORIES -->
+<section class="mc-categories" id="vehiculos">
     <div class="mc-container">
         <div class="mc-section-header">
-            <h2 class="mc-section-title mc-section-title--script" data-i18n="catalog_title">Conoce nuestros vehículos</h2>
-            <p class="mc-section-subtitle" data-i18n="catalog_subtitle">Nuestra flota diversa incluye sedanes, SUV y camionetas, todos sometidos a rigurosas inspecciones y mantenimientos por profesionales, garantizando así los más altos estándares de calidad. Te invitamos a realizar tu reserva hoy mismo a través de nuestro sistema de reservas en línea.</p>
+            <h2 class="mc-section-title mc-section-title--script" data-i18n="catalog_title">Nuestra Flota</h2>
+            <p class="mc-section-subtitle" data-i18n="catalog_subtitle">Elige tu vehículo ideal entre nuestras categorías</p>
         </div>
 
-        <div class="mc-catalogo__grid" id="vehiculosGrid">
-            <!-- Yamaha Aerox -->
-            <div class="mc-card" data-vehicle-id="demo-5" data-tipo="moto" data-subcategoria="moto" data-precio="55000">
-                <span class="mc-card__badge">2 Personas</span>
-                <h3 class="mc-card__title">Yamaha Aerox</h3>
-                <div class="mc-card__image">
-                    <img src="motocar-theme/assets/img/aerox.png" alt="Yamaha Aerox" loading="lazy">
+        <!-- FILTROS -->
+        <div class="mc-filter">
+            <div class="mc-filter__group">
+                <label class="mc-filter__label" data-i18n="filter_type">Tipo de vehículo</label>
+                <div class="mc-filter__buttons">
+                    <button class="mc-filter__btn active" data-filter="all" data-i18n="filter_all">Todos</button>
+                    <button class="mc-filter__btn" data-filter="carro" data-i18n="filter_cars"><i class="fas fa-car"></i> Carros</button>
+                    <button class="mc-filter__btn" data-filter="moto" data-i18n="filter_motos"><i class="fas fa-motorcycle"></i> Motos</button>
                 </div>
-                <div class="mc-card__pricing">
-                    <span class="mc-card__price">Desde $80.000 <small>COP/día</small></span>
-                    <span class="mc-card__price-usd">$21,70 <small>USD/día</small></span>
-                </div>
-                <div class="mc-card__specs">
-                    <div class="mc-card__spec">
-                        <span class="mc-card__spec-label">Motor</span>
-                        <span class="mc-card__spec-value">155 cc</span>
-                    </div>
-                    <div class="mc-card__spec">
-                        <span class="mc-card__spec-label">Caja</span>
-                        <span class="mc-card__spec-value">Automática</span>
-                    </div>
-                    <div class="mc-card__spec">
-                        <span class="mc-card__spec-label">ABS</span>
-                        <span class="mc-card__spec-value">Sí</span>
-                    </div>
-                </div>
-                <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openVehicleModalDemo('Yamaha Aerox', '2024', 'Automática', '2', 'Gasolina', 'No', '155 cc', '80000', 'motocar-theme/assets/img/aerox-modal.png', 'La Yamaha Aerox 155 es un scooter deportivo, ágil y moderno, ideal para la ciudad.')">
-                    Reserva Ahora
-                </button>
             </div>
+            <div class="mc-filter__group">
+                <label class="mc-filter__label" data-i18n="filter_availability">Disponibilidad</label>
+                <div class="mc-filter__flow">
+                    <div class="mc-filter__panel">
+                        <p class="mc-filter__panel-title" data-i18n="filter_pickup_block">Recogida</p>
+                        <div class="mc-filter__panel-grid">
+                            <div class="mc-filter__date-field">
+                                <i class="fas fa-calendar-alt"></i>
+                                <input type="text" id="filterPickup" placeholder="Fecha de recogida" data-i18n-placeholder="filter_pickup" readonly>
+                            </div>
+                            <div class="mc-filter__time-field">
+                                <i class="fas fa-clock"></i>
+                                <select id="filterPickupTime">
+                                    <option value="" data-i18n="filter_pickup_time">Hora recogida</option>
+                                    <option value="00:00">00:00</option>
+                                    <option value="01:00">01:00</option>
+                                    <option value="02:00">02:00</option>
+                                    <option value="03:00">03:00</option>
+                                    <option value="04:00">04:00</option>
+                                    <option value="05:00">05:00</option>
+                                    <option value="06:00">06:00</option>
+                                    <option value="07:00">07:00</option>
+                                    <option value="08:00">08:00</option>
+                                    <option value="09:00">09:00</option>
+                                    <option value="10:00" selected>10:00</option>
+                                    <option value="11:00">11:00</option>
+                                    <option value="12:00">12:00</option>
+                                    <option value="13:00">13:00</option>
+                                    <option value="14:00">14:00</option>
+                                    <option value="15:00">15:00</option>
+                                    <option value="16:00">16:00</option>
+                                    <option value="17:00">17:00</option>
+                                    <option value="18:00">18:00</option>
+                                    <option value="19:00">19:00</option>
+                                    <option value="20:00">20:00</option>
+                                    <option value="21:00">21:00</option>
+                                    <option value="22:00">22:00</option>
+                                    <option value="23:00">23:00</option>
+                                </select>
+                            </div>
+                            <div class="mc-filter__location-field mc-filter__field--full">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <select id="filterPickupLocation" required>
+                                    <option value="" data-i18n="filter_pickup_location" selected disabled hidden>Lugar de retirada</option>
+                                    <option value="rionegro-airport" data-i18n="location_rionegro_airport">Mall Terranova</option>
+                                    <option value="other" data-i18n="location_other">Otro</option>
+                                </select>
+                            </div>
+                            <div class="mc-filter__other-field mc-filter__field--full" id="filterPickupLocationOtherWrap" hidden>
+                                <i class="fas fa-pen"></i>
+                                <input type="text" id="filterPickupLocationOther" placeholder="¿Cuál lugar?" data-i18n-placeholder="filter_location_other_placeholder">
+                            </div>
+                        </div>
+                    </div>
 
-            <!-- FZ-250 -->
-            <div class="mc-card" data-vehicle-id="demo-4" data-tipo="moto" data-subcategoria="moto" data-precio="75000">
-                <span class="mc-card__badge">2 Personas</span>
-                <h3 class="mc-card__title">Fz - 250</h3>
-                <div class="mc-card__image">
-                    <img src="motocar-theme/assets/img/fz250.png" alt="FZ-250" loading="lazy">
-                </div>
-                <div class="mc-card__pricing">
-                    <span class="mc-card__price">Desde $100.000 <small>COP/día</small></span>
-                    <span class="mc-card__price-usd">$27,10 <small>USD/día</small></span>
-                </div>
-                <div class="mc-card__specs">
-                    <div class="mc-card__spec">
-                        <span class="mc-card__spec-label">Motor</span>
-                        <span class="mc-card__spec-value">250 cc</span>
-                    </div>
-                    <div class="mc-card__spec">
-                        <span class="mc-card__spec-label">Caja</span>
-                        <span class="mc-card__spec-value">Mecánica</span>
-                    </div>
-                    <div class="mc-card__spec">
-                        <span class="mc-card__spec-label">ABS</span>
-                        <span class="mc-card__spec-value">Sí</span>
-                    </div>
-                </div>
-                <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openVehicleModalDemo('Yamaha FZ-250', '2024', 'Manual', '2', 'Gasolina', 'No', '250 cc', '100000', 'motocar-theme/assets/img/fz250-modal.png', 'La Yamaha FZ-250 es una moto deportiva con excelente rendimiento y diseño agresivo.')">
-                    Reserva Ahora
-                </button>
-            </div>
-
-            <!-- Renault Logan (Sedan) -->
-            <div class="mc-card" data-vehicle-id="demo-3" data-tipo="carro" data-subcategoria="sedan" data-precio="95000">
-                <span class="mc-card__badge">5 Personas</span>
-                <h3 class="mc-card__title">Renault Logan</h3>
-                <div class="mc-card__image">
-                    <img src="motocar-theme/assets/img/renault-logan.png" alt="Renault Logan" loading="lazy">
-                </div>
-                <div class="mc-card__pricing">
-                    <span class="mc-card__price">Desde $200.000 <small>COP/día</small></span>
-                    <span class="mc-card__price-usd">$54,20 <small>USD/día</small></span>
-                </div>
-                <div class="mc-card__specs">
-                    <div class="mc-card__spec">
-                        <span class="mc-card__spec-label">Motor</span>
-                        <span class="mc-card__spec-value">2000 cc</span>
-                    </div>
-                    <div class="mc-card__spec">
-                        <span class="mc-card__spec-label">Caja</span>
-                        <span class="mc-card__spec-value">Mecánica</span>
-                    </div>
-                    <div class="mc-card__spec">
-                        <span class="mc-card__spec-label">Aire</span>
-                        <span class="mc-card__spec-value">acondicionado</span>
+                    <div class="mc-filter__panel">
+                        <p class="mc-filter__panel-title" data-i18n="filter_return_block">Devolución</p>
+                        <div class="mc-filter__panel-grid">
+                            <div class="mc-filter__date-field">
+                                <i class="fas fa-calendar-alt"></i>
+                                <input type="text" id="filterReturn" placeholder="Fecha de devolución" data-i18n-placeholder="filter_return" readonly>
+                            </div>
+                            <div class="mc-filter__time-field">
+                                <i class="fas fa-clock"></i>
+                                <select id="filterReturnTime">
+                                    <option value="" data-i18n="filter_return_time">Hora devolución</option>
+                                    <option value="00:00">00:00</option>
+                                    <option value="01:00">01:00</option>
+                                    <option value="02:00">02:00</option>
+                                    <option value="03:00">03:00</option>
+                                    <option value="04:00">04:00</option>
+                                    <option value="05:00">05:00</option>
+                                    <option value="06:00">06:00</option>
+                                    <option value="07:00">07:00</option>
+                                    <option value="08:00">08:00</option>
+                                    <option value="09:00">09:00</option>
+                                    <option value="10:00" selected>10:00</option>
+                                    <option value="11:00">11:00</option>
+                                    <option value="12:00">12:00</option>
+                                    <option value="13:00">13:00</option>
+                                    <option value="14:00">14:00</option>
+                                    <option value="15:00">15:00</option>
+                                    <option value="16:00">16:00</option>
+                                    <option value="17:00">17:00</option>
+                                    <option value="18:00">18:00</option>
+                                    <option value="19:00">19:00</option>
+                                    <option value="20:00">20:00</option>
+                                    <option value="21:00">21:00</option>
+                                    <option value="22:00">22:00</option>
+                                    <option value="23:00">23:00</option>
+                                </select>
+                            </div>
+                            <div class="mc-filter__location-field mc-filter__field--full">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <select id="filterReturnLocation" required>
+                                    <option value="" data-i18n="filter_return_location" selected disabled hidden>Lugar de devolución</option>
+                                    <option value="rionegro-airport" data-i18n="location_rionegro_airport">Mall Terranova</option>
+                                    <option value="other" data-i18n="location_other">Otro</option>
+                                </select>
+                            </div>
+                            <div class="mc-filter__other-field mc-filter__field--full" id="filterReturnLocationOtherWrap" hidden>
+                                <i class="fas fa-pen"></i>
+                                <input type="text" id="filterReturnLocationOther" placeholder="¿Cuál lugar?" data-i18n-placeholder="filter_location_other_placeholder">
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openVehicleModalDemo('Renault Logan', '2024', 'Manual', '5', 'Gasolina', 'Sí', '1600 cc', '200000', 'motocar-theme/assets/img/renault-logan-modal.png', 'El Renault Logan es un sedán confiable y económico, perfecto para desplazamientos diarios.')">
-                    Reserva Ahora
-                </button>
-            </div>
-
-            <!-- Volkswagen (Sedan) -->
-            <div class="mc-card" data-vehicle-id="demo-2" data-tipo="carro" data-subcategoria="sedan" data-precio="135000">
-                <span class="mc-card__badge">5 Personas</span>
-                <h3 class="mc-card__title">Volkswagen</h3>
-                <div class="mc-card__image">
-                    <img src="motocar-theme/assets/img/volkswagen.png" alt="Volkswagen" loading="lazy">
+                <div class="mc-filter__actions">
+                    <button type="button" class="mc-filter__reset" id="filterReset" data-i18n="filter_reset">
+                        <i class="fas fa-rotate-left"></i> Reiniciar filtros
+                    </button>
                 </div>
-                <div class="mc-card__pricing">
-                    <span class="mc-card__price">Desde $200.000 <small>COP/día</small></span>
-                    <span class="mc-card__price-usd">$54,20 <small>USD/día</small></span>
-                </div>
-                <div class="mc-card__specs">
-                    <div class="mc-card__spec">
-                        <span class="mc-card__spec-label">Motor</span>
-                        <span class="mc-card__spec-value">2000 cc</span>
-                    </div>
-                    <div class="mc-card__spec">
-                        <span class="mc-card__spec-label">Caja</span>
-                        <span class="mc-card__spec-value">Mecánica</span>
-                    </div>
-                    <div class="mc-card__spec">
-                        <span class="mc-card__spec-label">Aire</span>
-                        <span class="mc-card__spec-value">acondicionado</span>
-                    </div>
-                </div>
-                <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openVehicleModalDemo('Volkswagen', '2024', 'Manual', '5', 'Gasolina', 'Sí', '2000 cc', '200000', 'motocar-theme/assets/img/volkswagen-modal.png', 'El Volkswagen ofrece confort, seguridad y eficiencia. Ideal para recorridos urbanos y carreteras.')">
-                    Reserva Ahora
-                </button>
-            </div>
-
-            <!-- Kia Sportage (Camioneta) -->
-            <div class="mc-card" data-vehicle-id="demo-1" data-tipo="carro" data-subcategoria="camioneta" data-precio="135000">
-                <span class="mc-card__badge">5 Personas</span>
-                <h3 class="mc-card__title">Kia Sportage</h3>
-                <div class="mc-card__image">
-                    <img src="motocar-theme/assets/img/kia-sportage.png" alt="Kia Sportage" loading="lazy">
-                </div>
-                <div class="mc-card__pricing">
-                    <span class="mc-card__price">Desde $200.000 <small>COP/día</small></span>
-                    <span class="mc-card__price-usd">$54,20 <small>USD/día</small></span>
-                </div>
-                <div class="mc-card__specs">
-                    <div class="mc-card__spec">
-                        <span class="mc-card__spec-label">Motor</span>
-                        <span class="mc-card__spec-value">2000 cc</span>
-                    </div>
-                    <div class="mc-card__spec">
-                        <span class="mc-card__spec-label">Caja</span>
-                        <span class="mc-card__spec-value">Mecánica</span>
-                    </div>
-                    <div class="mc-card__spec">
-                        <span class="mc-card__spec-label">Aire</span>
-                        <span class="mc-card__spec-value">acondicionado</span>
-                    </div>
-                </div>
-                <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openVehicleModalDemo('Kia Sportage', '2025', 'Automática', '5', 'Gasolina', 'Sí', '2000 cc', '200000', 'motocar-theme/assets/img/kia-sportage-modal.png', 'La Kia Sportage es una SUV que combina diseño moderno, buen espacio interior y tecnología, ideal para ciudad y viajes largos.')">
-                    Reserva Ahora
-                </button>
+                <p class="mc-filter__hint" data-i18n="filter_hint"><i class="fas fa-info-circle"></i> Selecciona las fechas para calcular un precio estimado en COP y USD al ver los vehículos.</p>
             </div>
         </div>
+
+        <div class="mc-categories__grid">
+            <!-- Motorcycles -->
+            <div class="mc-catcard" data-category="motos" data-type="moto">
+                <div class="mc-catcard__carousel" data-carousel>
+                    <div class="mc-catcard__slides">
+                        <div class="mc-catcard__slide active">
+                            <img src="motocar-theme/assets/img/aerox.png" alt="Yamaha Aerox" loading="lazy">
+                        </div>
+                        <div class="mc-catcard__slide">
+                            <img src="motocar-theme/assets/img/fz250.png" alt="Yamaha FZ-250" loading="lazy">
+                        </div>
+                    </div>
+                    <button class="mc-catcard__arrow mc-catcard__arrow--left" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+                    <button class="mc-catcard__arrow mc-catcard__arrow--right" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
+                    <div class="mc-catcard__dots">
+                        <span class="mc-catcard__dot active" data-index="0"></span>
+                        <span class="mc-catcard__dot" data-index="1"></span>
+                    </div>
+                </div>
+                <div class="mc-catcard__info">
+                    <div class="mc-catcard__badge"><i class="fas fa-motorcycle"></i></div>
+                    <h3 class="mc-catcard__title">Motocicletas</h3>
+                    <p class="mc-catcard__desc">Yamaha FZ 150 o similar</p>
+                    <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('motos', 'Motocicletas')">
+                        Ver Detalles
+                    </button>
+                </div>
+            </div>
+
+            <!-- Carro Económico -->
+            <div class="mc-catcard" data-category="economy" data-type="carro">
+                <div class="mc-catcard__carousel" data-carousel>
+                    <div class="mc-catcard__slides">
+                        <div class="mc-catcard__slide active">
+                            <img src="motocar-theme/assets/img/volkswagen.png" alt="Volkswagen Gol" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+                <div class="mc-catcard__info">
+                    <div class="mc-catcard__badge"><i class="fas fa-car"></i></div>
+                    <h3 class="mc-catcard__title">Carro Económico</h3>
+                    <p class="mc-catcard__desc">Volkswagen Gol o similar</p>
+                    <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('economy', 'Carro Económico')">
+                        Ver Detalles
+                    </button>
+                </div>
+            </div>
+
+            <!-- Carro Compacto -->
+            <div class="mc-catcard" data-category="compact" data-type="carro">
+                <div class="mc-catcard__carousel" data-carousel>
+                    <div class="mc-catcard__slides">
+                        <div class="mc-catcard__slide active">
+                            <img src="motocar-theme/assets/img/renault-logan.png" alt="Renault Logan" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+                <div class="mc-catcard__info">
+                    <div class="mc-catcard__badge"><i class="fas fa-car-side"></i></div>
+                    <h3 class="mc-catcard__title">Carro Compacto</h3>
+                    <p class="mc-catcard__desc">Renault Logan o similar</p>
+                    <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('compact', 'Carro Compacto')">
+                        Ver Detalles
+                    </button>
+                </div>
+            </div>
+
+            <!-- Compact SUV -->
+            <div class="mc-catcard" data-category="suv" data-type="carro">
+                <div class="mc-catcard__carousel" data-carousel>
+                    <div class="mc-catcard__slides">
+                        <div class="mc-catcard__slide active">
+                            <img src="motocar-theme/assets/img/kia-sportage.png" alt="Kia Sportage" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+                <div class="mc-catcard__info">
+                    <div class="mc-catcard__badge"><i class="fas fa-shuttle-van"></i></div>
+                    <h3 class="mc-catcard__title">SUV Compacto</h3>
+                    <p class="mc-catcard__desc">Kia Seltos o similar</p>
+                    <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('suv', 'SUV Compacto')">
+                        Ver Detalles
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hidden demo data for modal -->
+        <script>
+        var DEMO_VEHICLES = [
+            {
+                slug: 'economy',
+                name: 'Carro Económico',
+                vehicles: [
+                    { name: 'Volkswagen Gol', img: 'volkswagen.png', price: '150,000', motor: '1600 cc', trans: 'Manual', ac: 'Sí', pax: '5', luggage: '2 medianas' }
+                ]
+            },
+            {
+                slug: 'compact',
+                name: 'Carro Compacto',
+                vehicles: [
+                    { name: 'Renault Logan', img: 'renault-logan.png', price: '200,000', motor: '1600 cc', trans: 'Manual', ac: 'Sí', pax: '5', luggage: '2 grandes, 1 mediana' }
+                ]
+            },
+            {
+                slug: 'suv',
+                name: 'SUV Compacto',
+                vehicles: [
+                    { name: 'Kia Sportage', img: 'kia-sportage.png', price: '200,000', motor: '2000 cc', trans: 'Automática', ac: 'Sí', pax: '5', luggage: '2 grandes, 1 mediana' }
+                ]
+            },
+            {
+                slug: 'motos',
+                name: 'Motocicletas',
+                vehicles: [
+                    { name: 'Yamaha Aerox', img: 'aerox.png', price: '80,000', motor: '155 cc', trans: 'Automática', ac: 'N/A', pax: '2', luggage: 'N/A' },
+                    { name: 'Yamaha FZ-250', img: 'fz250.png', price: '100,000', motor: '250 cc', trans: 'Manual', ac: 'N/A', pax: '2', luggage: 'N/A' }
+                ]
+            }
+        ];
+        </script>
     </div>
 </section>
 
@@ -821,7 +880,12 @@
             <div class="mc-footer__col">
                 <h4 data-i18n="footer_contactanos">Contáctanos</h4>
                 <ul>
-                    <li>Aeropuerto José María Cordova</li>
+                    <li>
+                        <a href="https://www.google.com/maps/place/MotoCar+Rentals/@6.1762,-75.435,1576m/data=!3m1!1e3!4m6!3m5!1s0x8e469d8d8761cbb1:0xcf88fa157645f16d!8m2!3d6.1755508!4d-75.4348712!16s%2Fg%2F11y2tz0l_5" target="_blank" class="mc-footer__location-link">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Mall Terranova</span>
+                        </a>
+                    </li>
                     <li><a href="tel:+573202161156">(+57) 320 - 2161156</a></li>
                     <li><a href="mailto:motocarrentals@gmail.com">motocarrentals@gmail.com</a></li>
                 </ul>
@@ -848,110 +912,27 @@
     </div>
 </footer>
 
-<!-- MODAL DE DETALLE / RESERVA -->
-<div class="mc-modal" id="vehicleModal">
-    <div class="mc-modal__overlay" onclick="closeVehicleModal()"></div>
-    <div class="mc-modal__content">
-        <button class="mc-modal__close" onclick="closeVehicleModal()" aria-label="Cerrar">
+<!-- CATEGORY DETAIL MODAL -->
+<div class="mc-catmodal" id="categoryModal">
+    <div class="mc-catmodal__overlay" onclick="closeCategoryModal()"></div>
+    <div class="mc-catmodal__content">
+        <button class="mc-catmodal__close" onclick="closeCategoryModal()" aria-label="Close">
             <i class="fas fa-times"></i>
         </button>
-        <div class="mc-modal__body">
-            <!-- Layout principal: info izquierda + formulario derecha -->
-            <div class="mc-modal__layout">
-                <!-- Columna izquierda: vehículo -->
-                <div class="mc-modal__left">
-                    <h2 class="mc-modal__title" id="modalTitle">KIA SELTOS 2025</h2>
-
-                    <div class="mc-modal__info-row">
-                        <div class="mc-modal__image">
-                            <img id="modalImage" src="" alt="Vehículo">
-                        </div>
-                        <div class="mc-modal__description">
-                            <p id="modalDescripcion"></p>
-                        </div>
-                    </div>
-
-                    <!-- Specs bar con flechas -->
-                    <div class="mc-modal__specs-bar">
-                        <button class="mc-modal__specs-arrow" id="specsLeft" aria-label="Anterior">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <div class="mc-modal__specs-list">
-                            <div class="mc-modal__spec-item">
-                                <span class="mc-modal__spec-title" data-i18n="modal_motor">MOTOR</span>
-                                <div class="mc-modal__spec-detail">
-                                    <i class="fas fa-engine"></i>
-                                    <span id="modalMotor">2000 CC</span>
-                                </div>
-                            </div>
-                            <div class="mc-modal__spec-item">
-                                <span class="mc-modal__spec-title" data-i18n="modal_abs">ABS</span>
-                                <div class="mc-modal__spec-detail">
-                                    <span class="mc-modal__spec-abs">(ABS)</span>
-                                    <span id="modalABS">Sí</span>
-                                </div>
-                            </div>
-                            <div class="mc-modal__spec-item">
-                                <span class="mc-modal__spec-title" data-i18n="modal_pasajeros">PASAJEROS</span>
-                                <div class="mc-modal__spec-detail">
-                                    <i class="fas fa-users"></i>
-                                    <span id="modalPasajeros">5</span>
-                                </div>
-                            </div>
-                            <div class="mc-modal__spec-item">
-                                <span class="mc-modal__spec-title" data-i18n="modal_tipo">TIPO</span>
-                                <div class="mc-modal__spec-detail">
-                                    <i class="fas fa-cog"></i>
-                                    <span id="modalTransmision">Automática</span>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="mc-modal__specs-arrow" id="specsRight" aria-label="Siguiente">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Columna derecha: formulario de cotización -->
-                <div class="mc-modal__right">
-                    <form class="mc-cotizar-form" id="reservationForm">
-                        <input type="hidden" name="vehicle_name" id="reserveVehicleName">
-
-                        <div class="mc-cotizar__field">
-                            <label data-i18n="modal_fechas_label">Definir Fechas de renta</label>
-                            <input type="text" id="modalFechas" placeholder="Seleccionar fechas" data-i18n-placeholder="modal_fechas_placeholder" readonly required>
-                        </div>
-
-                        <div class="mc-cotizar__field">
-                            <label data-i18n="modal_entrega_label">Lugar de Entrega</label>
-                            <input type="text" name="lugar_entrega" placeholder="Elegir Lugar..." data-i18n-placeholder="modal_entrega_placeholder">
-                        </div>
-
-                        <div class="mc-cotizar__field">
-                            <label data-i18n="modal_devolucion_label">Lugar de Devolución</label>
-                            <input type="text" name="lugar_devolucion" placeholder="Elegir Lugar..." data-i18n-placeholder="modal_devolucion_placeholder">
-                        </div>
-
-                        <div class="mc-cotizar__field">
-                            <label data-i18n="modal_hora_entrega">Hora de Entrega</label>
-                            <div class="mc-cotizar__time">
-                                <input type="time" name="hora_entrega" value="11:10">
-                            </div>
-                        </div>
-
-                        <div class="mc-cotizar__field">
-                            <label data-i18n="modal_hora_devolucion">Hora de Devolución</label>
-                            <div class="mc-cotizar__time">
-                                <input type="time" name="hora_devolucion" value="11:10">
-                            </div>
-                        </div>
-
-                        <button type="submit" class="mc-btn mc-btn--primary mc-btn--cotizar" data-i18n-html="modal_cotizar_btn">
-                            Ir a Cotizar <i class="fab fa-whatsapp"></i>
-                        </button>
-                    </form>
-                </div>
-            </div>
+        <h2 class="mc-catmodal__title" id="catModalTitle">Category</h2>
+        <div class="mc-catmodal__dates-hint" id="catModalDatesHint" style="display:none;">
+            <i class="fas fa-calendar-alt"></i>
+            <span data-i18n="modal_dates_hint">Selecciona fechas en los filtros para ver el precio estimado en COP y USD de cada vehículo.</span>
+        </div>
+        <div class="mc-catmodal__grid" id="catModalGrid">
+            <!-- Vehicle cards injected via JS -->
+        </div>
+        <div class="mc-catmodal__cta">
+            <i class="fab fa-whatsapp mc-catmodal__cta-icon"></i>
+            <p class="mc-catmodal__cta-text" data-i18n="modal_cta_text">¿No ves el vehículo ideal? Te conseguimos una opción en minutos.</p>
+            <a id="catModalWhatsApp" href="#" class="mc-btn mc-btn--whatsapp mc-catmodal__cta-btn" target="_blank" data-i18n-html="modal_cta_btn">
+                <i class="fab fa-whatsapp"></i> Buscar disponibilidad por WhatsApp
+            </a>
         </div>
     </div>
 </div>
