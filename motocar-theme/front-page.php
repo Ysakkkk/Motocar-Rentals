@@ -210,24 +210,27 @@
                 'order'      => 'ASC',
             ));
 
-            $cat_order = array('motos' => 1, 'economy' => 2, 'compact' => 3, 'suv' => 4);
+            $cat_order = array('motos' => 1, 'economy' => 2, 'compact' => 3, 'suv' => 4, 'suv7' => 5);
             $cat_icons = array(
                 'economy' => 'fas fa-car',
                 'compact' => 'fas fa-car-side',
                 'suv'     => 'fas fa-shuttle-van',
+                'suv7'    => 'fas fa-truck',
                 'motos'   => 'fas fa-motorcycle',
             );
             $cat_types = array(
                 'economy' => 'carro',
                 'compact' => 'carro',
                 'suv'     => 'carro',
+                'suv7'    => 'carro',
                 'motos'   => 'moto',
             );
             $cat_labels = array(
-                'economy' => array('name' => 'Carro Económico', 'desc' => 'Volkswagen Gol o similar'),
-                'compact' => array('name' => 'Carro Compacto', 'desc' => 'Renault Logan o similar'),
-                'suv'     => array('name' => 'SUV Compacto', 'desc' => 'Kia Seltos o similar'),
-                'motos'   => array('name' => 'Motocicletas', 'desc' => 'Yamaha FZ 150 o similar'),
+                'economy' => array('name' => 'Hatchback',      'desc' => 'Volkswagen Gol o similar'),
+                'compact' => array('name' => 'Sedan',          'desc' => 'Renault Logan o similar'),
+                'suv'     => array('name' => 'SUV Compacto',   'desc' => 'Kia Seltos o similar'),
+                'suv7'    => array('name' => 'SUV 7 Puestos',  'desc' => 'Toyota Fortuner o similar'),
+                'motos'   => array('name' => 'Motocicletas',   'desc' => 'Yamaha FZ 150 o similar'),
             );
 
             if (!empty($cat_terms) && !is_wp_error($cat_terms)) :
@@ -287,7 +290,8 @@
                         }
                     }
             ?>
-                <div class="mc-catcard" data-category="<?php echo esc_attr($cat->slug); ?>" data-type="<?php echo esc_attr($cat_types[$cat->slug] ?? 'carro'); ?>">
+                <?php $cat_price_meta = (int) get_term_meta($cat->term_id, '_precio_dia', true); ?>
+                <div class="mc-catcard" data-category="<?php echo esc_attr($cat->slug); ?>" data-type="<?php echo esc_attr($cat_types[$cat->slug] ?? 'carro'); ?>" data-price-day="<?php echo esc_attr($cat_price_meta ?: 0); ?>">
                     <div class="mc-catcard__carousel" data-carousel>
                         <div class="mc-catcard__slides">
                             <?php if (!empty($images)) : ?>
@@ -316,6 +320,12 @@
                         <div class="mc-catcard__badge"><i class="<?php echo esc_attr($icon); ?>"></i></div>
                         <h3 class="mc-catcard__title"><?php echo esc_html($display_name); ?></h3>
                         <p class="mc-catcard__desc"><?php echo esc_html($display_desc); ?></p>
+                        <?php if ($cat_price_meta) : ?>
+                        <p class="mc-catcard__price">
+                            <span class="mc-catcard__price-text">Desde $<?php echo number_format($cat_price_meta, 0, ',', '.'); ?> COP/día</span>
+                            <span class="mc-catcard__price-usd">~$<?php echo number_format($cat_price_meta / 4500, 2, '.', ''); ?> USD/día</span>
+                        </p>
+                        <?php endif; ?>
                         <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('<?php echo esc_attr($cat->slug); ?>', '<?php echo esc_js($display_name); ?>')">
                             Ver Detalles
                         </button>
@@ -329,47 +339,92 @@
                 <?php
                 $demo_categories = array(
                     array(
-                        'slug'  => 'motos',
-                        'name'  => 'Motocicletas',
-                        'desc'  => 'Yamaha FZ 150 o similar',
-                        'icon'  => 'fas fa-motorcycle',
+                        'slug'        => 'motos',
+                        'name'        => 'Motocicletas',
+                        'desc'        => 'Yamaha FZ 150 o similar',
+                        'icon'        => 'fas fa-motorcycle',
+                        'price'       => '80,000',
+                        'motor'       => '155 cc',
+                        'trans'       => 'Automática',
+                        'pax'         => '2',
+                        'abs'         => 'No',
+                        'maletas'     => 'N/A',
+                        'descripcion' => 'Nuestras motocicletas son perfectas para explorar la región de forma ágil y económica. Ideales para recorrer caminos y disfrutar del paisaje antioqueño.',
                         'vehicles' => array(
                             array('name' => 'Yamaha Aerox', 'img' => 'aerox.png', 'price' => '80,000', 'motor' => '155 cc', 'trans' => 'Automática', 'ac' => 'N/A', 'pax' => '2', 'luggage' => 'N/A'),
                             array('name' => 'Yamaha FZ-250', 'img' => 'fz250.png', 'price' => '100,000', 'motor' => '250 cc', 'trans' => 'Manual', 'ac' => 'N/A', 'pax' => '2', 'luggage' => 'N/A'),
                         ),
                     ),
                     array(
-                        'slug'  => 'economy',
-                        'name'  => 'Carro Económico',
-                        'desc'  => 'Volkswagen Gol o similar',
-                        'icon'  => 'fas fa-car',
+                        'slug'        => 'economy',
+                        'name'        => 'Hatchback',
+                        'desc'        => 'Volkswagen Gol o similar',
+                        'icon'        => 'fas fa-car',
+                        'price'       => '150,000',
+                        'motor'       => '1600 cc',
+                        'trans'       => 'Manual',
+                        'pax'         => '5',
+                        'abs'         => 'No',
+                        'maletas'     => '2 medianas',
+                        'descripcion' => 'Vehículos compactos y eficientes, ideales para moverse por la ciudad y alrededores con comodidad y bajo consumo de combustible.',
                         'vehicles' => array(
                             array('name' => 'Volkswagen Gol', 'img' => 'volkswagen.png', 'price' => '150,000', 'motor' => '1600 cc', 'trans' => 'Manual', 'ac' => 'Sí', 'pax' => '5', 'luggage' => '2 medianas'),
                         ),
                     ),
                     array(
-                        'slug'  => 'compact',
-                        'name'  => 'Carro Compacto',
-                        'desc'  => 'Renault Logan o similar',
-                        'icon'  => 'fas fa-car-side',
+                        'slug'        => 'compact',
+                        'name'        => 'Sedan',
+                        'desc'        => 'Renault Logan o similar',
+                        'icon'        => 'fas fa-car-side',
+                        'price'       => '200,000',
+                        'motor'       => '1600 cc',
+                        'trans'       => 'Manual',
+                        'pax'         => '5',
+                        'abs'         => 'No',
+                        'maletas'     => '2 grandes, 1 mediana',
+                        'descripcion' => 'Sedán con amplio espacio interior, perfecto para viajes largos con familia o amigos. Combina comodidad, equipaje y economía en un solo auto.',
                         'vehicles' => array(
                             array('name' => 'Renault Logan', 'img' => 'renault-logan.png', 'price' => '200,000', 'motor' => '1600 cc', 'trans' => 'Manual', 'ac' => 'Sí', 'pax' => '5', 'luggage' => '2 grandes, 1 mediana'),
                         ),
                     ),
                     array(
-                        'slug'  => 'suv',
-                        'name'  => 'SUV Compacto',
-                        'desc'  => 'Kia Seltos o similar',
-                        'icon'  => 'fas fa-shuttle-van',
+                        'slug'        => 'suv',
+                        'name'        => 'SUV Compacto',
+                        'desc'        => 'Kia Seltos o similar',
+                        'icon'        => 'fas fa-shuttle-van',
+                        'price'       => '200,000',
+                        'motor'       => '2000 cc',
+                        'trans'       => 'Automática',
+                        'pax'         => '5',
+                        'abs'         => 'Sí',
+                        'maletas'     => '2 grandes, 1 mediana',
+                        'descripcion' => 'SUV moderna con transmisión automática, ABS y espacio para toda la familia. Ideal para rutas largas, viajes al campo o simplemente disfrutar el lujo.',
                         'vehicles' => array(
                             array('name' => 'Kia Sportage', 'img' => 'kia-sportage.png', 'price' => '200,000', 'motor' => '2000 cc', 'trans' => 'Automática', 'ac' => 'Sí', 'pax' => '5', 'luggage' => '2 grandes, 1 mediana'),
+                        ),
+                    ),
+                    array(
+                        'slug'        => 'suv7',
+                        'name'        => 'SUV 7 Puestos',
+                        'desc'        => 'Toyota Fortuner o similar',
+                        'icon'        => 'fas fa-truck',
+                        'price'       => '350,000',
+                        'motor'       => '2700 cc',
+                        'trans'       => 'Automática',
+                        'pax'         => '7',
+                        'abs'         => 'Sí',
+                        'maletas'     => '3 grandes',
+                        'descripcion' => 'Camioneta 4x4 todo terreno, ideal para grupos grandes y rutas exigentes. Gasolina, automática, con toda la potencia y el confort de una Fortuner.',
+                        'vehicles' => array(
+                            array('name' => 'Toyota Fortuner', 'img' => 'toyota-fortuner.webp', 'price' => '350,000', 'motor' => '2700 cc', 'trans' => 'Automática', 'ac' => 'Sí', 'pax' => '7', 'luggage' => '3 grandes'),
                         ),
                     ),
                 );
 
                 foreach ($demo_categories as $dcat) :
                 ?>
-                <div class="mc-catcard" data-category="<?php echo esc_attr($dcat['slug']); ?>" data-type="<?php echo esc_attr($dcat['slug'] === 'motos' ? 'moto' : 'carro'); ?>">
+                <?php $dcat_price = isset($dcat['price']) ? (int) str_replace(',', '', $dcat['price']) : 0; ?>
+                <div class="mc-catcard" data-category="<?php echo esc_attr($dcat['slug']); ?>" data-type="<?php echo esc_attr($dcat['slug'] === 'motos' ? 'moto' : 'carro'); ?>" data-price-day="<?php echo esc_attr($dcat_price); ?>">
                     <div class="mc-catcard__carousel" data-carousel>
                         <div class="mc-catcard__slides">
                             <?php foreach ($dcat['vehicles'] as $vi => $veh) : ?>
@@ -392,6 +447,12 @@
                         <div class="mc-catcard__badge"><i class="<?php echo esc_attr($dcat['icon']); ?>"></i></div>
                         <h3 class="mc-catcard__title"><?php echo esc_html($dcat['name']); ?></h3>
                         <p class="mc-catcard__desc"><?php echo esc_html($dcat['desc']); ?></p>
+                        <?php if ($dcat_price) : ?>
+                        <p class="mc-catcard__price">
+                            <span class="mc-catcard__price-text">Desde $<?php echo number_format($dcat_price, 0, ',', '.'); ?> COP/día</span>
+                            <span class="mc-catcard__price-usd">~$<?php echo number_format($dcat_price / 4500, 2, '.', ''); ?> USD/día</span>
+                        </p>
+                        <?php endif; ?>
                         <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('<?php echo esc_attr($dcat['slug']); ?>', '<?php echo esc_js($dcat['name']); ?>')">
                             Ver Detalles
                         </button>
@@ -417,12 +478,7 @@
             <p class="mc-section-subtitle" data-i18n="reviews_subtitle">Reseñas verificadas de Google</p>
         </div>
         <div class="mc-reviews__content">
-            <?php
-            // Pega aquí el shortcode del plugin de Google Reviews.
-            // Ejemplo: echo do_shortcode('[google-reviews]');
-            // Plugins recomendados: "Jetstagram" o "Widgets for Google Reviews"
-            ?>
-            <!-- Shortcode de Google Reviews va aquí -->
+            <?php echo do_shortcode('[trustindex no-registration=google]'); ?>
         </div>
     </div>
 </section>
@@ -518,12 +574,7 @@
             <!-- Columna izquierda - Instagram Embed -->
             <div class="mc-about__cta">
                 <div class="mc-about__instagram">
-                    <?php
-                    // Pega aquí el shortcode del plugin de Instagram.
-                    // Ejemplo: echo do_shortcode('[instagram-feed feed=1]');
-                    // Plugin recomendado: "Smash Balloon Instagram Feed"
-                    ?>
-                    <!-- Shortcode de Instagram va aquí -->
+                    <?php echo do_shortcode('[instagram-feed feed=2]'); ?>
                 </div>
             </div>
 
@@ -953,7 +1004,7 @@
                     <div class="mc-footer__brand">
                         <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo-footer.png" alt="MotoCar Rentals">
                     </div>
-                    <p class="mc-footer__tagline">Moto car Rentals</p>
+                    <p class="mc-footer__tagline">MotoCar Rentals</p>
                 </div>
             </div>
             <div class="mc-footer__col">
@@ -996,23 +1047,11 @@
 <div class="mc-catmodal" id="categoryModal">
     <div class="mc-catmodal__overlay" onclick="closeCategoryModal()"></div>
     <div class="mc-catmodal__content">
-        <button class="mc-catmodal__close" onclick="closeCategoryModal()" aria-label="Close">
+        <button class="mc-catmodal__close" onclick="closeCategoryModal()" aria-label="Cerrar">
             <i class="fas fa-times"></i>
         </button>
-        <h2 class="mc-catmodal__title" id="catModalTitle">Category</h2>
-        <div class="mc-catmodal__dates-hint" id="catModalDatesHint" style="display:none;">
-            <i class="fas fa-calendar-alt"></i>
-            <span data-i18n="modal_dates_hint">Selecciona fechas en los filtros para ver el precio estimado en COP y USD de cada vehículo.</span>
-        </div>
-        <div class="mc-catmodal__grid" id="catModalGrid">
-            <!-- Vehicle cards injected via JS -->
-        </div>
-        <div class="mc-catmodal__cta">
-            <i class="fab fa-whatsapp mc-catmodal__cta-icon"></i>
-            <p class="mc-catmodal__cta-text" data-i18n="modal_cta_text">¿No ves el vehículo ideal? Te conseguimos una opción en minutos.</p>
-            <a id="catModalWhatsApp" href="#" class="mc-btn mc-btn--whatsapp mc-catmodal__cta-btn" target="_blank" data-i18n-html="modal_cta_btn">
-                <i class="fab fa-whatsapp"></i> Buscar disponibilidad por WhatsApp
-            </a>
+        <div id="catModalLayout">
+            <!-- Injected by JS -->
         </div>
     </div>
 </div>

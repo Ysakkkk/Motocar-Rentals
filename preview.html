@@ -238,7 +238,7 @@
 
         <div class="mc-categories__grid">
             <!-- Motorcycles -->
-            <div class="mc-catcard" data-category="motos" data-type="moto">
+            <div class="mc-catcard" data-category="motos" data-type="moto" data-price-day="80000">
                 <div class="mc-catcard__carousel" data-carousel>
                     <div class="mc-catcard__slides">
                         <div class="mc-catcard__slide active">
@@ -259,14 +259,18 @@
                     <div class="mc-catcard__badge"><i class="fas fa-motorcycle"></i></div>
                     <h3 class="mc-catcard__title">Motocicletas</h3>
                     <p class="mc-catcard__desc">Yamaha FZ 150 o similar</p>
+                    <p class="mc-catcard__price">
+                        <span class="mc-catcard__price-text">Desde $80.000 COP/día</span>
+                        <span class="mc-catcard__price-usd">~$17.78 USD/día</span>
+                    </p>
                     <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('motos', 'Motocicletas')">
                         Ver Detalles
                     </button>
                 </div>
             </div>
 
-            <!-- Carro Económico -->
-            <div class="mc-catcard" data-category="economy" data-type="carro">
+            <!-- Hatchback -->
+            <div class="mc-catcard" data-category="economy" data-type="carro" data-price-day="150000">
                 <div class="mc-catcard__carousel" data-carousel>
                     <div class="mc-catcard__slides">
                         <div class="mc-catcard__slide active">
@@ -276,16 +280,20 @@
                 </div>
                 <div class="mc-catcard__info">
                     <div class="mc-catcard__badge"><i class="fas fa-car"></i></div>
-                    <h3 class="mc-catcard__title">Carro Económico</h3>
+                    <h3 class="mc-catcard__title">Hatchback</h3>
                     <p class="mc-catcard__desc">Volkswagen Gol o similar</p>
-                    <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('economy', 'Carro Económico')">
+                    <p class="mc-catcard__price">
+                        <span class="mc-catcard__price-text">Desde $150.000 COP/día</span>
+                        <span class="mc-catcard__price-usd">~$33.33 USD/día</span>
+                    </p>
+                    <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('economy', 'Hatchback')">
                         Ver Detalles
                     </button>
                 </div>
             </div>
 
-            <!-- Carro Compacto -->
-            <div class="mc-catcard" data-category="compact" data-type="carro">
+            <!-- Sedan -->
+            <div class="mc-catcard" data-category="compact" data-type="carro" data-price-day="200000">
                 <div class="mc-catcard__carousel" data-carousel>
                     <div class="mc-catcard__slides">
                         <div class="mc-catcard__slide active">
@@ -295,16 +303,20 @@
                 </div>
                 <div class="mc-catcard__info">
                     <div class="mc-catcard__badge"><i class="fas fa-car-side"></i></div>
-                    <h3 class="mc-catcard__title">Carro Compacto</h3>
+                    <h3 class="mc-catcard__title">Sedan</h3>
                     <p class="mc-catcard__desc">Renault Logan o similar</p>
-                    <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('compact', 'Carro Compacto')">
+                    <p class="mc-catcard__price">
+                        <span class="mc-catcard__price-text">Desde $200.000 COP/día</span>
+                        <span class="mc-catcard__price-usd">~$44.44 USD/día</span>
+                    </p>
+                    <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('compact', 'Sedan')">
                         Ver Detalles
                     </button>
                 </div>
             </div>
 
             <!-- Compact SUV -->
-            <div class="mc-catcard" data-category="suv" data-type="carro">
+            <div class="mc-catcard" data-category="suv" data-type="carro" data-price-day="250000">
                 <div class="mc-catcard__carousel" data-carousel>
                     <div class="mc-catcard__slides">
                         <div class="mc-catcard__slide active">
@@ -316,7 +328,34 @@
                     <div class="mc-catcard__badge"><i class="fas fa-shuttle-van"></i></div>
                     <h3 class="mc-catcard__title">SUV Compacto</h3>
                     <p class="mc-catcard__desc">Kia Seltos o similar</p>
+                    <p class="mc-catcard__price">
+                        <span class="mc-catcard__price-text">Desde $250.000 COP/día</span>
+                        <span class="mc-catcard__price-usd">~$55.56 USD/día</span>
+                    </p>
                     <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('suv', 'SUV Compacto')">
+                        Ver Detalles
+                    </button>
+                </div>
+            </div>
+
+            <!-- SUV 7 Puestos -->
+            <div class="mc-catcard" data-category="suv7" data-type="carro" data-price-day="350000">
+                <div class="mc-catcard__carousel" data-carousel>
+                    <div class="mc-catcard__slides">
+                        <div class="mc-catcard__slide active">
+                            <img src="motocar-theme/assets/img/toyota-fortuner.webp" alt="Toyota Fortuner" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+                <div class="mc-catcard__info">
+                    <div class="mc-catcard__badge"><i class="fas fa-truck"></i></div>
+                    <h3 class="mc-catcard__title">SUV 7 Puestos</h3>
+                    <p class="mc-catcard__desc">Toyota Fortuner o similar</p>
+                    <p class="mc-catcard__price">
+                        <span class="mc-catcard__price-text">Desde $350.000 COP/día</span>
+                        <span class="mc-catcard__price-usd">~$77.78 USD/día</span>
+                    </p>
+                    <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('suv7', 'SUV 7 Puestos')">
                         Ver Detalles
                     </button>
                 </div>
@@ -328,14 +367,28 @@
         var DEMO_VEHICLES = [
             {
                 slug: 'economy',
-                name: 'Carro Económico',
+                name: 'Hatchback',
+                descripcion: 'Ideal para moverse por la ciudad y alrededores. Económico, fácil de parquear y con bajo consumo de combustible.',
+                price: '150000',
+                motor: '1600 cc',
+                trans: 'Manual',
+                pax: '5',
+                abs: 'Sí',
+                maletas: '2 medianas',
                 vehicles: [
                     { name: 'Volkswagen Gol', img: 'volkswagen.png', price: '150,000', motor: '1600 cc', trans: 'Manual', ac: 'Sí', pax: '5', luggage: '2 medianas' }
                 ]
             },
             {
                 slug: 'compact',
-                name: 'Carro Compacto',
+                name: 'Sedan',
+                descripcion: 'Más espacio y comodidad para viajes largos o grupos de hasta 5 personas con equipaje.',
+                price: '200000',
+                motor: '1600 cc',
+                trans: 'Manual',
+                pax: '5',
+                abs: 'Sí',
+                maletas: '2 grandes, 1 mediana',
                 vehicles: [
                     { name: 'Renault Logan', img: 'renault-logan.png', price: '200,000', motor: '1600 cc', trans: 'Manual', ac: 'Sí', pax: '5', luggage: '2 grandes, 1 mediana' }
                 ]
@@ -343,13 +396,41 @@
             {
                 slug: 'suv',
                 name: 'SUV Compacto',
+                descripcion: 'Terreno urbano o rural, con tracción y altura extra. Perfecta para explorar Antioquia.',
+                price: '250000',
+                motor: '2000 cc',
+                trans: 'Automática',
+                pax: '5',
+                abs: 'Sí',
+                maletas: '2 grandes, 1 mediana',
                 vehicles: [
-                    { name: 'Kia Sportage', img: 'kia-sportage.png', price: '200,000', motor: '2000 cc', trans: 'Automática', ac: 'Sí', pax: '5', luggage: '2 grandes, 1 mediana' }
+                    { name: 'Kia Sportage', img: 'kia-sportage.png', price: '250,000', motor: '2000 cc', trans: 'Automática', ac: 'Sí', pax: '5', luggage: '2 grandes, 1 mediana' }
+                ]
+            },
+            {
+                slug: 'suv7',
+                name: 'SUV 7 Puestos',
+                descripcion: 'Camioneta 4x4 todo terreno, ideal para grupos grandes y rutas exigentes. Gasolina, automática, con toda la potencia de una Fortuner.',
+                price: '350000',
+                motor: '2700 cc',
+                trans: 'Automática',
+                pax: '7',
+                abs: 'Sí',
+                maletas: '3 grandes',
+                vehicles: [
+                    { name: 'Toyota Fortuner', img: 'toyota-fortuner.webp', price: '350,000', motor: '2700 cc', trans: 'Automática', ac: 'Sí', pax: '7', luggage: '3 grandes' }
                 ]
             },
             {
                 slug: 'motos',
                 name: 'Motocicletas',
+                descripcion: 'Ágiles, económicas y perfectas para recorrer Rionegro y el Oriente Antioqueño.',
+                price: '80000',
+                motor: '155–250 cc',
+                trans: 'Manual / Automática',
+                pax: '2',
+                abs: 'N/A',
+                maletas: 'N/A',
                 vehicles: [
                     { name: 'Yamaha Aerox', img: 'aerox.png', price: '80,000', motor: '155 cc', trans: 'Automática', ac: 'N/A', pax: '2', luggage: 'N/A' },
                     { name: 'Yamaha FZ-250', img: 'fz250.png', price: '100,000', motor: '250 cc', trans: 'Manual', ac: 'N/A', pax: '2', luggage: 'N/A' }
@@ -864,7 +945,7 @@
                     <div class="mc-footer__brand">
                         <img src="motocar-theme/assets/img/logo-footer.png" alt="MotoCar Rentals">
                     </div>
-                    <h4>Moto-car Rentals</h4>
+                    <h4>MotoCar Rentals</h4>
                 </div>
                 <p class="mc-footer__desc" data-i18n="footer_desc">MotoCar Rentals ofrece alquiler de vehículos y motocicletas con un servicio confiable y seguro, brindando atención personalizada, disponibilidad 24/7, servicio a domicilio y conductor elegido para garantizar una experiencia de movilidad cómoda y sin preocupaciones.</p>
             </div>
@@ -919,21 +1000,7 @@
         <button class="mc-catmodal__close" onclick="closeCategoryModal()" aria-label="Close">
             <i class="fas fa-times"></i>
         </button>
-        <h2 class="mc-catmodal__title" id="catModalTitle">Category</h2>
-        <div class="mc-catmodal__dates-hint" id="catModalDatesHint" style="display:none;">
-            <i class="fas fa-calendar-alt"></i>
-            <span data-i18n="modal_dates_hint">Selecciona fechas en los filtros para ver el precio estimado en COP y USD de cada vehículo.</span>
-        </div>
-        <div class="mc-catmodal__grid" id="catModalGrid">
-            <!-- Vehicle cards injected via JS -->
-        </div>
-        <div class="mc-catmodal__cta">
-            <i class="fab fa-whatsapp mc-catmodal__cta-icon"></i>
-            <p class="mc-catmodal__cta-text" data-i18n="modal_cta_text">¿No ves el vehículo ideal? Te conseguimos una opción en minutos.</p>
-            <a id="catModalWhatsApp" href="#" class="mc-btn mc-btn--whatsapp mc-catmodal__cta-btn" target="_blank" data-i18n-html="modal_cta_btn">
-                <i class="fab fa-whatsapp"></i> Buscar disponibilidad por WhatsApp
-            </a>
-        </div>
+        <div id="catModalLayout"><!-- Injected by JS --></div>
     </div>
 </div>
 

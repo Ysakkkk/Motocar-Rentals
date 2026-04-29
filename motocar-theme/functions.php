@@ -136,10 +136,11 @@ add_action('init', 'motocar_register_vehicles');
 // ==========================================
 function motocar_create_default_categories() {
     $categories = array(
-        'economy'  => array('name' => 'Carro Económico', 'desc' => 'Volkswagen Gol o similar'),
-        'compact'  => array('name' => 'Carro Compacto',  'desc' => 'Renault Logan o similar'),
-        'suv'      => array('name' => 'SUV Compacto',    'desc' => 'Kia Seltos o similar'),
-        'motos'    => array('name' => 'Motocicletas',    'desc' => 'Yamaha FZ 150 o similar'),
+        'economy'  => array('name' => 'Hatchback',     'desc' => 'Volkswagen Gol o similar'),
+        'compact'  => array('name' => 'Sedan',          'desc' => 'Renault Logan o similar'),
+        'suv'      => array('name' => 'SUV Compacto',   'desc' => 'Kia Seltos o similar'),
+        'suv7'     => array('name' => 'SUV 7 Puestos',  'desc' => 'Toyota Fortuner o similar'),
+        'motos'    => array('name' => 'Motocicletas',   'desc' => 'Yamaha FZ 150 o similar'),
     );
     foreach ($categories as $slug => $cat) {
         $existing_term = get_term_by('slug', $slug, 'categoria_vehiculo');
@@ -486,6 +487,73 @@ function motocar_save_vehicle_meta($post_id) {
 add_action('save_post_vehiculo', 'motocar_save_vehicle_meta');
 
 // ==========================================
+// TAXONOMY META: CATEGORÍA DE VEHÍCULO
+// ==========================================
+function motocar_categoria_edit_fields($term) {
+    $tid         = $term->term_id;
+    $precio_dia  = get_term_meta($tid, '_precio_dia',  true);
+    $descripcion = get_term_meta($tid, '_descripcion', true);
+    $motor       = get_term_meta($tid, '_motor',       true);
+    $transmision = get_term_meta($tid, '_transmision', true);
+    $pasajeros   = get_term_meta($tid, '_pasajeros',   true);
+    $abs         = get_term_meta($tid, '_abs',         true);
+    $maletas     = get_term_meta($tid, '_maletas',     true);
+    ?>
+    <tr class="form-field">
+        <th><label for="cat_precio_dia">💲 Precio por día (COP)</label></th>
+        <td><input type="number" id="cat_precio_dia" name="cat_precio_dia" value="<?php echo esc_attr($precio_dia); ?>" placeholder="Ej: 135000"></td>
+    </tr>
+    <tr class="form-field">
+        <th><label for="cat_descripcion">📝 Descripción (modal)</label></th>
+        <td><textarea id="cat_descripcion" name="cat_descripcion" rows="3" placeholder="Breve descripción para el modal"><?php echo esc_textarea($descripcion); ?></textarea></td>
+    </tr>
+    <tr class="form-field">
+        <th><label for="cat_motor">⚙️ Motor / Cilindraje</label></th>
+        <td><input type="text" id="cat_motor" name="cat_motor" value="<?php echo esc_attr($motor); ?>" placeholder="Ej: 2000 cc"></td>
+    </tr>
+    <tr class="form-field">
+        <th><label for="cat_transmision">🔧 Transmisión</label></th>
+        <td>
+            <select id="cat_transmision" name="cat_transmision">
+                <option value="">— Seleccionar —</option>
+                <option value="Manual" <?php selected($transmision, 'Manual'); ?>>Manual</option>
+                <option value="Automática" <?php selected($transmision, 'Automática'); ?>>Automática</option>
+            </select>
+        </td>
+    </tr>
+    <tr class="form-field">
+        <th><label for="cat_pasajeros">👥 Pasajeros</label></th>
+        <td><input type="number" id="cat_pasajeros" name="cat_pasajeros" value="<?php echo esc_attr($pasajeros); ?>" placeholder="Ej: 5" min="1" max="20"></td>
+    </tr>
+    <tr class="form-field">
+        <th><label for="cat_abs">🛑 ABS</label></th>
+        <td>
+            <select id="cat_abs" name="cat_abs">
+                <option value="">— Seleccionar —</option>
+                <option value="Sí" <?php selected($abs, 'Sí'); ?>>Sí</option>
+                <option value="No" <?php selected($abs, 'No'); ?>>No</option>
+            </select>
+        </td>
+    </tr>
+    <tr class="form-field">
+        <th><label for="cat_maletas">🧳 Maletas</label></th>
+        <td><input type="text" id="cat_maletas" name="cat_maletas" value="<?php echo esc_attr($maletas); ?>" placeholder="Ej: 2 grandes, 1 mediana"></td>
+    </tr>
+    <?php
+}
+add_action('categoria_vehiculo_edit_form_fields', 'motocar_categoria_edit_fields', 10, 1);
+
+function motocar_save_categoria_meta($term_id) {
+    $fields = array('precio_dia', 'descripcion', 'motor', 'transmision', 'pasajeros', 'abs', 'maletas');
+    foreach ($fields as $f) {
+        if (isset($_POST['cat_' . $f])) {
+            update_term_meta($term_id, '_' . $f, sanitize_text_field($_POST['cat_' . $f]));
+        }
+    }
+}
+add_action('edited_categoria_vehiculo', 'motocar_save_categoria_meta');
+
+// ==========================================
 // AJAX: OBTENER VEHÍCULOS POR CATEGORÍA
 // ==========================================
 function motocar_get_category_vehicles() {
@@ -532,7 +600,7 @@ function motocar_get_category_vehicles() {
 
             $vehicles[] = array(
                 'id'              => $id,
-                'nombre'          => get_the_title(),
+                'nombre'          => html_entity_decode(get_the_title(), ENT_QUOTES | ENT_HTML5, 'UTF-8'),
                 'descripcion'     => wp_strip_all_tags(apply_filters('the_content', get_the_content())),
                 'imagen'          => $thumbnail ?: '',
                 'gallery'         => $gallery_images,
@@ -556,6 +624,64 @@ function motocar_get_category_vehicles() {
 }
 add_action('wp_ajax_get_category_vehicles', 'motocar_get_category_vehicles');
 add_action('wp_ajax_nopriv_get_category_vehicles', 'motocar_get_category_vehicles');
+
+// ==========================================
+// AJAX: OBTENER DATOS DE CATEGORÍA (modal)
+// ==========================================
+function motocar_get_category_data() {
+    check_ajax_referer('motocar_nonce', 'nonce');
+    $slug = sanitize_text_field($_POST['category'] ?? '');
+    if (empty($slug)) { wp_send_json_error('Missing category'); }
+
+    $term = get_term_by('slug', $slug, 'categoria_vehiculo');
+    if (!$term) { wp_send_json_error('Category not found'); }
+
+    $tid = $term->term_id;
+
+    $query = new WP_Query(array(
+        'post_type'      => 'vehiculo',
+        'posts_per_page' => -1,
+        'post_status'    => 'publish',
+        'tax_query'      => array(array(
+            'taxonomy' => 'categoria_vehiculo',
+            'field'    => 'slug',
+            'terms'    => $slug,
+        )),
+        'meta_key'  => '_precio_dia',
+        'orderby'   => 'meta_value_num',
+        'order'     => 'ASC',
+    ));
+
+    $imagenes = array();
+    $fechas_bloqueadas = array();
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            $id    = get_the_ID();
+            $thumb = get_the_post_thumbnail_url($id, 'large');
+            if ($thumb) $imagenes[] = $thumb;
+            $vf = (array) (get_post_meta($id, '_fechas_no_disponibles', true) ?: array());
+            $fechas_bloqueadas = array_merge($fechas_bloqueadas, $vf);
+        }
+        wp_reset_postdata();
+    }
+
+    $precio_dia = get_term_meta($tid, '_precio_dia', true);
+    wp_send_json_success(array(
+        'nombre'                => html_entity_decode($term->name, ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+        'descripcion'           => get_term_meta($tid, '_descripcion', true) ?: '',
+        'precio_dia'            => $precio_dia ? intval($precio_dia) : 0,
+        'motor'                 => get_term_meta($tid, '_motor',       true) ?: '',
+        'transmision'           => get_term_meta($tid, '_transmision', true) ?: '',
+        'pasajeros'             => get_term_meta($tid, '_pasajeros',   true) ?: '',
+        'abs'                   => get_term_meta($tid, '_abs',         true) ?: '',
+        'maletas'               => get_term_meta($tid, '_maletas',     true) ?: '',
+        'imagenes'              => $imagenes,
+        'fechas_no_disponibles' => $fechas_bloqueadas,
+    ));
+}
+add_action('wp_ajax_get_category_data',        'motocar_get_category_data');
+add_action('wp_ajax_nopriv_get_category_data', 'motocar_get_category_data');
 
 // ==========================================
 // AJAX: OBTENER DATOS DEL VEHÍCULO
