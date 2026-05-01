@@ -10,10 +10,9 @@ var DISCOUNT_TABLES = {
     default: [
         { min: 2,  max: 3,  pct: 5  },
         { min: 4,  max: 6,  pct: 10 },
-        { min: 7,  max: 10, pct: 15 },
-        { min: 11, max: 15, pct: 20 },
-        { min: 16, max: 20, pct: 25 },
-        { min: 21, max: 30, pct: 30 }
+        { min: 7,  max: 14, pct: 15 },
+        { min: 15, max: 29, pct: 20 },
+        { min: 30, max: Infinity, pct: 30 }
     ],
     suv7: [
         { min: 2,  max: 3,          pct: 7  },
@@ -181,11 +180,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Category card titles
         var titleMap = {
-            'Hatchback':     'Hatchback',
-            'Sedan':         'Sedan',
-            'SUV Compacto':  'Compact SUV',
-            'SUV 7 Puestos': 'SUV 7 Seats',
-            'Motocicletas':  'Motorcycles'
+            'Hatchback':          'Hatchback',
+            'Sedan':              'Sedan',
+            'SUV Compacto':       'Compact SUV',
+            'SUV 7 Puestos':      'SUV 7 Seats',
+            'Motocicletas':       'Motorcycles',
+            'Motos Autom\u00e1ticas': 'Automatic Motorcycles'
         };
         var titleMapReverse = {};
         Object.keys(titleMap).forEach(function(k) { titleMapReverse[titleMap[k]] = k; });
@@ -548,6 +548,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 syncFilterTimes();
                 updateCategoryCardPrices();
+                checkCategoryAvailability();
             }
         });
         var fpReturn = flatpickr('#filterReturn', {
@@ -555,7 +556,7 @@ document.addEventListener('DOMContentLoaded', function() {
             dateFormat: 'd/m/Y',
             minDate: 'today',
             disableMobile: true,
-            onChange: function() { syncFilterTimes(); updateCategoryCardPrices(); }
+            onChange: function() { syncFilterTimes(); updateCategoryCardPrices(); checkCategoryAvailability(); }
         });
 
         // Expose for language switching
@@ -611,6 +612,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
             syncFilterTimes();
             updateCategoryCardPrices();
+            checkCategoryAvailability();
+        });
+    }
+
+    var filterSubmitBtn = document.getElementById('filterSubmit');
+    if (filterSubmitBtn) {
+        filterSubmitBtn.addEventListener('click', function() {
+            var grid = document.getElementById('categoriesGrid');
+            if (grid) {
+                var offset = 80; // account for sticky header
+                var top = grid.getBoundingClientRect().top + window.pageYOffset - offset;
+                window.scrollTo({ top: top, behavior: 'smooth' });
+            }
         });
     }
 
@@ -657,6 +671,58 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // ==========================================
+    // FOOTER CONTACT FORM
+    // ==========================================
+    var footerForm = document.getElementById('footerContactForm');
+    if (footerForm) {
+        footerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            var input  = document.getElementById('footerContactInput');
+            var msgEl  = document.getElementById('footerContactMsg');
+            var btn    = footerForm.querySelector('button[type="submit"]');
+            var contact = input ? input.value.trim() : '';
+            if (!contact) return;
+
+            // WordPress AJAX
+            if (typeof motocarData !== 'undefined') {
+                btn.disabled = true;
+                var fd = new FormData();
+                fd.append('action',  'footer_contact');
+                fd.append('nonce',   motocarData.nonce);
+                fd.append('contact', contact);
+                fetch(motocarData.ajaxUrl, { method: 'POST', body: fd })
+                    .then(function(r) { return r.json(); })
+                    .then(function(data) {
+                        btn.disabled = false;
+                        msgEl.style.display = 'block';
+                        if (data.success) {
+                            msgEl.style.color = '#1a9e40';
+                            msgEl.textContent = '¡Mensaje enviado! Pronto nos pondremos en contacto contigo.';
+                            input.value = '';
+                        } else {
+                            msgEl.style.color = '#c0392b';
+                            msgEl.textContent = 'Hubo un error al enviar. Por favor intenta de nuevo.';
+                        }
+                    })
+                    .catch(function() {
+                        btn.disabled = false;
+                        msgEl.style.display = 'block';
+                        msgEl.style.color = '#c0392b';
+                        msgEl.textContent = 'Error de conexión. Por favor intenta de nuevo.';
+                    });
+            } else {
+                // Fallback para preview estático: abre mailto
+                var mailSubject = 'Solicitud de contacto desde motocarrentals.com.co';
+                var mailBody = 'Hola MotoCar Rentals,\n\n'
+                    + 'Los encontré desde su página web y me gustaría ser contactado para obtener más información sobre sus servicios de alquiler de vehículos.\n\n'
+                    + 'Mi información de contacto es: ' + contact + '\n\n'
+                    + '¡Gracias!';
+                window.location.href = 'mailto:motocarrentals@gmail.com?subject=' + encodeURIComponent(mailSubject) + '&body=' + encodeURIComponent(mailBody);
+            }
+        });
+    }
 
 });
 
@@ -748,10 +814,11 @@ function openCategoryModal(slug, name) {
                 ? parseInt(String(cat.price).replace(/[,.]/g, ''))
                 : (cat.vehicles[0] ? parseInt(String(cat.vehicles[0].price).replace(/[,.]/g, '')) : 0);
             var catData = {
-                slug:         slug,
-                nombre:       cat.name,
-                descripcion:  cat.descripcion || '',
-                precio_dia:   minPrice,
+                slug:            slug,
+                nombre:          cat.name,
+                descripcion:     cat.descripcion    || '',
+                descripcion_en:  cat.descripcion_en || '',
+                precio_dia:      minPrice,
                 motor:        cat.motor        || (cat.vehicles[0] ? cat.vehicles[0].motor  : ''),
                 transmision:  cat.trans        || (cat.vehicles[0] ? cat.vehicles[0].trans  : ''),
                 pasajeros:    cat.pax          || (cat.vehicles[0] ? cat.vehicles[0].pax    : ''),
@@ -774,11 +841,12 @@ function openCategoryModal(slug, name) {
 // ==========================================
 function renderCategoryModal(catData, layout, lang) {
     var titleMap = {
-        'Hatchback':     'Hatchback',
-        'Sedan':         'Sedan',
-        'SUV Compacto':  'Compact SUV',
-        'SUV 7 Puestos': 'SUV 7 Seats',
-        'Motocicletas':  'Motorcycles'
+        'Hatchback':          'Hatchback',
+        'Sedan':              'Sedan',
+        'SUV Compacto':       'Compact SUV',
+        'SUV 7 Puestos':      'SUV 7 Seats',
+        'Motocicletas':       'Motorcycles',
+        'Motos Autom\u00e1ticas': 'Automatic Motorcycles'
     };
     var displayName = (lang === 'en' && titleMap[catData.nombre]) ? titleMap[catData.nombre] : catData.nombre;
     var placeHolder = (typeof motocarData !== 'undefined' ? motocarData.themeUrl : '') + '/assets/img/placeholder.jpg';
@@ -826,8 +894,9 @@ function renderCategoryModal(catData, layout, lang) {
           }).join('') + '</div>'
         : '';
 
-    var descHtml = catData.descripcion
-        ? '<p class="mc-catmodal__cat-desc">' + escapeHtml(catData.descripcion) + '</p>'
+    var descText = (lang === 'en' && catData.descripcion_en) ? catData.descripcion_en : catData.descripcion;
+    var descHtml = descText
+        ? '<p class="mc-catmodal__cat-desc">' + escapeHtml(descText) + '</p>'
         : '';
 
     layout.innerHTML =
@@ -891,26 +960,33 @@ function buildBookingPanel(catData, lang) {
         var discPct      = getDiscountPct(rentalDays, catData.slug || '');
         var baseTotal    = pricePerDay * rentalDays;
         var baseDesc     = discPct > 0 ? Math.round(baseTotal * (1 - discPct / 100)) : baseTotal;
-        var totalCash    = Math.round(baseDesc * 1.19);
+        var ivaAmount    = Math.round(baseDesc * 0.19);
+        var totalCash    = baseDesc + ivaAmount;
         var totalCard    = Math.round(totalCash * 1.19);
         var totalCashUsd = (totalCash / USD_RATE).toFixed(2);
         var totalCardUsd = (totalCard / USD_RATE).toFixed(2);
         var daysLabel    = rentalDays === 1 ? (lang === 'en' ? 'day' : 'd\u00eda') : (lang === 'en' ? 'days' : 'd\u00edas');
+        var sinDescRow   = discPct > 0
+            ? '<div class="mc-catmodal__price-row"><span>' + (lang === 'en' ? 'Subtotal' : 'Sin descuento') + '</span><span class="mc-price-strikethrough">$' + formatNumber(baseTotal) + ' COP</span></div>'
+            : '<div class="mc-catmodal__price-row"><span>' + (lang === 'en' ? 'Subtotal' : 'Sin descuento') + '</span><span>$' + formatNumber(baseTotal) + ' COP</span></div>';
         var discRow      = discPct > 0
             ? '<div class="mc-catmodal__price-row mc-catmodal__price-row--discount"><span>' +
-              (lang === 'en' ? 'Discount (' + discPct + '%)' : 'Descuento (' + discPct + '%)') +
-              '</span><span class="mc-discount-val">-$' + formatNumber(baseTotal - baseDesc) + ' COP</span></div>'
+              (lang === 'en' ? 'Discount (\u2212' + discPct + '%)' : 'Descuento (\u2212' + discPct + '%)') +
+              '</span><span class="mc-discount-val">\u2212$' + formatNumber(baseTotal - baseDesc) + ' COP</span></div>'
             : '';
         priceHtml =
             '<div class="mc-catmodal__price-box">' +
                 '<div class="mc-catmodal__price-row"><span>' + (lang === 'en' ? 'Price/day' : 'Precio/d\u00eda') + '</span><span>$' + formatNumber(pricePerDay) + ' COP</span></div>' +
                 '<div class="mc-catmodal__price-row"><span>' + (lang === 'en' ? 'Duration' : 'Duraci\u00f3n') + '</span><span>' + rentalDays + ' ' + daysLabel + '</span></div>' +
+                '<div class="mc-catmodal__price-divider"></div>' +
+                sinDescRow +
                 discRow +
+                '<div class="mc-catmodal__price-row mc-catmodal__price-row--iva"><span>IVA (19%)</span><span>+$' + formatNumber(ivaAmount) + ' COP</span></div>' +
                 '<div class="mc-catmodal__price-row mc-catmodal__price-row--total"><span><i class="fas fa-money-bill-wave"></i> ' + (lang === 'en' ? 'Cash (incl. IVA)' : 'Efectivo (incl. IVA)') + '</span><span>$' + formatNumber(totalCash) + ' COP</span></div>' +
                 '<div class="mc-catmodal__price-row mc-catmodal__price-row--sub"><span></span><span>~$' + totalCashUsd + ' USD</span></div>' +
-                '<div class="mc-catmodal__price-row mc-catmodal__price-row--total mc-catmodal__price-row--card"><span><i class="fas fa-credit-card"></i> ' + (lang === 'en' ? 'Card (+IVA)' : 'Tarjeta (+IVA)') + '</span><span>$' + formatNumber(totalCard) + ' COP</span></div>' +
-                '<div class="mc-catmodal__price-row mc-catmodal__price-row--sub"><span></span><span>~$' + totalCardUsd + ' USD</span></div>' +
-                '<p class="mc-catmodal__price-note">* ' + (lang === 'en' ? 'Estimated total. Additional charges may apply.' : 'Total estimado. Pueden aplicar costos adicionales.') + '</p>' +
+                '<div class="mc-catmodal__price-row mc-catmodal__price-row--total mc-catmodal__price-row--card"><span><i class="fas fa-credit-card"></i> ' + (lang === 'en' ? 'Card (+ Taxes)' : 'Tarjeta (+ Impuestos)') + '</span><span>$' + formatNumber(totalCard) + ' COP</span></div>' +
+                '<div class="mc-catmodal__price-row mc-catmodal__price-row--sub"><span><small>' + (lang === 'en' ? '+ additional charges may apply' : '+ pueden aplicar costos adicionales') + '</small></span><span>~$' + totalCardUsd + ' USD</span></div>' +
+                '<p class="mc-catmodal__price-note">* ' + (lang === 'en' ? 'Estimated total. Final price confirmed at pickup.' : 'Total estimado. Precio final confirmado al momento de la entrega.') + '</p>' +
             '</div>';
     } else if (pricePerDay > 0) {
         var priceUsdDay = (pricePerDay / USD_RATE).toFixed(2);
@@ -923,21 +999,130 @@ function buildBookingPanel(catData, lang) {
             '</div>';
     }
 
-    // WhatsApp link
-    var rentalContext = buildRentalContext(lang);
-    var waMsg = lang === 'en'
-        ? 'Hello MotoCar Rentals! I\'m interested in the ' + catData.nombre + ' category.'
-        : '\u00a1Hola MotoCar Rentals! Estoy interesado en la categor\u00eda ' + catData.nombre + '.';
-    if (rentalContext.length) waMsg += (lang === 'en' ? ' Details: ' : ' Detalles: ') + rentalContext.join(' | ');
+    // WhatsApp link — detailed message with prices
+    var waMsg;
+    if (lang === 'en') {
+        waMsg = 'Hello MotoCar Rentals! I found you on your website and I\'m interested in renting a vehicle from the *' + catData.nombre + '* category.\n\n';
+        if (pickupDate) waMsg += '\uD83D\uDCC5 Pick-up: '  + pickupDate + (pickupTime ? ' \u00b7 ' + pickupTime : '') + '\n';
+        if (returnDate) waMsg += '\uD83D\uDCC5 Return: '   + returnDate + (returnTime ? ' \u00b7 ' + returnTime : '') + '\n';
+        if (pickupLoc)  waMsg += '\uD83D\uDCCD Pick-up location: ' + pickupLoc + '\n';
+        if (returnLoc)  waMsg += '\uD83D\uDCCD Return location: '  + returnLoc + '\n';
+        if (rentalDays > 0 && pricePerDay > 0) {
+            waMsg += '\n\uD83D\uDCB0 Price estimate (' + rentalDays + ' ' + (rentalDays === 1 ? 'day' : 'days') + '):\n';
+            waMsg += '\u2022 Price/day: $' + formatNumber(pricePerDay) + ' COP\n';
+            if (discPct > 0) waMsg += '\u2022 Discount (\u2212' + discPct + '%): \u2212$' + formatNumber(baseTotal - baseDesc) + ' COP\n';
+            waMsg += '\u2022 IVA (19%): +$' + formatNumber(ivaAmount) + ' COP\n';
+            waMsg += '\u2022 Cash total: $' + formatNumber(totalCash) + ' COP (~$' + totalCashUsd + ' USD)\n';
+            waMsg += '\u2022 Card total: $' + formatNumber(totalCard) + ' COP (~$' + totalCardUsd + ' USD)\n';
+            waMsg += '\nCould you confirm availability and final price?';
+        } else {
+            waMsg += '\nCould you provide more information about availability and pricing?';
+        }
+    } else {
+        waMsg = '\u00a1Hola MotoCar Rentals! Los encontr\u00e9 en su p\u00e1gina web y estoy interesado en alquilar un veh\u00edculo de la categor\u00eda *' + catData.nombre + '*.\n\n';
+        if (pickupDate) waMsg += '\uD83D\uDCC5 Recogida: '             + pickupDate + (pickupTime ? ' \u00b7 ' + pickupTime : '') + '\n';
+        if (returnDate) waMsg += '\uD83D\uDCC5 Devoluci\u00f3n: '      + returnDate + (returnTime ? ' \u00b7 ' + returnTime : '') + '\n';
+        if (pickupLoc)  waMsg += '\uD83D\uDCCD Lugar de entrega: '      + pickupLoc + '\n';
+        if (returnLoc)  waMsg += '\uD83D\uDCCD Lugar de devoluci\u00f3n: ' + returnLoc + '\n';
+        if (rentalDays > 0 && pricePerDay > 0) {
+            waMsg += '\n\uD83D\uDCB0 Cotizaci\u00f3n estimada (' + rentalDays + ' ' + (rentalDays === 1 ? 'd\u00eda' : 'd\u00edas') + '):\n';
+            waMsg += '\u2022 Precio/d\u00eda: $' + formatNumber(pricePerDay) + ' COP\n';
+            if (discPct > 0) waMsg += '\u2022 Descuento (\u2212' + discPct + '%): \u2212$' + formatNumber(baseTotal - baseDesc) + ' COP\n';
+            waMsg += '\u2022 IVA (19%): +$' + formatNumber(ivaAmount) + ' COP\n';
+            waMsg += '\u2022 Total efectivo: $' + formatNumber(totalCash) + ' COP (~$' + totalCashUsd + ' USD)\n';
+            waMsg += '\u2022 Total tarjeta: $' + formatNumber(totalCard) + ' COP (~$' + totalCardUsd + ' USD)\n';
+            waMsg += '\n\u00bfPueden confirmarme la disponibilidad y el precio final?';
+        } else {
+            waMsg += '\n\u00bfPueden darme m\u00e1s informaci\u00f3n sobre disponibilidad y precios?';
+        }
+    }
     var waLink  = 'https://wa.me/' + phone + '?text=' + encodeURIComponent(waMsg);
     var btnText = lang === 'en' ? 'Get a Quote' : 'Ir a Cotizar';
+
+    // Store quote data for email notification (sent in goToQuote)
+    window._mcLastQuoteData = {
+        categoria:   catData.nombre,
+        slug:        catData.slug || '',
+        pickupDate:  pickupDate,
+        pickupTime:  pickupTime,
+        returnDate:  returnDate,
+        returnTime:  returnTime,
+        pickupLoc:   pickupLoc,
+        returnLoc:   returnLoc,
+        rentalDays:  rentalDays,
+        pricePerDay: pricePerDay,
+        discPct:     (rentalDays > 0 && pricePerDay > 0) ? discPct   : 0,
+        totalCash:   (rentalDays > 0 && pricePerDay > 0) ? totalCash : 0,
+        totalCard:   (rentalDays > 0 && pricePerDay > 0) ? totalCard : 0,
+        waLink:      waLink
+    };
 
     return '<div class="mc-catmodal__booking">' +
         '<h3 class="mc-catmodal__booking-title"><i class="fas fa-clipboard-list"></i> ' + (lang === 'en' ? 'Rental Details' : 'Detalles de Renta') + '</h3>' +
         fieldsHtml +
         priceHtml +
-        '<a href="' + waLink + '" target="_blank" class="mc-catmodal__book-btn">' + btnText + ' <i class="fab fa-whatsapp"></i></a>' +
+        '<a href="#" class="mc-catmodal__book-btn" onclick="goToQuote(); return false;">' + btnText + ' <i class="fab fa-whatsapp"></i></a>' +
     '</div>';
+}
+
+// ==========================================
+// CATEGORY AVAILABILITY CHECK BY DATES
+// ==========================================
+function checkCategoryAvailability() {
+    if (typeof motocarData === 'undefined') return; // Demo/preview: skip
+
+    var pickupDate = (document.getElementById('filterPickup') || {}).value || '';
+    var returnDate = (document.getElementById('filterReturn') || {}).value || '';
+
+    if (!pickupDate || !returnDate) {
+        // No dates selected: restore all cards
+        document.querySelectorAll('.mc-catcard').forEach(function(card) {
+            card.classList.remove('mc-catcard--unavailable');
+        });
+        return;
+    }
+
+    var fd = new FormData();
+    fd.append('action', 'check_categories_availability');
+    fd.append('nonce',  motocarData.nonce);
+    fd.append('pickup', pickupDate);
+    fd.append('return', returnDate);
+
+    fetch(motocarData.ajaxUrl, { method: 'POST', body: fd })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (!data.success) return;
+            var avail = data.data;
+            document.querySelectorAll('.mc-catcard').forEach(function(card) {
+                var slug = card.getAttribute('data-category');
+                if (avail.hasOwnProperty(slug) && avail[slug] === false) {
+                    card.classList.add('mc-catcard--unavailable');
+                } else {
+                    card.classList.remove('mc-catcard--unavailable');
+                }
+            });
+        })
+        .catch(function() {});
+}
+
+// ==========================================
+// QUOTE NOTIFICATION — open WhatsApp + email MotoCar
+// ==========================================
+function goToQuote() {
+    var d = window._mcLastQuoteData;
+    if (!d || !d.waLink) return;
+
+    // Notify MotoCar by email (fire and forget, does not block WhatsApp)
+    if (typeof motocarData !== 'undefined') {
+        var fd = new FormData();
+        fd.append('action', 'quote_notify');
+        fd.append('nonce',  motocarData.nonce);
+        fd.append('data',   JSON.stringify(d));
+        fetch(motocarData.ajaxUrl, { method: 'POST', body: fd }).catch(function() {});
+    }
+
+    // Open WhatsApp
+    window.open(d.waLink, '_blank');
 }
 
 function catModalGalleryNav(direction) {
@@ -991,10 +1176,17 @@ function updateCategoryCardPrices() {
             textEl.textContent = '~$' + formatNumber(total) + ' COP (' + rentalDays + ' ' + daysLbl + discTag + ')';
             usdEl.textContent  = '~$' + totalUsd + ' USD';
         } else {
-            var suffix  = lang === 'en' ? 'COP/day' : 'COP/d\u00eda';
-            var usdDay  = (priceDay / USD_RATE).toFixed(2);
-            textEl.textContent = (lang === 'en' ? 'From $' : 'Desde $') + formatNumber(priceDay) + ' ' + suffix;
+            var priceWithIva = Math.round(priceDay * 1.19);
+            var usdDay  = (priceWithIva / USD_RATE).toFixed(2);
+            textEl.textContent = (lang === 'en' ? 'From $' : 'Desde $') + formatNumber(priceWithIva) + (lang === 'en' ? ' COP/day' : ' COP/d\u00eda');
             usdEl.textContent  = '~$' + usdDay + ' USD/' + (lang === 'en' ? 'day' : 'd\u00eda');
+            var ivaEl = priceEl.querySelector('.mc-catcard__price-iva');
+            if (ivaEl) ivaEl.style.display = '';
+        }
+        // Hide IVA badge when dates are set
+        if (rentalDays > 0) {
+            var ivaElH = priceEl.querySelector('.mc-catcard__price-iva');
+            if (ivaElH) ivaElH.style.display = 'none';
         }
     });
 }

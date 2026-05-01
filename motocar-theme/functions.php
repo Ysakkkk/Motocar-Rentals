@@ -136,11 +136,12 @@ add_action('init', 'motocar_register_vehicles');
 // ==========================================
 function motocar_create_default_categories() {
     $categories = array(
-        'economy'  => array('name' => 'Hatchback',     'desc' => 'Volkswagen Gol o similar'),
-        'compact'  => array('name' => 'Sedan',          'desc' => 'Renault Logan o similar'),
-        'suv'      => array('name' => 'SUV Compacto',   'desc' => 'Kia Seltos o similar'),
-        'suv7'     => array('name' => 'SUV 7 Puestos',  'desc' => 'Toyota Fortuner o similar'),
-        'motos'    => array('name' => 'Motocicletas',   'desc' => 'Yamaha FZ 150 o similar'),
+        'economy'    => array('name' => 'Hatchback',          'desc' => 'Volkswagen Gol o similar'),
+        'compact'    => array('name' => 'Sedan',               'desc' => 'Renault Logan o similar'),
+        'suv'        => array('name' => 'SUV Compacto',        'desc' => 'Kia Seltos o similar'),
+        'suv7'       => array('name' => 'SUV 7 Puestos',       'desc' => 'Toyota Fortuner o similar'),
+        'motos'      => array('name' => 'Motocicletas',        'desc' => 'Yamaha FZ 150 o similar'),
+        'motos-auto' => array('name' => 'Motos Automáticas',   'desc' => 'Yamaha Aerox o similar'),
     );
     foreach ($categories as $slug => $cat) {
         $existing_term = get_term_by('slug', $slug, 'categoria_vehiculo');
@@ -490,22 +491,27 @@ add_action('save_post_vehiculo', 'motocar_save_vehicle_meta');
 // TAXONOMY META: CATEGORÍA DE VEHÍCULO
 // ==========================================
 function motocar_categoria_edit_fields($term) {
-    $tid         = $term->term_id;
-    $precio_dia  = get_term_meta($tid, '_precio_dia',  true);
-    $descripcion = get_term_meta($tid, '_descripcion', true);
-    $motor       = get_term_meta($tid, '_motor',       true);
-    $transmision = get_term_meta($tid, '_transmision', true);
-    $pasajeros   = get_term_meta($tid, '_pasajeros',   true);
-    $abs         = get_term_meta($tid, '_abs',         true);
-    $maletas     = get_term_meta($tid, '_maletas',     true);
+    $tid            = $term->term_id;
+    $precio_dia     = get_term_meta($tid, '_precio_dia',     true);
+    $descripcion    = get_term_meta($tid, '_descripcion',    true);
+    $descripcion_en = get_term_meta($tid, '_descripcion_en', true);
+    $motor          = get_term_meta($tid, '_motor',          true);
+    $transmision    = get_term_meta($tid, '_transmision',    true);
+    $pasajeros      = get_term_meta($tid, '_pasajeros',      true);
+    $abs            = get_term_meta($tid, '_abs',            true);
+    $maletas        = get_term_meta($tid, '_maletas',        true);
     ?>
     <tr class="form-field">
         <th><label for="cat_precio_dia">💲 Precio por día (COP)</label></th>
         <td><input type="number" id="cat_precio_dia" name="cat_precio_dia" value="<?php echo esc_attr($precio_dia); ?>" placeholder="Ej: 135000"></td>
     </tr>
     <tr class="form-field">
-        <th><label for="cat_descripcion">📝 Descripción (modal)</label></th>
+        <th><label for="cat_descripcion">📝 Descripción (modal) — Español</label></th>
         <td><textarea id="cat_descripcion" name="cat_descripcion" rows="3" placeholder="Breve descripción para el modal"><?php echo esc_textarea($descripcion); ?></textarea></td>
+    </tr>
+    <tr class="form-field">
+        <th><label for="cat_descripcion_en">📝 Description (modal) — English</label></th>
+        <td><textarea id="cat_descripcion_en" name="cat_descripcion_en" rows="3" placeholder="Short description for the modal in English"><?php echo esc_textarea($descripcion_en); ?></textarea></td>
     </tr>
     <tr class="form-field">
         <th><label for="cat_motor">⚙️ Motor / Cilindraje</label></th>
@@ -544,7 +550,7 @@ function motocar_categoria_edit_fields($term) {
 add_action('categoria_vehiculo_edit_form_fields', 'motocar_categoria_edit_fields', 10, 1);
 
 function motocar_save_categoria_meta($term_id) {
-    $fields = array('precio_dia', 'descripcion', 'motor', 'transmision', 'pasajeros', 'abs', 'maletas');
+    $fields = array('precio_dia', 'descripcion', 'descripcion_en', 'motor', 'transmision', 'pasajeros', 'abs', 'maletas');
     foreach ($fields as $f) {
         if (isset($_POST['cat_' . $f])) {
             update_term_meta($term_id, '_' . $f, sanitize_text_field($_POST['cat_' . $f]));
@@ -669,7 +675,8 @@ function motocar_get_category_data() {
     $precio_dia = get_term_meta($tid, '_precio_dia', true);
     wp_send_json_success(array(
         'nombre'                => html_entity_decode($term->name, ENT_QUOTES | ENT_HTML5, 'UTF-8'),
-        'descripcion'           => get_term_meta($tid, '_descripcion', true) ?: '',
+        'descripcion'           => get_term_meta($tid, '_descripcion',    true) ?: '',
+        'descripcion_en'        => get_term_meta($tid, '_descripcion_en', true) ?: '',
         'precio_dia'            => $precio_dia ? intval($precio_dia) : 0,
         'motor'                 => get_term_meta($tid, '_motor',       true) ?: '',
         'transmision'           => get_term_meta($tid, '_transmision', true) ?: '',
@@ -684,8 +691,178 @@ add_action('wp_ajax_get_category_data',        'motocar_get_category_data');
 add_action('wp_ajax_nopriv_get_category_data', 'motocar_get_category_data');
 
 // ==========================================
-// AJAX: OBTENER DATOS DEL VEHÍCULO
+// AJAX: DISPONIBILIDAD DE CATEGORÍAS POR FECHAS
 // ==========================================
+function motocar_check_categories_availability() {
+    check_ajax_referer('motocar_nonce', 'nonce');
+
+    $pickup_str = sanitize_text_field($_POST['pickup'] ?? '');
+    $return_str = sanitize_text_field($_POST['return'] ?? '');
+
+    if (empty($pickup_str) || empty($return_str)) {
+        wp_send_json_error('missing_dates');
+    }
+
+    $pickup = DateTime::createFromFormat('d/m/Y', $pickup_str);
+    $ret    = DateTime::createFromFormat('d/m/Y', $return_str);
+
+    if (!$pickup || !$ret) {
+        wp_send_json_error('invalid_dates');
+    }
+
+    $terms = get_terms(array(
+        'taxonomy'   => 'categoria_vehiculo',
+        'hide_empty' => false,
+    ));
+
+    $result = array();
+
+    foreach ($terms as $term) {
+        $query = new WP_Query(array(
+            'post_type'      => 'vehiculo',
+            'posts_per_page' => -1,
+            'post_status'    => 'publish',
+            'tax_query'      => array(array(
+                'taxonomy' => 'categoria_vehiculo',
+                'field'    => 'slug',
+                'terms'    => $term->slug,
+            )),
+            'fields' => 'ids',
+        ));
+
+        if (!$query->have_posts()) {
+            // No vehicles registered yet — show category
+            $result[$term->slug] = true;
+            continue;
+        }
+
+        $has_available = false;
+        foreach ($query->posts as $id) {
+            $blocked = (array)(get_post_meta($id, '_fechas_no_disponibles', true) ?: array());
+            $vehicle_blocked = false;
+            foreach ($blocked as $rango) {
+                if (empty($rango['inicio']) || empty($rango['fin'])) continue;
+                $b_start = new DateTime($rango['inicio']);
+                $b_end   = new DateTime($rango['fin']);
+                // Overlap: pickup <= b_end AND return >= b_start
+                if ($pickup <= $b_end && $ret >= $b_start) {
+                    $vehicle_blocked = true;
+                    break;
+                }
+            }
+            if (!$vehicle_blocked) {
+                $has_available = true;
+                break; // At least one available — no need to check further
+            }
+        }
+        wp_reset_postdata();
+        $result[$term->slug] = $has_available;
+    }
+
+    wp_send_json_success($result);
+}
+add_action('wp_ajax_check_categories_availability',        'motocar_check_categories_availability');
+add_action('wp_ajax_nopriv_check_categories_availability', 'motocar_check_categories_availability');
+
+// ==========================================
+// AJAX: FORMULARIO DE CONTACTO DEL FOOTER
+// ==========================================
+function motocar_footer_contact() {
+    check_ajax_referer('motocar_nonce', 'nonce');
+
+    $contact = sanitize_text_field($_POST['contact'] ?? '');
+    if (empty($contact)) {
+        wp_send_json_error('empty');
+    }
+
+    $to      = 'motocarrentals@gmail.com';
+    $subject = 'Solicitud de contacto desde el sitio web';
+    $body    = "Alguien dejó su información de contacto en el sitio web de MotoCar Rentals.\n\n"
+             . "Contacto: " . $contact . "\n\n"
+             . "Por favor comunícate con esta persona a la brevedad.";
+    $headers = array('Content-Type: text/plain; charset=UTF-8');
+
+    $sent = wp_mail($to, $subject, $body, $headers);
+
+    if ($sent) {
+        wp_send_json_success('sent');
+    } else {
+        wp_send_json_error('mail_failed');
+    }
+}
+add_action('wp_ajax_footer_contact',        'motocar_footer_contact');
+add_action('wp_ajax_nopriv_footer_contact', 'motocar_footer_contact');
+
+// ==========================================
+// QUOTE NOTIFICATION (email when user clicks "Ir a Cotizar")
+// ==========================================
+function motocar_quote_notify() {
+    check_ajax_referer('motocar_nonce', 'nonce');
+
+    $raw = isset($_POST['data']) ? wp_unslash($_POST['data']) : '';
+    if (empty($raw)) {
+        wp_send_json_error('empty');
+    }
+
+    $d = json_decode($raw, true);
+    if (!is_array($d)) {
+        wp_send_json_error('invalid');
+    }
+
+    $cat     = sanitize_text_field($d['categoria']  ?? 'N/A');
+    $pDate   = sanitize_text_field($d['pickupDate'] ?? '');
+    $pTime   = sanitize_text_field($d['pickupTime'] ?? '');
+    $rDate   = sanitize_text_field($d['returnDate'] ?? '');
+    $rTime   = sanitize_text_field($d['returnTime'] ?? '');
+    $pLoc    = sanitize_text_field($d['pickupLoc']  ?? '');
+    $rLoc    = sanitize_text_field($d['returnLoc']  ?? '');
+    $days    = intval($d['rentalDays']  ?? 0);
+    $perDay  = intval($d['pricePerDay'] ?? 0);
+    $discPct = intval($d['discPct']     ?? 0);
+    $cash    = intval($d['totalCash']   ?? 0);
+    $card    = intval($d['totalCard']   ?? 0);
+
+    $fecha_solicitud = date_i18n('d/m/Y H:i:s', current_time('timestamp'));
+
+    $body  = "Nueva solicitud de cotizacion desde motocarrentals.com.co\n";
+    $body .= "Fecha de solicitud: {$fecha_solicitud}\n\n";
+    $body .= "=== DETALLES DE LA RESERVA ===\n";
+    $body .= "Categoria: {$cat}\n";
+    if ($pDate) $body .= "Recogida:    {$pDate}" . ($pTime ? " - {$pTime}" : '') . "\n";
+    if ($rDate) $body .= "Devolucion:  {$rDate}" . ($rTime ? " - {$rTime}" : '') . "\n";
+    if ($pLoc)  $body .= "Lugar entrega:    {$pLoc}\n";
+    if ($rLoc)  $body .= "Lugar devolucion: {$rLoc}\n";
+
+    if ($days > 0 && $perDay > 0) {
+        $body .= "\n=== COTIZACION ESTIMADA ===\n";
+        $body .= "Duracion:   {$days} " . ($days === 1 ? 'dia' : 'dias') . "\n";
+        $body .= "Precio/dia: $" . number_format($perDay, 0, ',', '.') . " COP\n";
+        if ($discPct > 0) {
+            $body .= "Descuento:  -{$discPct}%\n";
+        }
+        if ($cash > 0) {
+            $usd_cash = number_format($cash / 4500, 2, '.', '');
+            $body .= "Total efectivo (c/IVA): $" . number_format($cash, 0, ',', '.') . " COP (~\${$usd_cash} USD)\n";
+        }
+        if ($card > 0) {
+            $usd_card = number_format($card / 4500, 2, '.', '');
+            $body .= "Total tarjeta (+ imp.): $" . number_format($card, 0, ',', '.') . " COP (~\${$usd_card} USD)\n";
+        }
+    }
+
+    $body .= "\nEl cliente fue redirigido a WhatsApp para continuar la cotizacion.";
+
+    $to      = 'motocarrentals@gmail.com';
+    $subject = "Nueva cotizacion web: {$cat}" . ($pDate ? " | {$pDate}" : '');
+    $headers = array('Content-Type: text/plain; charset=UTF-8');
+    wp_mail($to, $subject, $body, $headers);
+
+    wp_send_json_success('notified');
+}
+add_action('wp_ajax_quote_notify',        'motocar_quote_notify');
+add_action('wp_ajax_nopriv_quote_notify', 'motocar_quote_notify');
+
+
 function motocar_get_vehicle_data() {
     check_ajax_referer('motocar_nonce', 'nonce');
 

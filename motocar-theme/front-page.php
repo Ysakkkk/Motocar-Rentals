@@ -148,7 +148,7 @@
                                 <i class="fas fa-map-marker-alt"></i>
                                 <select id="filterPickupLocation" required>
                                     <option value="" data-i18n="filter_pickup_location" selected disabled hidden>Lugar de retirada</option>
-                                    <option value="rionegro-airport" data-i18n="location_rionegro_airport">Mall Terranova</option>
+                                    <option value="rionegro-airport" data-i18n="location_rionegro_airport">Mall Terranova - Aeropuerto de Rionegro</option>
                                     <option value="other" data-i18n="location_other">Otro</option>
                                 </select>
                             </div>
@@ -180,7 +180,7 @@
                                 <i class="fas fa-map-marker-alt"></i>
                                 <select id="filterReturnLocation" required>
                                     <option value="" data-i18n="filter_return_location" selected disabled hidden>Lugar de devolución</option>
-                                    <option value="rionegro-airport" data-i18n="location_rionegro_airport">Mall Terranova</option>
+                                    <option value="rionegro-airport" data-i18n="location_rionegro_airport">Mall Terranova - Aeropuerto de Rionegro</option>
                                     <option value="other" data-i18n="location_other">Otro</option>
                                 </select>
                             </div>
@@ -195,12 +195,15 @@
                     <button type="button" class="mc-filter__reset" id="filterReset" data-i18n="filter_reset">
                         <i class="fas fa-rotate-left"></i> Reiniciar filtros
                     </button>
+                    <button type="button" class="mc-filter__submit" id="filterSubmit" data-i18n="filter_submit">
+                        <i class="fas fa-search"></i> Filtrar
+                    </button>
                 </div>
                 <p class="mc-filter__hint" data-i18n="filter_hint"><i class="fas fa-info-circle"></i> Selecciona las fechas para calcular un precio estimado en COP y USD al ver los vehículos.</p>
             </div>
         </div>
 
-        <div class="mc-categories__grid">
+        <div class="mc-categories__grid" id="categoriesGrid">
             <?php
             // Get categories from WP taxonomy
             $cat_terms = get_terms(array(
@@ -210,27 +213,30 @@
                 'order'      => 'ASC',
             ));
 
-            $cat_order = array('motos' => 1, 'economy' => 2, 'compact' => 3, 'suv' => 4, 'suv7' => 5);
+            $cat_order = array('motos' => 1, 'motos-auto' => 2, 'economy' => 3, 'compact' => 4, 'suv' => 5, 'suv7' => 6);
             $cat_icons = array(
-                'economy' => 'fas fa-car',
-                'compact' => 'fas fa-car-side',
-                'suv'     => 'fas fa-shuttle-van',
-                'suv7'    => 'fas fa-truck',
-                'motos'   => 'fas fa-motorcycle',
+                'economy'    => 'fas fa-car',
+                'compact'    => 'fas fa-car-side',
+                'suv'        => 'fas fa-shuttle-van',
+                'suv7'       => 'fas fa-truck',
+                'motos'      => 'fas fa-motorcycle',
+                'motos-auto' => 'fas fa-motorcycle',
             );
             $cat_types = array(
-                'economy' => 'carro',
-                'compact' => 'carro',
-                'suv'     => 'carro',
-                'suv7'    => 'carro',
-                'motos'   => 'moto',
+                'economy'    => 'carro',
+                'compact'    => 'carro',
+                'suv'        => 'carro',
+                'suv7'       => 'carro',
+                'motos'      => 'moto',
+                'motos-auto' => 'moto',
             );
             $cat_labels = array(
-                'economy' => array('name' => 'Hatchback',      'desc' => 'Volkswagen Gol o similar'),
-                'compact' => array('name' => 'Sedan',          'desc' => 'Renault Logan o similar'),
-                'suv'     => array('name' => 'SUV Compacto',   'desc' => 'Kia Seltos o similar'),
-                'suv7'    => array('name' => 'SUV 7 Puestos',  'desc' => 'Toyota Fortuner o similar'),
-                'motos'   => array('name' => 'Motocicletas',   'desc' => 'Yamaha FZ 150 o similar'),
+                'economy'    => array('name' => 'Hatchback',          'desc' => 'Volkswagen Gol o similar'),
+                'compact'    => array('name' => 'Sedan',               'desc' => 'Renault Logan o similar'),
+                'suv'        => array('name' => 'SUV Compacto',        'desc' => 'Kia Seltos o similar'),
+                'suv7'       => array('name' => 'SUV 7 Puestos',       'desc' => 'Toyota Fortuner o similar'),
+                'motos'      => array('name' => 'Motocicletas',        'desc' => 'Yamaha FZ 150 o similar'),
+                'motos-auto' => array('name' => 'Motos Automáticas',   'desc' => 'Yamaha Aerox o similar'),
             );
 
             if (!empty($cat_terms) && !is_wp_error($cat_terms)) :
@@ -321,9 +327,11 @@
                         <h3 class="mc-catcard__title"><?php echo esc_html($display_name); ?></h3>
                         <p class="mc-catcard__desc"><?php echo esc_html($display_desc); ?></p>
                         <?php if ($cat_price_meta) : ?>
+                        <?php $cat_price_iva = (int) round($cat_price_meta * 1.19); ?>
                         <p class="mc-catcard__price">
-                            <span class="mc-catcard__price-text">Desde $<?php echo number_format($cat_price_meta, 0, ',', '.'); ?> COP/día</span>
-                            <span class="mc-catcard__price-usd">~$<?php echo number_format($cat_price_meta / 4500, 2, '.', ''); ?> USD/día</span>
+                            <span class="mc-catcard__price-text">Desde $<?php echo number_format($cat_price_iva, 0, ',', '.'); ?> COP/día</span>
+                            <span class="mc-catcard__price-iva"><i class="fas fa-check-circle"></i> IVA incluido</span>
+                            <span class="mc-catcard__price-usd">~$<?php echo number_format($cat_price_iva / 4500, 2, '.', ''); ?> USD/día</span>
                         </p>
                         <?php endif; ?>
                         <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('<?php echo esc_attr($cat->slug); ?>', '<?php echo esc_js($display_name); ?>')">
@@ -353,6 +361,23 @@
                         'vehicles' => array(
                             array('name' => 'Yamaha Aerox', 'img' => 'aerox.png', 'price' => '80,000', 'motor' => '155 cc', 'trans' => 'Automática', 'ac' => 'N/A', 'pax' => '2', 'luggage' => 'N/A'),
                             array('name' => 'Yamaha FZ-250', 'img' => 'fz250.png', 'price' => '100,000', 'motor' => '250 cc', 'trans' => 'Manual', 'ac' => 'N/A', 'pax' => '2', 'luggage' => 'N/A'),
+                        ),
+                    ),
+                    array(
+                        'slug'           => 'motos-auto',
+                        'name'           => 'Motos Autom\u00e1ticas',
+                        'desc'           => 'Yamaha Aerox o similar',
+                        'icon'           => 'fas fa-motorcycle',
+                        'price'          => '80,000',
+                        'motor'          => '155 cc',
+                        'trans'          => 'Autom\u00e1tica',
+                        'pax'            => '2',
+                        'abs'            => 'No',
+                        'maletas'        => 'N/A',
+                        'descripcion'    => 'Motos autom\u00e1ticas f\u00e1ciles de manejar, perfectas para quienes no tienen experiencia con cambios. \u00c1giles, econ\u00f3micas e ideales para recorrer Rionegro y el Oriente Antioque\u00f1o.',
+                        'descripcion_en' => 'Automatic motorcycles, easy to ride and perfect for those without gear-change experience. Agile, fuel-efficient and ideal for exploring Rionegro and Eastern Antioquia.',
+                        'vehicles' => array(
+                            array('name' => 'Yamaha Aerox', 'img' => 'aerox.png', 'price' => '80,000', 'motor' => '155 cc', 'trans' => 'Autom\u00e1tica', 'ac' => 'N/A', 'pax' => '2', 'luggage' => 'N/A'),
                         ),
                     ),
                     array(
@@ -424,7 +449,7 @@
                 foreach ($demo_categories as $dcat) :
                 ?>
                 <?php $dcat_price = isset($dcat['price']) ? (int) str_replace(',', '', $dcat['price']) : 0; ?>
-                <div class="mc-catcard" data-category="<?php echo esc_attr($dcat['slug']); ?>" data-type="<?php echo esc_attr($dcat['slug'] === 'motos' ? 'moto' : 'carro'); ?>" data-price-day="<?php echo esc_attr($dcat_price); ?>">
+                <div class="mc-catcard" data-category="<?php echo esc_attr($dcat['slug']); ?>" data-type="<?php echo esc_attr(($dcat['slug'] === 'motos' || $dcat['slug'] === 'motos-auto') ? 'moto' : 'carro'); ?>" data-price-day="<?php echo esc_attr($dcat_price); ?>">
                     <div class="mc-catcard__carousel" data-carousel>
                         <div class="mc-catcard__slides">
                             <?php foreach ($dcat['vehicles'] as $vi => $veh) : ?>
@@ -448,9 +473,11 @@
                         <h3 class="mc-catcard__title"><?php echo esc_html($dcat['name']); ?></h3>
                         <p class="mc-catcard__desc"><?php echo esc_html($dcat['desc']); ?></p>
                         <?php if ($dcat_price) : ?>
+                        <?php $dcat_price_iva = (int) round($dcat_price * 1.19); ?>
                         <p class="mc-catcard__price">
-                            <span class="mc-catcard__price-text">Desde $<?php echo number_format($dcat_price, 0, ',', '.'); ?> COP/día</span>
-                            <span class="mc-catcard__price-usd">~$<?php echo number_format($dcat_price / 4500, 2, '.', ''); ?> USD/día</span>
+                            <span class="mc-catcard__price-text">Desde $<?php echo number_format($dcat_price_iva, 0, ',', '.'); ?> COP/día</span>
+                            <span class="mc-catcard__price-iva"><i class="fas fa-check-circle"></i> IVA incluido</span>
+                            <span class="mc-catcard__price-usd">~$<?php echo number_format($dcat_price_iva / 4500, 2, '.', ''); ?> USD/día</span>
                         </p>
                         <?php endif; ?>
                         <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('<?php echo esc_attr($dcat['slug']); ?>', '<?php echo esc_js($dcat['name']); ?>')">
@@ -1010,8 +1037,8 @@
             <div class="mc-footer__col">
                 <h4 data-i18n="footer_servicios">Servicios 24/7</h4>
                 <ul>
-                    <li><i class="fas fa-phone"></i> +57 320 216 1156</li>
-                    <li><i class="fas fa-envelope"></i> motocarrentals@gmail.com</li>
+                    <li><a href="https://wa.me/573202161156" target="_blank" style="color:inherit;text-decoration:none;"><i class="fas fa-phone"></i> +57 320 216 1156</a></li>
+                    <li><a href="mailto:motocarrentals@gmail.com" style="color:inherit;text-decoration:none;"><i class="fas fa-envelope"></i> motocarrentals@gmail.com</a></li>
                 </ul>
             </div>
             <div class="mc-footer__col">
@@ -1029,9 +1056,10 @@
             </div>
             <div class="mc-footer__col">
                 <h4 data-i18n="footer_contactar_title">¿Quieres que te contactemos?</h4>
-                <form class="mc-footer__form">
-                    <input type="email" placeholder="Tu correo electrónico" data-i18n-placeholder="footer_email_placeholder" required>
+                <form class="mc-footer__form" id="footerContactForm">
+                    <input type="text" id="footerContactInput" placeholder="Tu correo electrónico o número de teléfono" data-i18n-placeholder="footer_email_placeholder" required>
                     <button type="submit" class="mc-btn mc-btn--primary mc-btn--sm" data-i18n="footer_enviar">Enviar</button>
+                    <p class="mc-footer__form-msg" id="footerContactMsg" style="display:none;font-size:0.85rem;margin-top:6px;"></p>
                 </form>
             </div>
         </div>

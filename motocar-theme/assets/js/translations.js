@@ -28,6 +28,7 @@ var MC_TRANSLATIONS = {
         // Filters
         filter_type: 'Vehicle type',
         filter_reset: 'Reset filters',
+        filter_submit: 'Filter',
         filter_all: 'All',
         filter_cars: 'Cars',
         filter_motos: 'Motorcycles',
@@ -41,7 +42,7 @@ var MC_TRANSLATIONS = {
         filter_pickup_location: 'Pick-up location',
         filter_return_location: 'Return location',
         filter_location_other_placeholder: 'Which place?',
-        location_rionegro_airport: 'Terranova Mall',
+        location_rionegro_airport: 'Terranova Mall - Rionegro Airport',
         location_other: 'Other',
         filter_hint: 'Select dates to calculate an estimated price in COP and USD when viewing vehicles.',
         modal_dates_hint: 'Select dates in the filters to see the estimated price in COP and USD for each vehicle.',

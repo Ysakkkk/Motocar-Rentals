@@ -618,6 +618,7 @@ ul {
     width: 100%;
     display: flex;
     justify-content: flex-end;
+    gap: 10px;
     margin-top: 4px;
 }
 
@@ -639,6 +640,27 @@ ul {
 
 .mc-filter__reset:hover {
     border-color: var(--mc-primary);
+    color: var(--mc-primary);
+}
+
+.mc-filter__submit {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 20px;
+    border: 2px solid var(--mc-primary);
+    border-radius: var(--mc-radius);
+    background: var(--mc-primary);
+    color: var(--mc-white);
+    font-family: var(--mc-font-topbar);
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--mc-transition);
+}
+
+.mc-filter__submit:hover {
+    background: transparent;
     color: var(--mc-primary);
 }
 
@@ -865,7 +887,8 @@ ul {
     box-shadow: var(--mc-shadow-lg);
 }
 
-.mc-catcard--hidden {
+.mc-catcard--hidden,
+.mc-catcard--unavailable {
     display: none;
 }
 
@@ -1014,6 +1037,20 @@ ul {
     font-size: 0.95rem;
     font-weight: 700;
     color: var(--mc-primary-dark);
+}
+
+.mc-catcard__price-iva {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--mc-font-topbar);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #1a9e40;
+    background: rgba(34, 169, 74, 0.1);
+    border-radius: 20px;
+    padding: 2px 8px;
+    margin: 3px auto 2px;
 }
 
 .mc-catcard__price-usd {
@@ -2322,6 +2359,21 @@ ul {
 
 .mc-catmodal__price-row--card { color: var(--mc-gray-700); }
 
+.mc-price-strikethrough {
+    text-decoration: line-through;
+    color: var(--mc-gray-400);
+}
+
+.mc-catmodal__price-divider {
+    border-top: 1px dashed var(--mc-gray-200);
+    margin: 6px 0;
+}
+
+.mc-catmodal__price-row--iva {
+    color: var(--mc-gray-500);
+    font-style: italic;
+}
+
 .mc-catmodal__price-row--discount {
     background: rgba(34, 169, 74, 0.08);
     border-radius: 4px;
@@ -2391,7 +2443,7 @@ ul {
         height: 220px;
     }
 }
-   ========================================== */
+
 .mc-whatsapp-float {
     position: fixed;
     bottom: 25px;

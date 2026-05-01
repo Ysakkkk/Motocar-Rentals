@@ -164,7 +164,7 @@
                                 <i class="fas fa-map-marker-alt"></i>
                                 <select id="filterPickupLocation" required>
                                     <option value="" data-i18n="filter_pickup_location" selected disabled hidden>Lugar de retirada</option>
-                                    <option value="rionegro-airport" data-i18n="location_rionegro_airport">Mall Terranova</option>
+                                    <option value="rionegro-airport" data-i18n="location_rionegro_airport">Mall Terranova - Aeropuerto de Rionegro</option>
                                     <option value="other" data-i18n="location_other">Otro</option>
                                 </select>
                             </div>
@@ -216,7 +216,7 @@
                                 <i class="fas fa-map-marker-alt"></i>
                                 <select id="filterReturnLocation" required>
                                     <option value="" data-i18n="filter_return_location" selected disabled hidden>Lugar de devolución</option>
-                                    <option value="rionegro-airport" data-i18n="location_rionegro_airport">Mall Terranova</option>
+                                    <option value="rionegro-airport" data-i18n="location_rionegro_airport">Mall Terranova - Aeropuerto de Rionegro</option>
                                     <option value="other" data-i18n="location_other">Otro</option>
                                 </select>
                             </div>
@@ -231,12 +231,15 @@
                     <button type="button" class="mc-filter__reset" id="filterReset" data-i18n="filter_reset">
                         <i class="fas fa-rotate-left"></i> Reiniciar filtros
                     </button>
+                    <button type="button" class="mc-filter__submit" id="filterSubmit" data-i18n="filter_submit">
+                        <i class="fas fa-search"></i> Filtrar
+                    </button>
                 </div>
                 <p class="mc-filter__hint" data-i18n="filter_hint"><i class="fas fa-info-circle"></i> Selecciona las fechas para calcular un precio estimado en COP y USD al ver los vehículos.</p>
             </div>
         </div>
 
-        <div class="mc-categories__grid">
+        <div class="mc-categories__grid" id="categoriesGrid">
             <!-- Motorcycles -->
             <div class="mc-catcard" data-category="motos" data-type="moto" data-price-day="80000">
                 <div class="mc-catcard__carousel" data-carousel>
@@ -260,10 +263,36 @@
                     <h3 class="mc-catcard__title">Motocicletas</h3>
                     <p class="mc-catcard__desc">Yamaha FZ 150 o similar</p>
                     <p class="mc-catcard__price">
-                        <span class="mc-catcard__price-text">Desde $80.000 COP/día</span>
-                        <span class="mc-catcard__price-usd">~$17.78 USD/día</span>
+                        <span class="mc-catcard__price-text">Desde $95.200 COP/día</span>
+                        <span class="mc-catcard__price-iva"><i class="fas fa-check-circle"></i> IVA incluido</span>
+                        <span class="mc-catcard__price-usd">~$21.16 USD/día</span>
                     </p>
                     <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('motos', 'Motocicletas')">
+                        Ver Detalles
+                    </button>
+                </div>
+            </div>
+
+            <!-- Hatchback -->
+            <!-- Motos Automáticas -->
+            <div class="mc-catcard" data-category="motos-auto" data-type="moto" data-price-day="80000">
+                <div class="mc-catcard__carousel" data-carousel>
+                    <div class="mc-catcard__slides">
+                        <div class="mc-catcard__slide active">
+                            <img src="motocar-theme/assets/img/aerox.png" alt="Yamaha Aerox" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+                <div class="mc-catcard__info">
+                    <div class="mc-catcard__badge"><i class="fas fa-motorcycle"></i></div>
+                    <h3 class="mc-catcard__title">Motos Automáticas</h3>
+                    <p class="mc-catcard__desc">Yamaha Aerox o similar</p>
+                    <p class="mc-catcard__price">
+                        <span class="mc-catcard__price-text">Desde $95.200 COP/día</span>
+                        <span class="mc-catcard__price-iva"><i class="fas fa-check-circle"></i> IVA incluido</span>
+                        <span class="mc-catcard__price-usd">~$21.16 USD/día</span>
+                    </p>
+                    <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('motos-auto', 'Motos Automáticas')">
                         Ver Detalles
                     </button>
                 </div>
@@ -283,8 +312,9 @@
                     <h3 class="mc-catcard__title">Hatchback</h3>
                     <p class="mc-catcard__desc">Volkswagen Gol o similar</p>
                     <p class="mc-catcard__price">
-                        <span class="mc-catcard__price-text">Desde $150.000 COP/día</span>
-                        <span class="mc-catcard__price-usd">~$33.33 USD/día</span>
+                        <span class="mc-catcard__price-text">Desde $178.500 COP/día</span>
+                        <span class="mc-catcard__price-iva"><i class="fas fa-check-circle"></i> IVA incluido</span>
+                        <span class="mc-catcard__price-usd">~$39.67 USD/día</span>
                     </p>
                     <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('economy', 'Hatchback')">
                         Ver Detalles
@@ -306,8 +336,9 @@
                     <h3 class="mc-catcard__title">Sedan</h3>
                     <p class="mc-catcard__desc">Renault Logan o similar</p>
                     <p class="mc-catcard__price">
-                        <span class="mc-catcard__price-text">Desde $200.000 COP/día</span>
-                        <span class="mc-catcard__price-usd">~$44.44 USD/día</span>
+                        <span class="mc-catcard__price-text">Desde $238.000 COP/día</span>
+                        <span class="mc-catcard__price-iva"><i class="fas fa-check-circle"></i> IVA incluido</span>
+                        <span class="mc-catcard__price-usd">~$52.89 USD/día</span>
                     </p>
                     <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('compact', 'Sedan')">
                         Ver Detalles
@@ -329,8 +360,9 @@
                     <h3 class="mc-catcard__title">SUV Compacto</h3>
                     <p class="mc-catcard__desc">Kia Seltos o similar</p>
                     <p class="mc-catcard__price">
-                        <span class="mc-catcard__price-text">Desde $250.000 COP/día</span>
-                        <span class="mc-catcard__price-usd">~$55.56 USD/día</span>
+                        <span class="mc-catcard__price-text">Desde $297.500 COP/día</span>
+                        <span class="mc-catcard__price-iva"><i class="fas fa-check-circle"></i> IVA incluido</span>
+                        <span class="mc-catcard__price-usd">~$66.11 USD/día</span>
                     </p>
                     <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('suv', 'SUV Compacto')">
                         Ver Detalles
@@ -352,8 +384,9 @@
                     <h3 class="mc-catcard__title">SUV 7 Puestos</h3>
                     <p class="mc-catcard__desc">Toyota Fortuner o similar</p>
                     <p class="mc-catcard__price">
-                        <span class="mc-catcard__price-text">Desde $350.000 COP/día</span>
-                        <span class="mc-catcard__price-usd">~$77.78 USD/día</span>
+                        <span class="mc-catcard__price-text">Desde $416.500 COP/día</span>
+                        <span class="mc-catcard__price-iva"><i class="fas fa-check-circle"></i> IVA incluido</span>
+                        <span class="mc-catcard__price-usd">~$92.56 USD/día</span>
                     </p>
                     <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('suv7', 'SUV 7 Puestos')">
                         Ver Detalles
@@ -365,6 +398,21 @@
         <!-- Hidden demo data for modal -->
         <script>
         var DEMO_VEHICLES = [
+            {
+                slug: 'motos-auto',
+                name: 'Motos Automáticas',
+                descripcion: 'Motos automáticas fáciles de manejar, perfectas para quienes no tienen experiencia con cambios. Ágiles, económicas e ideales para recorrer Rionegro y el Oriente Antioqueño.',
+                descripcion_en: 'Automatic motorcycles, easy to ride and perfect for those without gear-change experience. Agile, fuel-efficient and ideal for exploring Rionegro and Eastern Antioquia.',
+                price: '80000',
+                motor: '155 cc',
+                trans: 'Automática',
+                pax: '2',
+                abs: 'N/A',
+                maletas: 'N/A',
+                vehicles: [
+                    { name: 'Yamaha Aerox', img: 'aerox.png', price: '80,000', motor: '155 cc', trans: 'Automática', ac: 'N/A', pax: '2', luggage: 'N/A' }
+                ]
+            },
             {
                 slug: 'economy',
                 name: 'Hatchback',
@@ -964,7 +1012,7 @@
                     <li>
                         <a href="https://www.google.com/maps/place/MotoCar+Rentals/@6.1762,-75.435,1576m/data=!3m1!1e3!4m6!3m5!1s0x8e469d8d8761cbb1:0xcf88fa157645f16d!8m2!3d6.1755508!4d-75.4348712!16s%2Fg%2F11y2tz0l_5" target="_blank" class="mc-footer__location-link">
                             <i class="fas fa-map-marker-alt"></i>
-                            <span>Mall Terranova</span>
+                            <span>Mall Terranova - Aeropuerto de Rionegro</span>
                         </a>
                     </li>
                     <li><a href="tel:+573202161156">(+57) 320 - 2161156</a></li>
@@ -973,9 +1021,10 @@
             </div>
             <div class="mc-footer__col">
                 <h4 data-i18n="footer_contactar_title">¿Deseas qué te contactemos?</h4>
-                <form class="mc-footer__form" onsubmit="event.preventDefault(); alert('¡Gracias! Te contactaremos pronto.');">
-                    <input type="text" placeholder="Ingresa tu correo o número de contacto" data-i18n-placeholder="footer_contactar_placeholder" required>
+                <form class="mc-footer__form" id="footerContactForm">
+                    <input type="text" id="footerContactInput" placeholder="Ingresa tu correo o número de contacto" data-i18n-placeholder="footer_contactar_placeholder" required>
                     <button type="submit" class="mc-btn mc-btn--primary mc-btn--sm" data-i18n="footer_contactar_btn">¡Contáctame!</button>
+                    <p class="mc-footer__form-msg" id="footerContactMsg" style="display:none;font-size:0.85rem;margin-top:6px;"></p>
                 </form>
             </div>
         </div>
