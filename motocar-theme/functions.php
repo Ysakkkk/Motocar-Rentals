@@ -42,8 +42,8 @@ add_action('after_setup_theme', 'motocar_setup');
 // CARGAR ESTILOS Y SCRIPTS
 // ==========================================
 function motocar_scripts() {
-    // Google Fonts
-    wp_enqueue_style('google-fonts', 'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Antic+Didone&family=Anton&display=swap', array(), null);
+    // Google Fonts — solo pesos usados en el CSS
+    wp_enqueue_style('google-fonts', 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@400;700&family=Antic+Didone&family=Anton&display=swap', array(), null);
 
     // Font Awesome
     wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css', array(), '6.5.1');
@@ -54,14 +54,16 @@ function motocar_scripts() {
     wp_enqueue_script('flatpickr-es', 'https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js', array('flatpickr'), '4.6.13', true);
 
     // Estilo principal del tema
-    wp_enqueue_style('motocar-style', get_stylesheet_uri(), array(), '1.0');
+    $theme_dir = get_template_directory();
+    $theme_uri = get_template_directory_uri();
+    wp_enqueue_style('motocar-style', get_stylesheet_uri(), array(), filemtime(get_stylesheet_directory() . '/style.css'));
 
     // CSS personalizado
-    wp_enqueue_style('motocar-custom', get_template_directory_uri() . '/assets/css/custom.css', array(), '1.0');
+    wp_enqueue_style('motocar-custom', $theme_uri . '/assets/css/custom.css', array(), filemtime($theme_dir . '/assets/css/custom.css'));
 
     // JavaScript personalizado
-    wp_enqueue_script('motocar-translations', get_template_directory_uri() . '/assets/js/translations.js', array(), '1.0', true);
-    wp_enqueue_script('motocar-main', get_template_directory_uri() . '/assets/js/main.js', array('motocar-translations'), '1.0', true);
+    wp_enqueue_script('motocar-translations', $theme_uri . '/assets/js/translations.js', array(), filemtime($theme_dir . '/assets/js/translations.js'), true);
+    wp_enqueue_script('motocar-main', $theme_uri . '/assets/js/main.js', array('motocar-translations'), filemtime($theme_dir . '/assets/js/main.js'), true);
 
     // Pasar datos de PHP a JS
     wp_localize_script('motocar-main', 'motocarData', array(
@@ -72,6 +74,32 @@ function motocar_scripts() {
     ));
 }
 add_action('wp_enqueue_scripts', 'motocar_scripts');
+
+// ==========================================
+// PRECONNECT Y PRELOAD PARA PERFORMANCE
+// ==========================================
+function motocar_head_hints() {
+    // Preconnect a dominios externos (inicia TCP/TLS antes de que se descargue el CSS)
+    echo '<link rel="preconnect" href="https://fonts.googleapis.com">' . "\n";
+    echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' . "\n";
+    echo '<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>' . "\n";
+    echo '<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>' . "\n";
+    // Preload del primer slide del hero (imagen LCP)
+    $slide1 = get_template_directory_uri() . '/assets/img/slide-1.webp';
+    echo '<link rel="preload" as="image" href="' . esc_url($slide1) . '">' . "\n";
+}
+add_action('wp_head', 'motocar_head_hints', 1);
+
+// ==========================================
+// LIMPIAR CACHÉ AL ACTIVAR/REACTIVAR EL TEMA
+// ==========================================
+function motocar_purge_cache_on_activation() {
+    // LiteSpeed Cache
+    do_action('litespeed_purge_all');
+    // Object cache de WordPress (Memcached, Redis, etc.)
+    wp_cache_flush();
+}
+add_action('after_switch_theme', 'motocar_purge_cache_on_activation');
 
 // ==========================================
 // DESACTIVAR ESTILOS DE BLOQUES DE WORDPRESS
@@ -563,8 +591,6 @@ add_action('edited_categoria_vehiculo', 'motocar_save_categoria_meta');
 // AJAX: OBTENER VEHÍCULOS POR CATEGORÍA
 // ==========================================
 function motocar_get_category_vehicles() {
-    check_ajax_referer('motocar_nonce', 'nonce');
-
     $category_slug = sanitize_text_field($_POST['category'] ?? '');
     if (empty($category_slug)) {
         wp_send_json_error('Missing category');
@@ -635,7 +661,6 @@ add_action('wp_ajax_nopriv_get_category_vehicles', 'motocar_get_category_vehicle
 // AJAX: OBTENER DATOS DE CATEGORÍA (modal)
 // ==========================================
 function motocar_get_category_data() {
-    check_ajax_referer('motocar_nonce', 'nonce');
     $slug = sanitize_text_field($_POST['category'] ?? '');
     if (empty($slug)) { wp_send_json_error('Missing category'); }
 
@@ -694,8 +719,6 @@ add_action('wp_ajax_nopriv_get_category_data', 'motocar_get_category_data');
 // AJAX: DISPONIBILIDAD DE CATEGORÍAS POR FECHAS
 // ==========================================
 function motocar_check_categories_availability() {
-    check_ajax_referer('motocar_nonce', 'nonce');
-
     $pickup_str = sanitize_text_field($_POST['pickup'] ?? '');
     $return_str = sanitize_text_field($_POST['return'] ?? '');
 
@@ -768,10 +791,14 @@ add_action('wp_ajax_nopriv_check_categories_availability', 'motocar_check_catego
 // AJAX: FORMULARIO DE CONTACTO DEL FOOTER
 // ==========================================
 function motocar_footer_contact() {
-    check_ajax_referer('motocar_nonce', 'nonce');
+    // Rate limit: 1 submission per IP every 2 minutes
+    $ip_key = 'mc_contact_' . md5($_SERVER['REMOTE_ADDR'] ?? '');
+    if (get_transient($ip_key)) {
+        wp_send_json_error('rate_limit');
+    }
 
     $contact = sanitize_text_field($_POST['contact'] ?? '');
-    if (empty($contact)) {
+    if (empty($contact) || strlen($contact) > 200) {
         wp_send_json_error('empty');
     }
 
@@ -785,6 +812,7 @@ function motocar_footer_contact() {
     $sent = wp_mail($to, $subject, $body, $headers);
 
     if ($sent) {
+        set_transient($ip_key, 1, 2 * MINUTE_IN_SECONDS);
         wp_send_json_success('sent');
     } else {
         wp_send_json_error('mail_failed');
@@ -797,7 +825,13 @@ add_action('wp_ajax_nopriv_footer_contact', 'motocar_footer_contact');
 // QUOTE NOTIFICATION (email when user clicks "Ir a Cotizar")
 // ==========================================
 function motocar_quote_notify() {
-    check_ajax_referer('motocar_nonce', 'nonce');
+    // Rate limit: 1 quote notification per IP every minute
+    $ip_key = 'mc_quote_' . md5($_SERVER['REMOTE_ADDR'] ?? '');
+    if (get_transient($ip_key)) {
+        wp_send_json_success('notified'); // silently ignore duplicates
+        return;
+    }
+    set_transient($ip_key, 1, MINUTE_IN_SECONDS);
 
     $raw = isset($_POST['data']) ? wp_unslash($_POST['data']) : '';
     if (empty($raw)) {
@@ -864,8 +898,6 @@ add_action('wp_ajax_nopriv_quote_notify', 'motocar_quote_notify');
 
 
 function motocar_get_vehicle_data() {
-    check_ajax_referer('motocar_nonce', 'nonce');
-
     $vehicle_id = intval($_POST['vehicle_id']);
     $vehicle = get_post($vehicle_id);
 
