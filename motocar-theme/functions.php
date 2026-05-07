@@ -794,7 +794,8 @@ function motocar_footer_contact() {
     // Rate limit: 1 submission per IP every 2 minutes
     $ip_key = 'mc_contact_' . md5($_SERVER['REMOTE_ADDR'] ?? '');
     if (get_transient($ip_key)) {
-        wp_send_json_error('rate_limit');
+        // Tratar como éxito para no confundir al usuario — el mensaje ya fue enviado
+        wp_send_json_success('already_sent');
     }
 
     $contact = sanitize_text_field($_POST['contact'] ?? '');
@@ -809,12 +810,22 @@ function motocar_footer_contact() {
              . "Por favor comunícate con esta persona a la brevedad.";
     $headers = array('Content-Type: text/plain; charset=UTF-8');
 
+    $mail_error = '';
+    add_action('wp_mail_failed', function( $wp_error ) use ( &$mail_error ) {
+        $mail_error = $wp_error->get_error_message();
+    });
+
     $sent = wp_mail($to, $subject, $body, $headers);
 
     if ($sent) {
         set_transient($ip_key, 1, 2 * MINUTE_IN_SECONDS);
         wp_send_json_success('sent');
     } else {
+        // Guarda el error en la BD para que puedas verlo desde WP Admin → Ajustes → Generales (o con un plugin de debug)
+        update_option('motocar_last_mail_error', array(
+            'time'  => current_time('mysql'),
+            'error' => $mail_error ?: 'unknown - wp_mail returned false without exception',
+        ));
         wp_send_json_error('mail_failed');
     }
 }
