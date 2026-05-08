@@ -68,7 +68,7 @@ var MC_TRANSLATIONS = {
         srv_247_title: '24/7 Availability',
         srv_247_desc: 'We are available 24 hours a day, 7 days a week for you.',
         srv_domicilio_title: 'Delivery Service',
-        srv_domicilio_desc: 'We deliver and pick up the vehicle wherever you need it at no additional cost.',
+        srv_domicilio_desc: 'We pick up and deliver at the airport completely free. For other addresses, rates vary by distance.',
         srv_conductor_title: 'Designated Driver',
         srv_conductor_desc: 'If you prefer, we assign a professional driver for your trip.',
 

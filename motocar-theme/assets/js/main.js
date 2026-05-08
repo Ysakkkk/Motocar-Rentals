@@ -960,9 +960,8 @@ function buildBookingPanel(catData, lang) {
         var discPct      = getDiscountPct(rentalDays, catData.slug || '');
         var baseTotal    = pricePerDay * rentalDays;
         var baseDesc     = discPct > 0 ? Math.round(baseTotal * (1 - discPct / 100)) : baseTotal;
-        var ivaAmount    = Math.round(baseDesc * 0.19);
-        var totalCash    = baseDesc + ivaAmount;
-        var totalCard    = Math.round(totalCash * 1.19);
+        var totalCash    = baseDesc;
+        var totalCard    = Math.round(baseDesc * 1.19);
         var totalCashUsd = (totalCash / USD_RATE).toFixed(2);
         var totalCardUsd = (totalCard / USD_RATE).toFixed(2);
         var daysLabel    = rentalDays === 1 ? (lang === 'en' ? 'day' : 'd\u00eda') : (lang === 'en' ? 'days' : 'd\u00edas');
@@ -981,10 +980,9 @@ function buildBookingPanel(catData, lang) {
                 '<div class="mc-catmodal__price-divider"></div>' +
                 sinDescRow +
                 discRow +
-                '<div class="mc-catmodal__price-row mc-catmodal__price-row--iva"><span>IVA (19%)</span><span>+$' + formatNumber(ivaAmount) + ' COP</span></div>' +
-                '<div class="mc-catmodal__price-row mc-catmodal__price-row--total"><span><i class="fas fa-money-bill-wave"></i> ' + (lang === 'en' ? 'Cash (incl. IVA)' : 'Efectivo (incl. IVA)') + '</span><span>$' + formatNumber(totalCash) + ' COP</span></div>' +
+                '<div class="mc-catmodal__price-row mc-catmodal__price-row--total"><span><i class="fas fa-money-bill-wave"></i> ' + (lang === 'en' ? 'Cash' : 'Efectivo') + '</span><span>$' + formatNumber(totalCash) + ' COP</span></div>' +
                 '<div class="mc-catmodal__price-row mc-catmodal__price-row--sub"><span></span><span>~$' + totalCashUsd + ' USD</span></div>' +
-                '<div class="mc-catmodal__price-row mc-catmodal__price-row--total mc-catmodal__price-row--card"><span><i class="fas fa-credit-card"></i> ' + (lang === 'en' ? 'Card (+ Taxes)' : 'Tarjeta (+ Impuestos)') + '</span><span>$' + formatNumber(totalCard) + ' COP</span></div>' +
+                '<div class="mc-catmodal__price-row mc-catmodal__price-row--total mc-catmodal__price-row--card"><span><i class="fas fa-credit-card"></i> ' + (lang === 'en' ? 'Card (+ IVA 19%)' : 'Tarjeta (+ IVA 19%)') + '</span><span>$' + formatNumber(totalCard) + ' COP</span></div>' +
                 '<div class="mc-catmodal__price-row mc-catmodal__price-row--sub"><span><small>' + (lang === 'en' ? '+ additional charges may apply' : '+ pueden aplicar costos adicionales') + '</small></span><span>~$' + totalCardUsd + ' USD</span></div>' +
                 '<p class="mc-catmodal__price-note">* ' + (lang === 'en' ? 'Estimated total. Final price confirmed at pickup.' : 'Total estimado. Precio final confirmado al momento de la entrega.') + '</p>' +
             '</div>';
@@ -1011,7 +1009,7 @@ function buildBookingPanel(catData, lang) {
             waMsg += '\n\uD83D\uDCB0 Price estimate (' + rentalDays + ' ' + (rentalDays === 1 ? 'day' : 'days') + '):\n';
             waMsg += '\u2022 Price/day: $' + formatNumber(pricePerDay) + ' COP\n';
             if (discPct > 0) waMsg += '\u2022 Discount (\u2212' + discPct + '%): \u2212$' + formatNumber(baseTotal - baseDesc) + ' COP\n';
-            waMsg += '\u2022 IVA (19%): +$' + formatNumber(ivaAmount) + ' COP\n';
+
             waMsg += '\u2022 Cash total: $' + formatNumber(totalCash) + ' COP (~$' + totalCashUsd + ' USD)\n';
             waMsg += '\u2022 Card total: $' + formatNumber(totalCard) + ' COP (~$' + totalCardUsd + ' USD)\n';
             waMsg += '\nCould you confirm availability and final price?';
@@ -1028,7 +1026,7 @@ function buildBookingPanel(catData, lang) {
             waMsg += '\n\uD83D\uDCB0 Cotizaci\u00f3n estimada (' + rentalDays + ' ' + (rentalDays === 1 ? 'd\u00eda' : 'd\u00edas') + '):\n';
             waMsg += '\u2022 Precio/d\u00eda: $' + formatNumber(pricePerDay) + ' COP\n';
             if (discPct > 0) waMsg += '\u2022 Descuento (\u2212' + discPct + '%): \u2212$' + formatNumber(baseTotal - baseDesc) + ' COP\n';
-            waMsg += '\u2022 IVA (19%): +$' + formatNumber(ivaAmount) + ' COP\n';
+
             waMsg += '\u2022 Total efectivo: $' + formatNumber(totalCash) + ' COP (~$' + totalCashUsd + ' USD)\n';
             waMsg += '\u2022 Total tarjeta: $' + formatNumber(totalCard) + ' COP (~$' + totalCardUsd + ' USD)\n';
             waMsg += '\n\u00bfPueden confirmarme la disponibilidad y el precio final?';
@@ -1169,252 +1167,16 @@ function updateCategoryCardPrices() {
             var discPct  = getDiscountPct(rentalDays, slug);
             var baseTotal = priceDay * rentalDays;
             var baseDesc  = discPct > 0 ? Math.round(baseTotal * (1 - discPct / 100)) : baseTotal;
-            var total     = Math.round(baseDesc * 1.19);
+            var total     = baseDesc;
             var totalUsd  = (total / USD_RATE).toFixed(2);
             var daysLbl   = rentalDays === 1 ? (lang === 'en' ? 'day' : 'd\u00eda') : (lang === 'en' ? 'days' : 'd\u00edas');
             var discTag   = discPct > 0 ? ' \u2022 -' + discPct + '%' : '';
             textEl.textContent = '~$' + formatNumber(total) + ' COP (' + rentalDays + ' ' + daysLbl + discTag + ')';
             usdEl.textContent  = '~$' + totalUsd + ' USD';
         } else {
-            var priceWithIva = Math.round(priceDay * 1.19);
-            var usdDay  = (priceWithIva / USD_RATE).toFixed(2);
-            textEl.textContent = (lang === 'en' ? 'From $' : 'Desde $') + formatNumber(priceWithIva) + (lang === 'en' ? ' COP/day' : ' COP/d\u00eda');
+            var usdDay  = (priceDay / USD_RATE).toFixed(2);
+            textEl.textContent = (lang === 'en' ? 'From $' : 'Desde $') + formatNumber(priceDay) + (lang === 'en' ? ' COP/day' : ' COP/d\u00eda');
             usdEl.textContent  = '~$' + usdDay + ' USD/' + (lang === 'en' ? 'day' : 'd\u00eda');
-            var ivaEl = priceEl.querySelector('.mc-catcard__price-iva');
-            if (ivaEl) ivaEl.style.display = '';
-        }
-        // Hide IVA badge when dates are set
-        if (rentalDays > 0) {
-            var ivaElH = priceEl.querySelector('.mc-catcard__price-iva');
-            if (ivaElH) ivaElH.style.display = 'none';
         }
     });
-}
-
-function renderCategoryVehicles(vehicles, grid) {
-    var phone = '573202161156';
-    var lang = _getLang();
-    var USD_RATE = 4500; // 1 USD = 4500 COP (configurable)
-
-    // Pickup/return dates and times
-    var pickupDate = '';
-    var returnDate = '';
-    var pickupEl = document.getElementById('filterPickup');
-    var returnEl = document.getElementById('filterReturn');
-    var pickupTimeEl = document.getElementById('filterPickupTime');
-    var returnTimeEl = document.getElementById('filterReturnTime');
-    if (pickupEl && pickupEl.value) pickupDate = pickupEl.value;
-    if (returnEl && returnEl.value) returnDate = returnEl.value;
-    var pickupTime = (pickupTimeEl && pickupTimeEl.value) ? pickupTimeEl.value : '';
-    var returnTime = (returnTimeEl && returnTimeEl.value) ? returnTimeEl.value : '';
-    var rentalContext = buildRentalContext(lang);
-
-    // Filter out vehicles unavailable on selected dates
-    if (pickupDate && returnDate) {
-        var pParts = pickupDate.split('/');
-        var rParts = returnDate.split('/');
-        var filterStart = new Date(parseInt(pParts[2]), parseInt(pParts[1]) - 1, parseInt(pParts[0]));
-        var filterEnd = new Date(parseInt(rParts[2]), parseInt(rParts[1]) - 1, parseInt(rParts[0]));
-
-        vehicles = vehicles.filter(function(v) {
-            var blocked = v.fechas_no_disponibles;
-            if (!blocked || !blocked.length) return true;
-            return !blocked.some(function(rango) {
-                if (!rango.inicio || !rango.fin) return false;
-                var bStart = new Date(rango.inicio); // yyyy-mm-dd from PHP
-                var bEnd = new Date(rango.fin);
-                // Overlap if filterStart <= bEnd AND filterEnd >= bStart
-                return filterStart <= bEnd && filterEnd >= bStart;
-            });
-        });
-    }
-
-    // Calculate rental days
-    var rentalDays = 0;
-    if (pickupDate && returnDate) {
-        rentalDays = calcRentalDays(pickupDate, returnDate, pickupTime, returnTime);
-    }
-
-    // Translation maps for specs
-    var transMap = {
-        'Manual': 'Manual',
-        'Autom\u00e1tica': 'Automatic',
-        'S\u00ed': 'Yes',
-        '2 medianas': '2 medium',
-        '2 grandes, 1 mediana': '2 large, 1 medium'
-    };
-
-    grid.innerHTML = vehicles.map(function(v) {
-        var priceLabel = (lang === 'en') ? 'From' : 'Desde';
-        var priceSuffix = (lang === 'en') ? 'COP/day' : 'COP/d\u00eda';
-        var usdDaySuffix = (lang === 'en') ? 'USD/day' : 'USD/d\u00eda';
-        var pricePerDay = parseInt(String(v.precio_dia).replace(/[,.]/g, '')) || 0;
-        var priceUsdPerDay = pricePerDay > 0 ? (pricePerDay / USD_RATE).toFixed(2) : '';
-        var priceUsdLine = priceUsdPerDay ? ('~$' + priceUsdPerDay + ' ' + usdDaySuffix) : '';
-        var priceFmt = v.precio_display
-            ? ((lang === 'en') ? v.precio_display.replace('COP/d\u00eda', 'COP/day') : v.precio_display)
-            : (priceLabel + ' $' + formatNumber(v.precio_dia) + ' ' + priceSuffix);
-        var disclaimerText = (lang === 'en')
-            ? '* Estimated price. Additional charges may apply.'
-            : '* Precio estimado. Pueden aplicar costos adicionales.';
-
-        var dateInfo = rentalContext.length
-            ? ((lang === 'en' ? ' Details: ' : ' Detalles: ') + rentalContext.join(' | '))
-            : '';
-
-        var waMsg;
-        if (lang === 'en') {
-            waMsg = encodeURIComponent('Hello MotoCar Rentals! I\'m interested in renting the ' + v.nombre + '.' + dateInfo + ' Could you give me more information?');
-        } else {
-            waMsg = encodeURIComponent('\u00a1Hola MotoCar Rentals! Estoy interesado en alquilar el ' + v.nombre + '.' + dateInfo + ' \u00bfPodr\u00edan darme m\u00e1s informaci\u00f3n?');
-        }
-        var waLink = 'https://wa.me/' + phone + '?text=' + waMsg;
-
-        // Translate spec values if English
-        function specVal(val) {
-            if (lang === 'en' && transMap[val]) return transMap[val];
-            return val;
-        }
-
-        var specs = '';
-        if (v.cilindrada) specs += '<span class="mc-catmodal__vspec"><i class="fas fa-tachometer-alt"></i> ' + escapeHtml(v.cilindrada) + '</span>';
-        if (v.transmision) specs += '<span class="mc-catmodal__vspec"><i class="fas fa-cog"></i> ' + escapeHtml(specVal(v.transmision)) + '</span>';
-        if (v.pasajeros) specs += '<span class="mc-catmodal__vspec"><i class="fas fa-users"></i> ' + escapeHtml(v.pasajeros) + ' pax</span>';
-        var acVal = v.aire_acondicionado || v.aire || '';
-        if (acVal && acVal !== 'N/A') specs += '<span class="mc-catmodal__vspec"><i class="fas fa-snowflake"></i> A/C: ' + escapeHtml(specVal(acVal)) + '</span>';
-        if (v.maletas && v.maletas !== 'N/A') specs += '<span class="mc-catmodal__vspec"><i class="fas fa-suitcase"></i> ' + escapeHtml(specVal(v.maletas)) + '</span>';
-
-        // Price calculator
-        var calcHtml = '';
-        if (rentalDays > 0 && pricePerDay > 0) {
-            var totalCash = pricePerDay * rentalDays;
-            var totalCard = Math.round(totalCash * 1.19);
-            var totalCashUsd = (totalCash / USD_RATE).toFixed(2);
-            var totalCardUsd = (totalCard / USD_RATE).toFixed(2);
-
-            var lblDays = (lang === 'en') ? 'days' : 'días';
-            var lblDay = (lang === 'en') ? 'day' : 'día';
-            var lblPriceDay = (lang === 'en') ? 'Price/day' : 'Precio/día';
-            var lblCash = (lang === 'en') ? 'Cash total' : 'Total efectivo';
-            var lblCard = (lang === 'en') ? 'Card total' : 'Total tarjeta';
-            var lblIva = (lang === 'en') ? 'incl. 19% IVA' : 'incl. 19% IVA';
-            var daysLabel = rentalDays === 1 ? lblDay : lblDays;
-
-            calcHtml = '<div class="mc-calc">' +
-                '<div class="mc-calc__header"><i class="fas fa-calculator"></i> ' + rentalDays + ' ' + daysLabel + '</div>' +
-                '<div class="mc-calc__row"><span>' + lblPriceDay + '</span><span>$' + formatNumber(pricePerDay) + ' COP</span></div>' +
-                '<div class="mc-calc__divider"></div>' +
-                '<div class="mc-calc__row mc-calc__row--highlight"><span><i class="fas fa-money-bill-wave"></i> ' + lblCash + '</span><span>$' + formatNumber(totalCash) + ' COP</span></div>' +
-                '<div class="mc-calc__row mc-calc__row--sub"><span></span><span>~$' + totalCashUsd + ' USD</span></div>' +
-                '<div class="mc-calc__row mc-calc__row--highlight mc-calc__row--card"><span><i class="fas fa-credit-card"></i> ' + lblCard + '</span><span>$' + formatNumber(totalCard) + ' COP</span></div>' +
-                '<div class="mc-calc__row mc-calc__row--sub"><span><small>' + lblIva + '</small></span><span>~$' + totalCardUsd + ' USD</span></div>' +
-                '<div class="mc-calc__footer">' + ((lang === 'en') ? '* Estimated total based on selected filters. Additional charges may apply.' : '* Total estimado según los filtros seleccionados. Pueden aplicar costos adicionales.') + '</div>' +
-            '</div>';
-        } else if (pickupDate && !returnDate) {
-            var selectReturn = (lang === 'en') ? 'Select return date to see price' : 'Selecciona fecha de devolución para ver precio';
-            calcHtml = '<div class="mc-calc mc-calc--hint"><i class="fas fa-info-circle"></i> ' + selectReturn + '</div>';
-        }
-
-        var btnText = (lang === 'en') ? 'Book Now' : 'Reservar';
-        
-        return '<div class="mc-catmodal__vehicle">' +
-            '<div class="mc-catmodal__vimg"><img src="' + escapeHtml(v.imagen || '') + '" alt="' + escapeHtml(v.nombre) + '" loading="lazy" onerror="this.src=\'' + (typeof motocarData !== 'undefined' ? motocarData.themeUrl : '') + '/assets/img/placeholder.jpg\'"></div>' +
-            '<div class="mc-catmodal__vinfo">' +
-                '<h3 class="mc-catmodal__vname">' + escapeHtml(v.nombre) + '</h3>' +
-                '<p class="mc-catmodal__vprice">' + escapeHtml(priceFmt) + '</p>' +
-                (priceUsdLine ? '<p class="mc-catmodal__vprice-usd">' + escapeHtml(priceUsdLine) + '</p>' : '') +
-                '<p class="mc-catmodal__vdisclaimer">' + disclaimerText + '</p>' +
-                '<div class="mc-catmodal__vspecs">' + specs + '</div>' +
-                calcHtml +
-                '<a href="' + waLink + '" target="_blank" class="mc-catmodal__vbtn">' + btnText + ' <i class="fab fa-whatsapp"></i></a>' +
-            '</div>' +
-        '</div>';
-    }).join('');
-
-    if (!vehicles.length) {
-        var noAvailMsg = (lang === 'en')
-            ? 'No vehicles available for the selected dates.'
-            : 'No hay vehículos disponibles para las fechas seleccionadas.';
-        grid.innerHTML = '<div class="mc-catmodal__loading"><i class="fas fa-calendar-times"></i> ' + noAvailMsg + '</div>';
-    }
-}
-
-// Calculate rental days from dd/mm/yyyy strings + optional HH:MM times
-function calcRentalDays(pickupStr, returnStr, pickupTime, returnTime) {
-    var pParts = pickupStr.split('/');
-    var rParts = returnStr.split('/');
-    var pickup = new Date(parseInt(pParts[2]), parseInt(pParts[1]) - 1, parseInt(pParts[0]));
-    var ret = new Date(parseInt(rParts[2]), parseInt(rParts[1]) - 1, parseInt(rParts[0]));
-
-    if (pickupTime) {
-        var pt = pickupTime.split(':');
-        pickup.setHours(parseInt(pt[0]), parseInt(pt[1]));
-    }
-    if (returnTime) {
-        var rt = returnTime.split(':');
-        ret.setHours(parseInt(rt[0]), parseInt(rt[1]));
-    }
-
-    var diffMs = ret.getTime() - pickup.getTime();
-    if (diffMs <= 0) return 1;
-    var diffHours = diffMs / (1000 * 60 * 60);
-    return Math.ceil(diffHours / 24);
-}
-
-function closeCategoryModal() {
-    var modal = document.getElementById('categoryModal');
-    modal.classList.remove('active');
-    document.body.style.overflow = '';
-}
-
-// Close modal with Escape
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        closeCategoryModal();
-    }
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    [
-        {
-            selectId: 'filterPickupLocation',
-            wrapId: 'filterPickupLocationOtherWrap',
-            inputId: 'filterPickupLocationOther'
-        },
-        {
-            selectId: 'filterReturnLocation',
-            wrapId: 'filterReturnLocationOtherWrap',
-            inputId: 'filterReturnLocationOther'
-        }
-    ].forEach(function(field) {
-        var select = document.getElementById(field.selectId);
-        var wrap = document.getElementById(field.wrapId);
-        var input = document.getElementById(field.inputId);
-        if (!select || !wrap || !input) return;
-
-        function toggleOtherField() {
-            var showOther = select.value === 'other';
-            wrap.hidden = !showOther;
-            input.required = showOther;
-            if (!showOther) {
-                input.value = '';
-            }
-        }
-
-        select.addEventListener('change', toggleOtherField);
-        toggleOtherField();
-    });
-});
-
-// Utility: escape HTML to prevent XSS
-function escapeHtml(str) {
-    if (!str) return '';
-    var div = document.createElement('div');
-    div.appendChild(document.createTextNode(String(str)));
-    return div.innerHTML;
-}
-
-// Format number (Colombian style)
-function formatNumber(num) {
-    return parseInt(num).toLocaleString('es-CO');
 }

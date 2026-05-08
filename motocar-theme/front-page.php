@@ -4,6 +4,17 @@
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="MotoCar Rentals - Alquila la emoción, vive la experiencia. Alquiler de carros y motos en Antioquia, Colombia.">
+    <!-- Dark mode: aplicar clase antes de que cargue el CSS para evitar FOUC -->
+    <script>
+    (function(){
+        try {
+            var t = localStorage.getItem('mc-theme');
+            if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark-mode');
+            }
+        } catch(e) {}
+    })();
+    </script>
     <?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
@@ -41,6 +52,9 @@
                         <img src="<?php echo get_template_directory_uri(); ?>/assets/img/flag-en.png" alt="English">
                     </button>
                 </div>
+                <button class="mc-dark-toggle" id="darkModeToggle" aria-label="Cambiar tema oscuro/claro">
+                    <i class="fas fa-moon"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -327,11 +341,9 @@
                         <h3 class="mc-catcard__title"><?php echo esc_html($display_name); ?></h3>
                         <p class="mc-catcard__desc"><?php echo esc_html($display_desc); ?></p>
                         <?php if ($cat_price_meta) : ?>
-                        <?php $cat_price_iva = (int) round($cat_price_meta * 1.19); ?>
                         <p class="mc-catcard__price">
-                            <span class="mc-catcard__price-text">Desde $<?php echo number_format($cat_price_iva, 0, ',', '.'); ?> COP/día</span>
-                            <span class="mc-catcard__price-iva"><i class="fas fa-check-circle"></i> IVA incluido</span>
-                            <span class="mc-catcard__price-usd">~$<?php echo number_format($cat_price_iva / 4500, 2, '.', ''); ?> USD/día</span>
+                            <span class="mc-catcard__price-text">Desde $<?php echo number_format($cat_price_meta, 0, ',', '.'); ?> COP/día</span>
+                            <span class="mc-catcard__price-usd">~$<?php echo number_format($cat_price_meta / 4500, 2, '.', ''); ?> USD/día</span>
                         </p>
                         <?php endif; ?>
                         <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('<?php echo esc_attr($cat->slug); ?>', '<?php echo esc_js($display_name); ?>')">
@@ -473,11 +485,9 @@
                         <h3 class="mc-catcard__title"><?php echo esc_html($dcat['name']); ?></h3>
                         <p class="mc-catcard__desc"><?php echo esc_html($dcat['desc']); ?></p>
                         <?php if ($dcat_price) : ?>
-                        <?php $dcat_price_iva = (int) round($dcat_price * 1.19); ?>
                         <p class="mc-catcard__price">
-                            <span class="mc-catcard__price-text">Desde $<?php echo number_format($dcat_price_iva, 0, ',', '.'); ?> COP/día</span>
-                            <span class="mc-catcard__price-iva"><i class="fas fa-check-circle"></i> IVA incluido</span>
-                            <span class="mc-catcard__price-usd">~$<?php echo number_format($dcat_price_iva / 4500, 2, '.', ''); ?> USD/día</span>
+                            <span class="mc-catcard__price-text">Desde $<?php echo number_format($dcat_price, 0, ',', '.'); ?> COP/día</span>
+                            <span class="mc-catcard__price-usd">~$<?php echo number_format($dcat_price / 4500, 2, '.', ''); ?> USD/día</span>
                         </p>
                         <?php endif; ?>
                         <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('<?php echo esc_attr($dcat['slug']); ?>', '<?php echo esc_js($dcat['name']); ?>')">
@@ -635,7 +645,7 @@
                         </div>
                         <div class="mc-service__content">
                             <h4 data-i18n="srv_domicilio_title">Servicio a domicilio</h4>
-                            <p data-i18n="srv_domicilio_desc">Llevamos y recogemos el vehículo donde lo necesites sin costo adicional.</p>
+                            <p data-i18n="srv_domicilio_desc">Recogemos y entregamos el vehículo en el aeropuerto totalmente gratis. Para otras direcciones aplican tarifas según la distancia.</p>
                         </div>
                     </div>
 
@@ -1028,16 +1038,16 @@
         <div class="mc-footer__grid">
             <div class="mc-footer__col">
                 <div class="mc-footer__brand-row">
+                    <p class="mc-footer__tagline">MotoCar Rentals</p>
                     <div class="mc-footer__brand">
                         <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo-footer.png" alt="MotoCar Rentals">
                     </div>
-                    <p class="mc-footer__tagline">MotoCar Rentals</p>
                 </div>
             </div>
             <div class="mc-footer__col">
                 <h4 data-i18n="footer_servicios">Servicios 24/7</h4>
                 <ul>
-                    <li><a href="https://wa.me/573202161156" target="_blank" style="color:inherit;text-decoration:none;"><i class="fas fa-phone"></i> +57 320 216 1156</a></li>
+                    <li><a href="tel:+573202161156" style="color:inherit;text-decoration:none;"><i class="fas fa-phone"></i> +57 320 216 1156</a></li>
                     <li><a href="mailto:motocarrentals@gmail.com" style="color:inherit;text-decoration:none;"><i class="fas fa-envelope"></i> motocarrentals@gmail.com</a></li>
                 </ul>
             </div>

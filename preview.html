@@ -18,6 +18,17 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="motocar-theme/assets/css/custom.css">
 
+    <!-- Anti-FOUC: apply dark mode before paint -->
+    <script>
+    (function(){
+        try {
+            var t = localStorage.getItem('mc-theme');
+            if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark-mode');
+            }
+        } catch(e) {}
+    })();
+    </script>
 </head>
 <body>
 
@@ -51,6 +62,9 @@
                         <img src="motocar-theme/assets/img/flag-en.png" alt="English">
                     </button>
                 </div>
+                <button class="mc-dark-toggle" id="darkModeToggle" aria-label="Cambiar tema oscuro/claro">
+                    <i class="fas fa-moon"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -263,9 +277,8 @@
                     <h3 class="mc-catcard__title">Motocicletas</h3>
                     <p class="mc-catcard__desc">Yamaha FZ 150 o similar</p>
                     <p class="mc-catcard__price">
-                        <span class="mc-catcard__price-text">Desde $95.200 COP/día</span>
-                        <span class="mc-catcard__price-iva"><i class="fas fa-check-circle"></i> IVA incluido</span>
-                        <span class="mc-catcard__price-usd">~$21.16 USD/día</span>
+                        <span class="mc-catcard__price-text">Desde $80.000 COP/día</span>
+                        <span class="mc-catcard__price-usd">~$17.78 USD/día</span>
                     </p>
                     <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('motos', 'Motocicletas')">
                         Ver Detalles
@@ -288,9 +301,8 @@
                     <h3 class="mc-catcard__title">Motos Automáticas</h3>
                     <p class="mc-catcard__desc">Yamaha Aerox o similar</p>
                     <p class="mc-catcard__price">
-                        <span class="mc-catcard__price-text">Desde $95.200 COP/día</span>
-                        <span class="mc-catcard__price-iva"><i class="fas fa-check-circle"></i> IVA incluido</span>
-                        <span class="mc-catcard__price-usd">~$21.16 USD/día</span>
+                        <span class="mc-catcard__price-text">Desde $80.000 COP/día</span>
+                        <span class="mc-catcard__price-usd">~$17.78 USD/día</span>
                     </p>
                     <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('motos-auto', 'Motos Automáticas')">
                         Ver Detalles
@@ -312,9 +324,8 @@
                     <h3 class="mc-catcard__title">Hatchback</h3>
                     <p class="mc-catcard__desc">Volkswagen Gol o similar</p>
                     <p class="mc-catcard__price">
-                        <span class="mc-catcard__price-text">Desde $178.500 COP/día</span>
-                        <span class="mc-catcard__price-iva"><i class="fas fa-check-circle"></i> IVA incluido</span>
-                        <span class="mc-catcard__price-usd">~$39.67 USD/día</span>
+                        <span class="mc-catcard__price-text">Desde $150.000 COP/día</span>
+                        <span class="mc-catcard__price-usd">~$33.33 USD/día</span>
                     </p>
                     <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('economy', 'Hatchback')">
                         Ver Detalles
@@ -336,9 +347,8 @@
                     <h3 class="mc-catcard__title">Sedan</h3>
                     <p class="mc-catcard__desc">Renault Logan o similar</p>
                     <p class="mc-catcard__price">
-                        <span class="mc-catcard__price-text">Desde $238.000 COP/día</span>
-                        <span class="mc-catcard__price-iva"><i class="fas fa-check-circle"></i> IVA incluido</span>
-                        <span class="mc-catcard__price-usd">~$52.89 USD/día</span>
+                        <span class="mc-catcard__price-text">Desde $200.000 COP/día</span>
+                        <span class="mc-catcard__price-usd">~$44.44 USD/día</span>
                     </p>
                     <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('compact', 'Sedan')">
                         Ver Detalles
@@ -360,9 +370,8 @@
                     <h3 class="mc-catcard__title">SUV Compacto</h3>
                     <p class="mc-catcard__desc">Kia Seltos o similar</p>
                     <p class="mc-catcard__price">
-                        <span class="mc-catcard__price-text">Desde $297.500 COP/día</span>
-                        <span class="mc-catcard__price-iva"><i class="fas fa-check-circle"></i> IVA incluido</span>
-                        <span class="mc-catcard__price-usd">~$66.11 USD/día</span>
+                        <span class="mc-catcard__price-text">Desde $250.000 COP/día</span>
+                        <span class="mc-catcard__price-usd">~$55.56 USD/día</span>
                     </p>
                     <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('suv', 'SUV Compacto')">
                         Ver Detalles
@@ -384,9 +393,8 @@
                     <h3 class="mc-catcard__title">SUV 7 Puestos</h3>
                     <p class="mc-catcard__desc">Toyota Fortuner o similar</p>
                     <p class="mc-catcard__price">
-                        <span class="mc-catcard__price-text">Desde $416.500 COP/día</span>
-                        <span class="mc-catcard__price-iva"><i class="fas fa-check-circle"></i> IVA incluido</span>
-                        <span class="mc-catcard__price-usd">~$92.56 USD/día</span>
+                        <span class="mc-catcard__price-text">Desde $350.000 COP/día</span>
+                        <span class="mc-catcard__price-usd">~$77.78 USD/día</span>
                     </p>
                     <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('suv7', 'SUV 7 Puestos')">
                         Ver Detalles
@@ -620,7 +628,7 @@
                         <div class="mc-service__icon"><img src="motocar-theme/assets/img/icon-domicilio.png" alt="Domicilio"></div>
                         <div class="mc-service__content">
                             <h4 data-i18n="srv_domicilio_title">Servicio a domicilio</h4>
-                            <p data-i18n="srv_domicilio_desc">Llevamos y recogemos el vehículo donde lo necesites sin costo adicional.</p>
+                            <p data-i18n="srv_domicilio_desc">Recogemos y entregamos el vehículo en el aeropuerto totalmente gratis. Para otras direcciones aplican tarifas según la distancia.</p>
                         </div>
                     </div>
                     <div class="mc-service">
@@ -990,10 +998,10 @@
         <div class="mc-footer__grid">
             <div class="mc-footer__col">
                 <div class="mc-footer__brand-row">
-                    <div class="mc-footer__brand">
-                        <img src="motocar-theme/assets/img/logo-footer.png" alt="MotoCar Rentals">
-                    </div>
                     <h4>MotoCar Rentals</h4>
+                    <div class="mc-footer__brand">
+                        <img src="motocar-theme/assets/img/logo-footer.png" alt="MotoCar Rentals" style="max-width: 150px;">
+                    </div>
                 </div>
                 <p class="mc-footer__desc" data-i18n="footer_desc">MotoCar Rentals ofrece alquiler de vehículos y motocicletas con un servicio confiable y seguro, brindando atención personalizada, disponibilidad 24/7, servicio a domicilio y conductor elegido para garantizar una experiencia de movilidad cómoda y sin preocupaciones.</p>
             </div>
