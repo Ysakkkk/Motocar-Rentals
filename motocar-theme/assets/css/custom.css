@@ -3081,6 +3081,10 @@ html.dark-mode .mc-hero__title {
     color: #ffffff;
 }
 
+html.dark-mode .mc-brands__item img {
+    filter: invert(1);
+}
+
 html.dark-mode .mc-header {
     background: rgba(18, 18, 18, 0.98);
 }

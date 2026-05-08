@@ -377,19 +377,19 @@
                     ),
                     array(
                         'slug'           => 'motos-auto',
-                        'name'           => 'Motos Autom\u00e1ticas',
+                        'name'           => 'Motos Automáticas',
                         'desc'           => 'Yamaha Aerox o similar',
                         'icon'           => 'fas fa-motorcycle',
                         'price'          => '80,000',
                         'motor'          => '155 cc',
-                        'trans'          => 'Autom\u00e1tica',
+                        'trans'          => 'Automática',
                         'pax'            => '2',
                         'abs'            => 'No',
                         'maletas'        => 'N/A',
-                        'descripcion'    => 'Motos autom\u00e1ticas f\u00e1ciles de manejar, perfectas para quienes no tienen experiencia con cambios. \u00c1giles, econ\u00f3micas e ideales para recorrer Rionegro y el Oriente Antioque\u00f1o.',
+                        'descripcion'    => 'Motos automáticas fáciles de manejar, perfectas para quienes no tienen experiencia con cambios. Ágiles, económicas e ideales para recorrer Rionegro y el Oriente Antioqueño.',
                         'descripcion_en' => 'Automatic motorcycles, easy to ride and perfect for those without gear-change experience. Agile, fuel-efficient and ideal for exploring Rionegro and Eastern Antioquia.',
                         'vehicles' => array(
-                            array('name' => 'Yamaha Aerox', 'img' => 'aerox.png', 'price' => '80,000', 'motor' => '155 cc', 'trans' => 'Autom\u00e1tica', 'ac' => 'N/A', 'pax' => '2', 'luggage' => 'N/A'),
+                            array('name' => 'Yamaha Aerox', 'img' => 'aerox.png', 'price' => '80,000', 'motor' => '155 cc', 'trans' => 'Automática', 'ac' => 'N/A', 'pax' => '2', 'luggage' => 'N/A'),
                         ),
                     ),
                     array(
@@ -429,7 +429,7 @@
                         'name'        => 'SUV Compacto',
                         'desc'        => 'Kia Seltos o similar',
                         'icon'        => 'fas fa-shuttle-van',
-                        'price'       => '200,000',
+                        'price'       => '250,000',
                         'motor'       => '2000 cc',
                         'trans'       => 'Automática',
                         'pax'         => '5',
@@ -437,7 +437,7 @@
                         'maletas'     => '2 grandes, 1 mediana',
                         'descripcion' => 'SUV moderna con transmisión automática, ABS y espacio para toda la familia. Ideal para rutas largas, viajes al campo o simplemente disfrutar el lujo.',
                         'vehicles' => array(
-                            array('name' => 'Kia Sportage', 'img' => 'kia-sportage.png', 'price' => '200,000', 'motor' => '2000 cc', 'trans' => 'Automática', 'ac' => 'Sí', 'pax' => '5', 'luggage' => '2 grandes, 1 mediana'),
+                            array('name' => 'Kia Sportage', 'img' => 'kia-sportage.png', 'price' => '250,000', 'motor' => '2000 cc', 'trans' => 'Automática', 'ac' => 'Sí', 'pax' => '5', 'luggage' => '2 grandes, 1 mediana'),
                         ),
                     ),
                     array(

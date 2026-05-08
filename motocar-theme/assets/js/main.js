@@ -727,6 +727,57 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ==========================================
+// UTILITY FUNCTIONS (Global scope)
+// ==========================================
+
+/**
+ * Calculate rental days between two DD/MM/YYYY date strings.
+ * Takes pickup/return times into account: if return time < pickup time,
+ * an extra day is charged (same logic as most rental companies).
+ */
+function calcRentalDays(pickupDate, returnDate, pickupTime, returnTime) {
+    if (!pickupDate || !returnDate) return 0;
+    var p = pickupDate.split('/');
+    var r = returnDate.split('/');
+    if (p.length !== 3 || r.length !== 3) return 0;
+    var pickup = new Date(parseInt(p[2], 10), parseInt(p[1], 10) - 1, parseInt(p[0], 10));
+    var ret    = new Date(parseInt(r[2], 10), parseInt(r[1], 10) - 1, parseInt(r[0], 10));
+    var diffDays = Math.round((ret.getTime() - pickup.getTime()) / (1000 * 60 * 60 * 24));
+    if (diffDays <= 0) return 0;
+    // If return time is before pickup time, charge an extra day
+    if (pickupTime && returnTime) {
+        var ph = parseInt(pickupTime.split(':')[0], 10);
+        var rh = parseInt(returnTime.split(':')[0], 10);
+        if (rh < ph) diffDays += 1;
+    }
+    return diffDays;
+}
+
+/** Format a number with dots as thousands separator (Colombian style: 150.000) */
+function formatNumber(n) {
+    return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+/** Escape HTML special characters to prevent XSS */
+function escapeHtml(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+/** Close the category detail modal */
+function closeCategoryModal() {
+    var modal = document.getElementById('categoryModal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+// ==========================================
 // CATEGORY MODAL FUNCTIONS (Global scope)
 // ==========================================
 function _getLang() {
@@ -1180,3 +1231,47 @@ function updateCategoryCardPrices() {
         }
     });
 }
+
+// ==========================================
+// DARK MODE TOGGLE
+// ==========================================
+(function() {
+    var html = document.documentElement;
+
+    function isDarkActive() {
+        return html.classList.contains('dark-mode');
+    }
+
+    function updateToggleIcon(dark) {
+        var btn = document.getElementById('darkModeToggle');
+        if (!btn) return;
+        var icon = btn.querySelector('i');
+        if (icon) {
+            icon.className = dark ? 'fas fa-sun' : 'fas fa-moon';
+        }
+        btn.setAttribute('aria-label', dark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
+    }
+
+    function setTheme(dark) {
+        html.classList.toggle('dark-mode', dark);
+        updateToggleIcon(dark);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        updateToggleIcon(isDarkActive());
+        var btn = document.getElementById('darkModeToggle');
+        if (btn) {
+            btn.addEventListener('click', function() {
+                var nowDark = !isDarkActive();
+                setTheme(nowDark);
+                try { localStorage.setItem('mc-theme', nowDark ? 'dark' : 'light'); } catch(e) {}
+            });
+        }
+    });
+
+    try {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+            if (!localStorage.getItem('mc-theme')) { setTheme(e.matches); }
+        });
+    } catch(e) {}
+})();
