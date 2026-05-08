@@ -1599,7 +1599,7 @@ ul {
 .mc-footer__brand-row {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 12px;
     margin-bottom: 15px;
 }
@@ -1609,8 +1609,10 @@ ul {
 }
 
 .mc-footer__brand img {
-    max-width: 150px;
+    max-width: 200px;
     height: auto;
+    display: block;
+    margin: 0 auto;
 }
 
 .mc-footer__desc {
