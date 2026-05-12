@@ -45,6 +45,10 @@
                     <img src="motocar-theme/assets/img/icon-email.png" alt="Correo" class="mc-topbar__item-icon">
                     <span>motocarrentals@gmail.com</span>
                 </a>
+                <span class="mc-topbar__item mc-topbar__item--static">
+                    <i class="fas fa-headset"></i>
+                    <span data-i18n="topbar_247">Atención 24/7</span>
+                </span>
             </div>
             <div class="mc-topbar__right">
                 <div class="mc-topbar__social">
@@ -103,10 +107,20 @@
     </div>
     <div class="mc-hero__overlay"></div>
     <div class="mc-hero__content">
-        <h1 class="mc-hero__title" data-i18n-html="hero_title">
-            ¡Alquila la emoción,<br>
-            vive la experiencia!
-        </h1>
+        <div class="mc-hero__titles">
+            <h1 class="mc-hero__title-slide active" data-i18n-html="hero_title_0">
+                ¡Alquila la emoción,<br>vive la experiencia!
+            </h1>
+            <h1 class="mc-hero__title-slide" data-i18n-html="hero_title_1">
+                Atención 24/7
+            </h1>
+            <h1 class="mc-hero__title-slide" data-i18n-html="hero_title_2">
+                Alquiler de carros y motos<br>cerca del aeropuerto JMC
+            </h1>
+            <h1 class="mc-hero__title-slide" data-i18n-html="hero_title_3">
+                Alquiler 24/7 en<br>Medellín y Rionegro Antioquia
+            </h1>
+        </div>
     </div>
     <div class="mc-hero__dots" id="heroDots">
         <button class="mc-hero__dot active" data-slide="0"></button>
@@ -278,6 +292,7 @@
                     <p class="mc-catcard__desc">Yamaha FZ 150 o similar</p>
                     <p class="mc-catcard__price">
                         <span class="mc-catcard__price-text">Desde $80.000 COP/día</span>
+                        <span class="mc-catcard__price-disc"></span>
                         <span class="mc-catcard__price-usd">~$17.78 USD/día</span>
                     </p>
                     <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('motos', 'Motocicletas')">
@@ -302,6 +317,7 @@
                     <p class="mc-catcard__desc">Yamaha Aerox o similar</p>
                     <p class="mc-catcard__price">
                         <span class="mc-catcard__price-text">Desde $80.000 COP/día</span>
+                        <span class="mc-catcard__price-disc"></span>
                         <span class="mc-catcard__price-usd">~$17.78 USD/día</span>
                     </p>
                     <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('motos-auto', 'Motos Automáticas')">
@@ -325,6 +341,7 @@
                     <p class="mc-catcard__desc">Volkswagen Gol o similar</p>
                     <p class="mc-catcard__price">
                         <span class="mc-catcard__price-text">Desde $150.000 COP/día</span>
+                        <span class="mc-catcard__price-disc"></span>
                         <span class="mc-catcard__price-usd">~$33.33 USD/día</span>
                     </p>
                     <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('economy', 'Hatchback')">
@@ -348,6 +365,7 @@
                     <p class="mc-catcard__desc">Renault Logan o similar</p>
                     <p class="mc-catcard__price">
                         <span class="mc-catcard__price-text">Desde $200.000 COP/día</span>
+                        <span class="mc-catcard__price-disc"></span>
                         <span class="mc-catcard__price-usd">~$44.44 USD/día</span>
                     </p>
                     <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('compact', 'Sedan')">
@@ -371,6 +389,7 @@
                     <p class="mc-catcard__desc">Kia Seltos o similar</p>
                     <p class="mc-catcard__price">
                         <span class="mc-catcard__price-text">Desde $250.000 COP/día</span>
+                        <span class="mc-catcard__price-disc"></span>
                         <span class="mc-catcard__price-usd">~$55.56 USD/día</span>
                     </p>
                     <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('suv', 'SUV Compacto')">
@@ -394,6 +413,7 @@
                     <p class="mc-catcard__desc">Toyota Fortuner o similar</p>
                     <p class="mc-catcard__price">
                         <span class="mc-catcard__price-text">Desde $350.000 COP/día</span>
+                        <span class="mc-catcard__price-disc"></span>
                         <span class="mc-catcard__price-usd">~$77.78 USD/día</span>
                     </p>
                     <button class="mc-btn mc-btn--primary mc-btn--card" onclick="openCategoryModal('suv7', 'SUV 7 Puestos')">
@@ -496,6 +516,7 @@
         </script>
     </div>
 </section>
+<p class="mc-catalog__seo-note" data-i18n="catalog_seo_note">Servicio de Alquiler de Vehículos y Motos en Rionegro y Medellín con entrega en el Aeropuerto Internacional José María Córdova</p>
 
 <!-- RINCONES ÚNICOS -->
 <section class="mc-lugares" id="lugares">

@@ -57,7 +57,7 @@ html {
 
 body {
     font-family: var(--mc-font-main);
-    color: var(--mc-gray-800);
+    color: var(--mc-gray-900);
     line-height: 1.6;
     background: var(--mc-white);
     overflow-x: hidden;
@@ -492,7 +492,12 @@ ul {
     padding: 20px;
 }
 
-.mc-hero__title {
+.mc-hero__titles {
+    position: relative;
+    min-height: 4.8rem; /* prevents hero from jumping when titles change */
+}
+
+.mc-hero__title-slide {
     font-family: var(--mc-font-hero);
     font-size: 4rem;
     font-weight: 400;
@@ -501,6 +506,18 @@ ul {
     text-shadow: 0 3px 30px rgba(0,0,0,0.4);
     letter-spacing: 1px;
     text-transform: none;
+    display: none;
+    opacity: 0;
+}
+
+.mc-hero__title-slide.active {
+    display: block;
+    animation: mc-hero-title-in 0.7s ease forwards;
+}
+
+@keyframes mc-hero-title-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 /* Dots de navegación del slider */
@@ -869,6 +886,17 @@ ul {
     color: var(--mc-primary);
 }
 
+.mc-catalog__seo-note {
+    text-align: center;
+    font-family: var(--mc-font-topbar);
+    font-size: 0.82rem;
+    color: var(--mc-gray-400);
+    letter-spacing: 0.3px;
+    padding: 14px 20px 0;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
 /* ==========================================
    CATEGORY CARD
    ========================================== */
@@ -1051,6 +1079,24 @@ ul {
     border-radius: 20px;
     padding: 2px 8px;
     margin: 3px auto 2px;
+}
+
+.mc-catcard__price-disc {
+    display: none;
+    font-family: var(--mc-font-topbar);
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #1a9e40;
+    margin: 3px 0 2px;
+}
+
+.mc-catcard__price-disc {
+    display: none;
+    font-family: var(--mc-font-topbar);
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #1a9e40;
+    margin: 3px 0 2px;
 }
 
 .mc-catcard__price-usd {
@@ -2395,6 +2441,16 @@ ul {
     padding-bottom: 4px;
 }
 
+.mc-price-usd-note {
+    font-size: 0.78rem;
+    color: var(--mc-gray-500);
+}
+.mc-price-usd-note em {
+    font-style: italic;
+    font-size: 0.72rem;
+    color: var(--mc-gray-400);
+}
+
 .mc-catmodal__price-row i { color: var(--mc-primary); margin-right: 4px; }
 
 .mc-catmodal__price-note {
@@ -2403,6 +2459,30 @@ ul {
     color: var(--mc-gray-400);
     margin-top: 8px;
     line-height: 1.3;
+}
+
+/* Name field */
+.mc-catmodal__name-field {
+    margin: 10px 0 6px;
+}
+.mc-catmodal__name-input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 2px solid var(--mc-gray-200);
+    border-radius: var(--mc-radius);
+    font-family: var(--mc-font-topbar);
+    font-size: 0.92rem;
+    color: var(--mc-gray-900);
+    background: var(--mc-white);
+    transition: var(--mc-transition);
+}
+.mc-catmodal__name-input:focus {
+    outline: none;
+    border-color: var(--mc-primary);
+    box-shadow: 0 0 0 3px rgba(245,166,35,0.15);
+}
+.mc-catmodal__name-input::placeholder {
+    color: var(--mc-gray-400);
 }
 
 /* Book button */
@@ -2425,9 +2505,15 @@ ul {
     text-decoration: none;
     margin-top: 4px;
 }
-.mc-catmodal__book-btn:hover {
+.mc-catmodal__book-btn:hover:not(:disabled) {
     background: var(--mc-primary-dark);
     color: var(--mc-white);
+}
+.mc-catmodal__book-btn:disabled {
+    background: var(--mc-gray-300);
+    color: var(--mc-gray-500);
+    cursor: not-allowed;
+    opacity: 0.7;
 }
 .mc-catmodal__book-btn i { font-size: 1.2rem; }
 
@@ -2612,9 +2698,9 @@ ul {
     cursor: pointer;
     text-align: left;
     font-family: var(--mc-font-topbar);
-    font-size: 1.05rem;
+    font-size: 1.15rem;
     font-weight: 600;
-    color: var(--mc-gray-900);
+    color: #000000;
     transition: var(--mc-transition);
 }
 
@@ -2662,13 +2748,15 @@ ul {
     max-height: 600px;
     padding: 0 24px 24px;
     border-top: 1px solid var(--mc-gray-200);
+    background: #fdf8f0;
+    border-radius: 0 0 12px 12px;
 }
 
 .mc-faq__answer p,
 .mc-faq__answer li {
     font-family: var(--mc-font-topbar);
     font-size: 1rem;
-    color: var(--mc-gray-700);
+    color: #000000;
     line-height: 1.8;
 }
 
@@ -2880,7 +2968,11 @@ ul {
         padding: 12px;
     }
 
-    .mc-hero__title {
+    .mc-hero__titles {
+        min-height: 2.4rem;
+    }
+
+    .mc-hero__title-slide {
         font-size: 2rem;
     }
 
@@ -2928,7 +3020,7 @@ ul {
         min-height: 400px;
     }
 
-    .mc-hero__title {
+    .mc-hero__title-slide {
         font-size: 1.6rem;
     }
 
@@ -3079,7 +3171,39 @@ html.dark-mode {
 }
 
 /* Overrides de colores hardcodeados */
-html.dark-mode .mc-hero__title {
+html.dark-mode .mc-topbar {
+    color: #cccccc;
+}
+
+html.dark-mode .mc-topbar__item {
+    color: #cccccc;
+}
+
+html.dark-mode .mc-faq__question {
+    color: #f0f0f0;
+    background: var(--mc-white);
+}
+
+html.dark-mode .mc-faq__item.active .mc-faq__question {
+    color: #ffffff;
+    background: var(--mc-gray-100);
+}
+
+html.dark-mode .mc-faq__item.active .mc-faq__answer {
+    background: transparent;
+    border-top-color: rgba(245, 166, 35, 0.25);
+}
+
+html.dark-mode .mc-faq__answer p,
+html.dark-mode .mc-faq__answer li {
+    color: #e0e0e0;
+}
+
+html.dark-mode .mc-faq__answer strong {
+    color: #ffffff;
+}
+
+html.dark-mode .mc-hero__title-slide {
     color: #ffffff;
 }
 

@@ -35,6 +35,10 @@
                     <i class="fas fa-envelope"></i>
                     <span>motocarrentals@gmail.com</span>
                 </a>
+                <span class="mc-topbar__item mc-topbar__item--static">
+                    <i class="fas fa-headset"></i>
+                    <span data-i18n="topbar_247">Atención 24/7</span>
+                </span>
             </div>
             <div class="mc-topbar__right">
                 <div class="mc-topbar__social">
@@ -105,10 +109,20 @@
     </div>
     <div class="mc-hero__overlay"></div>
     <div class="mc-hero__content">
-        <h1 class="mc-hero__title" data-i18n-html="hero_title">
-            ¡Alquila la emoción,<br>
-            vive la experiencia!
-        </h1>
+        <div class="mc-hero__titles">
+            <h1 class="mc-hero__title-slide active" data-i18n-html="hero_title_0">
+                ¡Alquila la emoción,<br>vive la experiencia!
+            </h1>
+            <h1 class="mc-hero__title-slide" data-i18n-html="hero_title_1">
+                Atención 24/7
+            </h1>
+            <h1 class="mc-hero__title-slide" data-i18n-html="hero_title_2">
+                Alquiler de carros y motos<br>cerca del aeropuerto JMC
+            </h1>
+            <h1 class="mc-hero__title-slide" data-i18n-html="hero_title_3">
+                Alquiler 24/7 en<br>Medellín y Rionegro Antioquia
+            </h1>
+        </div>
     </div>
     <div class="mc-hero__dots" id="heroDots">
         <button class="mc-hero__dot active" data-slide="0"></button>
@@ -236,14 +250,6 @@
                 'motos'      => 'fas fa-motorcycle',
                 'motos-auto' => 'fas fa-motorcycle',
             );
-            $cat_types = array(
-                'economy'    => 'carro',
-                'compact'    => 'carro',
-                'suv'        => 'carro',
-                'suv7'       => 'carro',
-                'motos'      => 'moto',
-                'motos-auto' => 'moto',
-            );
             $cat_labels = array(
                 'economy'    => array('name' => 'Hatchback',          'desc' => 'Volkswagen Gol o similar'),
                 'compact'    => array('name' => 'Sedan',               'desc' => 'Renault Logan o similar'),
@@ -311,7 +317,8 @@
                     }
             ?>
                 <?php $cat_price_meta = (int) get_term_meta($cat->term_id, '_precio_dia', true); ?>
-                <div class="mc-catcard" data-category="<?php echo esc_attr($cat->slug); ?>" data-type="<?php echo esc_attr($cat_types[$cat->slug] ?? 'carro'); ?>" data-price-day="<?php echo esc_attr($cat_price_meta ?: 0); ?>">
+                <?php $cat_tipo = get_term_meta($cat->term_id, '_tipo', true) ?: 'carro'; ?>
+                <div class="mc-catcard" data-category="<?php echo esc_attr($cat->slug); ?>" data-type="<?php echo esc_attr($cat_tipo); ?>" data-price-day="<?php echo esc_attr($cat_price_meta ?: 0); ?>">
                     <div class="mc-catcard__carousel" data-carousel>
                         <div class="mc-catcard__slides">
                             <?php if (!empty($images)) : ?>
@@ -343,6 +350,7 @@
                         <?php if ($cat_price_meta) : ?>
                         <p class="mc-catcard__price">
                             <span class="mc-catcard__price-text">Desde $<?php echo number_format($cat_price_meta, 0, ',', '.'); ?> COP/día</span>
+                            <span class="mc-catcard__price-disc"></span>
                             <span class="mc-catcard__price-usd">~$<?php echo number_format($cat_price_meta / 4500, 2, '.', ''); ?> USD/día</span>
                         </p>
                         <?php endif; ?>
@@ -487,6 +495,7 @@
                         <?php if ($dcat_price) : ?>
                         <p class="mc-catcard__price">
                             <span class="mc-catcard__price-text">Desde $<?php echo number_format($dcat_price, 0, ',', '.'); ?> COP/día</span>
+                            <span class="mc-catcard__price-disc"></span>
                             <span class="mc-catcard__price-usd">~$<?php echo number_format($dcat_price / 4500, 2, '.', ''); ?> USD/día</span>
                         </p>
                         <?php endif; ?>
@@ -504,9 +513,11 @@
             <?php endif; ?>
         </div>
     </div>
+    <p class="mc-catalog__seo-note" data-i18n="catalog_seo_note">Servicio de Alquiler de Vehículos y Motos en Rionegro y Medellín con entrega en el Aeropuerto Internacional José María Córdova</p>
 </section>
+
 <!-- ==========================================
-     RESEÑAS DE GOOGLE
+     RESEÑAS DE CLIENTES
      ========================================== -->
 <section class="mc-reviews" id="resenas">
     <div class="mc-container">
@@ -840,6 +851,25 @@
                 <div class="mc-faq__answer" data-i18n-html="faq_a15">
                     <p>El auto o la motocicleta debe ser entregado en las mismas condiciones que fue retirado: con el depósito de combustible completo, en estado físico igual al verificado en el check-in de entrega y limpio lo suficiente para conferir el estado de la carrocería.</p>
                     <p>Si el vehículo presenta un faltante de combustible, se procederá con el cobro. Esta tarifa es superior a la de una estación de servicio, ya que incluye otros costos como la movilización, seguros, etc.</p>
+                </div>
+            </div>
+
+            <div class="mc-faq__item">
+                <button class="mc-faq__question" aria-expanded="false">
+                    <span data-i18n="faq_q_cancel">¿Por qué motivos se podría cancelar la reserva?</span>
+                    <i class="fas fa-chevron-down mc-faq__icon"></i>
+                </button>
+                <div class="mc-faq__answer" data-i18n-html="faq_a_cancel">
+                    <ul>
+                        <li>El no pago de la reserva.</li>
+                        <li>Inconsistencia en la documentación al momento de retirar el vehículo.</li>
+                        <li>La no presentación del cliente a la hora y fecha de la renta sin dar previo aviso.</li>
+                        <li>La no presentación de los documentos al momento de la entrega del vehículo.</li>
+                        <li>La no presencia del titular de la tarjeta de crédito para avalar la garantía.</li>
+                        <li>Nuestra empresa no hace devolución de los dineros recibidos por conceptos de reserva, o devolución del vehículo antes del tiempo pactado.</li>
+                        <li>El no pago del total de la renta al momento de retirar el vehículo.</li>
+                        <li>No tener el cupo disponible en la tarjeta de crédito al momento de retirar el vehículo.</li>
+                    </ul>
                 </div>
             </div>
 

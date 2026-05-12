@@ -7,6 +7,10 @@ var MC_TRANSLATIONS = {
         // Topbar
         lang_label: 'Language',
         topbar_location: 'Rionegro, Antioquia',
+        topbar_247: 'Support 24/7',
+
+        // Catalog SEO
+        catalog_seo_note: 'Vehicle and Motorcycle Rental Service in Rionegro and Medellín with delivery at the José María Córdova International Airport',
 
         // Nav
         nav_inicio: 'Home',
@@ -16,7 +20,10 @@ var MC_TRANSLATIONS = {
         nav_quienes: 'Who We Are',
 
         // Hero
-        hero_title: 'Rent the thrill,<br>live the experience!',
+        hero_title_0: 'Rent the thrill,<br>live the experience!',
+        hero_title_1: 'Support 24/7',
+        hero_title_2: 'Car and motorcycle rental<br>near JMC airport',
+        hero_title_3: '24/7 rental in<br>Medellín &amp; Rionegro Antioquia',
 
         // Search / Filter (removed - now category-based)
 
@@ -120,6 +127,9 @@ var MC_TRANSLATIONS = {
 
         faq_q15: 'What should be the return conditions of the car or motorcycle?',
         faq_a15: '<p>The car or motorcycle must be returned in the same conditions as when it was picked up: with a full fuel tank, in the same physical condition as verified at the delivery check-in, and clean enough to verify the bodywork condition.</p><p>If the vehicle has a fuel shortage, a charge will be applied. This rate is higher than at a gas station, as it includes other costs such as mobilization, insurance, etc.</p>',
+
+        faq_q_cancel: 'What are the reasons a reservation could be cancelled?',
+        faq_a_cancel: '<ul><li>Non-payment of the reservation.</li><li>Inconsistency in documentation at the time of vehicle pickup.</li><li>The client does not show up at the rental date and time without prior notice.</li><li>Failure to present documents at the time of vehicle delivery.</li><li>The absence of the credit cardholder to guarantee the deposit.</li><li>Our company does not refund money received as reservation fees, or for vehicle returns before the agreed time.</li><li>Non-payment of the total rental amount at the time of vehicle pickup.</li><li>Insufficient available credit on the credit card at the time of vehicle pickup.</li></ul>',
 
         faq_q16: 'When renting a car or motorcycle, what add-ons are offered at MotoCar?',
         faq_a16: '<p><strong>Car:</strong> Baby seat, upgrade, return in another city, third-party protection, loss of income, phone holder and additional driver.</p><p><strong>Motorcycle:</strong> Additional driver, upgrade, return in another city, third-party protection, loss of income, phone holder and rain gear.</p>',

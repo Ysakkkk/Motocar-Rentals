@@ -164,20 +164,24 @@ add_action('init', 'motocar_register_vehicles');
 // ==========================================
 function motocar_create_default_categories() {
     $categories = array(
-        'economy'    => array('name' => 'Hatchback',          'desc' => 'Volkswagen Gol o similar'),
-        'compact'    => array('name' => 'Sedan',               'desc' => 'Renault Logan o similar'),
-        'suv'        => array('name' => 'SUV Compacto',        'desc' => 'Kia Seltos o similar'),
-        'suv7'       => array('name' => 'SUV 7 Puestos',       'desc' => 'Toyota Fortuner o similar'),
-        'motos'      => array('name' => 'Motocicletas',        'desc' => 'Yamaha FZ 150 o similar'),
-        'motos-auto' => array('name' => 'Motos Automáticas',   'desc' => 'Yamaha Aerox o similar'),
+        'economy'    => array('name' => 'Hatchback',          'desc' => 'Volkswagen Gol o similar',  'tipo' => 'carro', 'nombre_en' => 'Hatchback'),
+        'compact'    => array('name' => 'Sedan',               'desc' => 'Renault Logan o similar',   'tipo' => 'carro', 'nombre_en' => 'Sedan'),
+        'suv'        => array('name' => 'SUV Compacto',        'desc' => 'Kia Seltos o similar',      'tipo' => 'carro', 'nombre_en' => 'Compact SUV'),
+        'suv7'       => array('name' => 'SUV 7 Puestos',       'desc' => 'Toyota Fortuner o similar', 'tipo' => 'carro', 'nombre_en' => 'SUV 7 Seats'),
+        'motos'      => array('name' => 'Motocicletas',        'desc' => 'Yamaha FZ 150 o similar',   'tipo' => 'moto',  'nombre_en' => 'Motorcycles'),
+        'motos-auto' => array('name' => 'Motos Automáticas',   'desc' => 'Yamaha Aerox o similar',    'tipo' => 'moto',  'nombre_en' => 'Automatic Motorcycles'),
     );
     foreach ($categories as $slug => $cat) {
         $existing_term = get_term_by('slug', $slug, 'categoria_vehiculo');
         if (!$existing_term) {
-            wp_insert_term($cat['name'], 'categoria_vehiculo', array(
+            $result = wp_insert_term($cat['name'], 'categoria_vehiculo', array(
                 'slug'        => $slug,
                 'description' => $cat['desc'],
             ));
+            if (!is_wp_error($result)) {
+                update_term_meta($result['term_id'], '_tipo',      $cat['tipo']);
+                update_term_meta($result['term_id'], '_nombre_en', $cat['nombre_en']);
+            }
             continue;
         }
 
@@ -189,6 +193,14 @@ function motocar_create_default_categories() {
                 'name'        => $cat['name'],
                 'description' => $cat['desc'],
             ));
+        }
+
+        // Set defaults for tipo/nombre_en only if not yet configured by admin
+        if (!get_term_meta($existing_term->term_id, '_tipo', true)) {
+            update_term_meta($existing_term->term_id, '_tipo', $cat['tipo']);
+        }
+        if (!get_term_meta($existing_term->term_id, '_nombre_en', true)) {
+            update_term_meta($existing_term->term_id, '_nombre_en', $cat['nombre_en']);
         }
     }
 }
@@ -528,6 +540,8 @@ function motocar_categoria_edit_fields($term) {
     $pasajeros      = get_term_meta($tid, '_pasajeros',      true);
     $abs            = get_term_meta($tid, '_abs',            true);
     $maletas        = get_term_meta($tid, '_maletas',        true);
+    $tipo           = get_term_meta($tid, '_tipo',           true) ?: 'carro';
+    $nombre_en      = get_term_meta($tid, '_nombre_en',      true);
     ?>
     <tr class="form-field">
         <th><label for="cat_precio_dia">💲 Precio por día (COP)</label></th>
@@ -573,12 +587,26 @@ function motocar_categoria_edit_fields($term) {
         <th><label for="cat_maletas">🧳 Maletas</label></th>
         <td><input type="text" id="cat_maletas" name="cat_maletas" value="<?php echo esc_attr($maletas); ?>" placeholder="Ej: 2 grandes, 1 mediana"></td>
     </tr>
+    <tr class="form-field">
+        <th><label for="cat_tipo">🏷️ Tipo de vehículo</label></th>
+        <td>
+            <select id="cat_tipo" name="cat_tipo">
+                <option value="carro" <?php selected($tipo, 'carro'); ?>>🚗 Carro</option>
+                <option value="moto"  <?php selected($tipo, 'moto');  ?>>🏍️ Moto</option>
+            </select>
+            <p class="description">Define si aparece en el filtro "Carros" o "Motos" de la página principal.</p>
+        </td>
+    </tr>
+    <tr class="form-field">
+        <th><label for="cat_nombre_en">🇺🇸 Nombre en inglés</label></th>
+        <td><input type="text" id="cat_nombre_en" name="cat_nombre_en" value="<?php echo esc_attr($nombre_en); ?>" placeholder="Ej: Compact SUV"></td>
+    </tr>
     <?php
 }
 add_action('categoria_vehiculo_edit_form_fields', 'motocar_categoria_edit_fields', 10, 1);
 
 function motocar_save_categoria_meta($term_id) {
-    $fields = array('precio_dia', 'descripcion', 'descripcion_en', 'motor', 'transmision', 'pasajeros', 'abs', 'maletas');
+    $fields = array('precio_dia', 'descripcion', 'descripcion_en', 'motor', 'transmision', 'pasajeros', 'abs', 'maletas', 'tipo', 'nombre_en');
     foreach ($fields as $f) {
         if (isset($_POST['cat_' . $f])) {
             update_term_meta($term_id, '_' . $f, sanitize_text_field($_POST['cat_' . $f]));
@@ -700,6 +728,7 @@ function motocar_get_category_data() {
     $precio_dia = get_term_meta($tid, '_precio_dia', true);
     wp_send_json_success(array(
         'nombre'                => html_entity_decode($term->name, ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+        'nombre_en'             => get_term_meta($tid, '_nombre_en',    true) ?: '',
         'descripcion'           => get_term_meta($tid, '_descripcion',    true) ?: '',
         'descripcion_en'        => get_term_meta($tid, '_descripcion_en', true) ?: '',
         'precio_dia'            => $precio_dia ? intval($precio_dia) : 0,
@@ -708,6 +737,7 @@ function motocar_get_category_data() {
         'pasajeros'             => get_term_meta($tid, '_pasajeros',   true) ?: '',
         'abs'                   => get_term_meta($tid, '_abs',         true) ?: '',
         'maletas'               => get_term_meta($tid, '_maletas',     true) ?: '',
+        'tipo'                  => get_term_meta($tid, '_tipo',        true) ?: 'carro',
         'imagenes'              => $imagenes,
         'fechas_no_disponibles' => $fechas_bloqueadas,
     ));
