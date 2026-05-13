@@ -942,7 +942,35 @@ function renderCategoryModal(catData, layout, lang) {
     ];
     var transMap = { 'Autom\u00e1tica': 'Automatic' };
     var activeSpecs = specDefs.filter(function(s) { return !!catData[s.key] && catData[s.key] !== 'N/A'; });
-    var specsBarHtml = activeSpecs.length
+
+    // Custom spec (set from WP admin)
+    var customSpecHtml = '';
+    var customVal   = (lang === 'en' && catData.custom_spec_value_en) ? catData.custom_spec_value_en : catData.custom_spec_value;
+    var customLabel = (lang === 'en' && catData.custom_spec_label_en) ? catData.custom_spec_label_en : catData.custom_spec_label;
+    if (customVal && customLabel) {
+        var iconLight = catData.custom_spec_icon      || '';
+        var iconDark  = catData.custom_spec_icon_dark || iconLight;
+        var isFaLight = iconLight.indexOf(' ') > 0 && (iconLight.indexOf('fas ') === 0 || iconLight.indexOf('fab ') === 0 || iconLight.indexOf('far ') === 0);
+        var isFaDark  = iconDark.indexOf(' ')  > 0 && (iconDark.indexOf('fas ')  === 0 || iconDark.indexOf('fab ')  === 0 || iconDark.indexOf('far ')  === 0);
+        var iconHtml = '';
+        if (iconLight) {
+            if (isFaLight) {
+                iconHtml = '<i class="' + escapeHtml(iconLight) + '"></i>';
+            } else {
+                // Image icon — light + dark src via data attr
+                iconHtml = '<img class="mc-catmodal__spec-img" src="' + escapeHtml(iconLight) + '"' +
+                    (iconDark !== iconLight ? ' data-src-dark="' + escapeHtml(iconDark) + '" data-src-light="' + escapeHtml(iconLight) + '"' : '') +
+                    ' alt="' + escapeHtml(customLabel) + '">';
+            }
+        }
+        customSpecHtml = '<div class="mc-catmodal__spec-item mc-catmodal__spec-item--custom">' +
+            '<span class="mc-catmodal__spec-label">' + escapeHtml(customLabel) + '</span>' +
+            iconHtml +
+            '<span class="mc-catmodal__spec-value">' + escapeHtml(customVal) + '</span>' +
+        '</div>';
+    }
+
+    var specsBarHtml = (activeSpecs.length || customSpecHtml)
         ? '<div class="mc-catmodal__specs-bar">' +
           activeSpecs.map(function(s) {
               var val = catData[s.key];
@@ -952,7 +980,7 @@ function renderCategoryModal(catData, layout, lang) {
                   '<i class="' + s.icon + '"></i>' +
                   '<span class="mc-catmodal__spec-value">' + escapeHtml(String(val)) + '</span>' +
               '</div>';
-          }).join('') + '</div>'
+          }).join('') + customSpecHtml + '</div>'
         : '';
 
     var descText = (lang === 'en' && catData.descripcion_en) ? catData.descripcion_en : catData.descripcion;
@@ -1291,6 +1319,10 @@ function updateCategoryCardPrices() {
     function setTheme(dark) {
         html.classList.toggle('dark-mode', dark);
         updateToggleIcon(dark);
+        // Update custom spec images in modal if open
+        document.querySelectorAll('.mc-catmodal__spec-img[data-src-dark]').forEach(function(img) {
+            img.src = dark ? img.getAttribute('data-src-dark') : img.getAttribute('data-src-light');
+        });
     }
 
     document.addEventListener('DOMContentLoaded', function() {

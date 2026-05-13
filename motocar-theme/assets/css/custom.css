@@ -2305,6 +2305,17 @@ ul {
     color: var(--mc-gray-700);
 }
 
+.mc-catmodal__spec-img {
+    width: 1.6rem;
+    height: 1.6rem;
+    object-fit: contain;
+    display: block;
+}
+
+html.dark-mode .mc-catmodal__spec-img:not([data-src-dark]) {
+    filter: invert(1) brightness(1.2);
+}
+
 .mc-catmodal__spec-value {
     font-family: var(--mc-font-topbar);
     font-size: 0.85rem;

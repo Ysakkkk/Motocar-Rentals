@@ -531,17 +531,24 @@ add_action('save_post_vehiculo', 'motocar_save_vehicle_meta');
 // TAXONOMY META: CATEGORÍA DE VEHÍCULO
 // ==========================================
 function motocar_categoria_edit_fields($term) {
-    $tid            = $term->term_id;
-    $precio_dia     = get_term_meta($tid, '_precio_dia',     true);
-    $descripcion    = get_term_meta($tid, '_descripcion',    true);
-    $descripcion_en = get_term_meta($tid, '_descripcion_en', true);
-    $motor          = get_term_meta($tid, '_motor',          true);
-    $transmision    = get_term_meta($tid, '_transmision',    true);
-    $pasajeros      = get_term_meta($tid, '_pasajeros',      true);
-    $abs            = get_term_meta($tid, '_abs',            true);
-    $maletas        = get_term_meta($tid, '_maletas',        true);
-    $tipo           = get_term_meta($tid, '_tipo',           true) ?: 'carro';
-    $nombre_en      = get_term_meta($tid, '_nombre_en',      true);
+    wp_enqueue_media();
+    $tid                   = $term->term_id;
+    $precio_dia            = get_term_meta($tid, '_precio_dia',            true);
+    $descripcion           = get_term_meta($tid, '_descripcion',           true);
+    $descripcion_en        = get_term_meta($tid, '_descripcion_en',        true);
+    $motor                 = get_term_meta($tid, '_motor',                 true);
+    $transmision           = get_term_meta($tid, '_transmision',           true);
+    $pasajeros             = get_term_meta($tid, '_pasajeros',             true);
+    $abs                   = get_term_meta($tid, '_abs',                   true);
+    $maletas               = get_term_meta($tid, '_maletas',               true);
+    $tipo                  = get_term_meta($tid, '_tipo',                  true) ?: 'carro';
+    $nombre_en             = get_term_meta($tid, '_nombre_en',             true);
+    $custom_spec_label     = get_term_meta($tid, '_custom_spec_label',     true);
+    $custom_spec_label_en  = get_term_meta($tid, '_custom_spec_label_en',  true);
+    $custom_spec_value     = get_term_meta($tid, '_custom_spec_value',     true);
+    $custom_spec_value_en  = get_term_meta($tid, '_custom_spec_value_en',  true);
+    $custom_spec_icon      = get_term_meta($tid, '_custom_spec_icon',      true);
+    $custom_spec_icon_dark = get_term_meta($tid, '_custom_spec_icon_dark', true);
     ?>
     <tr class="form-field">
         <th><label for="cat_precio_dia">💲 Precio por día (COP)</label></th>
@@ -601,12 +608,69 @@ function motocar_categoria_edit_fields($term) {
         <th><label for="cat_nombre_en">🇺🇸 Nombre en inglés</label></th>
         <td><input type="text" id="cat_nombre_en" name="cat_nombre_en" value="<?php echo esc_attr($nombre_en); ?>" placeholder="Ej: Compact SUV"></td>
     </tr>
+    <tr><td colspan="2"><hr style="border:none;border-top:1px solid #ddd;margin:12px 0;"></td></tr>
+    <tr class="form-field">
+        <th colspan="2"><strong>⭐ Especificación extra (opcional)</strong><br><small style="font-weight:normal;color:#666;">Aparece en la barra de specs del modal junto a Motor, ABS, etc.</small></th>
+    </tr>
+    <tr class="form-field">
+        <th><label for="cat_custom_spec_label">🏷️ Título (español)</label></th>
+        <td><input type="text" id="cat_custom_spec_label" name="cat_custom_spec_label" value="<?php echo esc_attr($custom_spec_label); ?>" placeholder="Ej: GPS, WiFi, A/C, Bluetooth..."></td>
+    </tr>
+    <tr class="form-field">
+        <th><label for="cat_custom_spec_label_en">🏷️ Title (English)</label></th>
+        <td><input type="text" id="cat_custom_spec_label_en" name="cat_custom_spec_label_en" value="<?php echo esc_attr($custom_spec_label_en); ?>" placeholder="Ej: GPS, WiFi, A/C, Bluetooth..."></td>
+    </tr>
+    <tr class="form-field">
+        <th><label for="cat_custom_spec_value">📄 Valor (español)</label></th>
+        <td><input type="text" id="cat_custom_spec_value" name="cat_custom_spec_value" value="<?php echo esc_attr($custom_spec_value); ?>" placeholder="Ej: Incluido, Sí, 4G..."></td>
+    </tr>
+    <tr class="form-field">
+        <th><label for="cat_custom_spec_value_en">📄 Value (English)</label></th>
+        <td><input type="text" id="cat_custom_spec_value_en" name="cat_custom_spec_value_en" value="<?php echo esc_attr($custom_spec_value_en); ?>" placeholder="Ej: Included, Yes, 4G..."></td>
+    </tr>
+    <tr class="form-field">
+        <th><label>🖼️ Ícono — Modo claro</label></th>
+        <td>
+            <input type="text" id="cat_custom_spec_icon" name="cat_custom_spec_icon" value="<?php echo esc_attr($custom_spec_icon); ?>" placeholder="URL de imagen o clase FA: fas fa-wifi">
+            <button type="button" class="button button-secondary mc-spec-upload-btn" data-target="cat_custom_spec_icon" style="margin-top:6px;">📁 Elegir imagen</button>
+            <?php if ($custom_spec_icon && !str_starts_with($custom_spec_icon, 'fas') && !str_starts_with($custom_spec_icon, 'fab')) : ?>
+                <br><img src="<?php echo esc_url($custom_spec_icon); ?>" style="height:40px;margin-top:6px;border-radius:4px;background:#f5f5f5;padding:4px;">
+            <?php endif; ?>
+            <p class="description">Pega la URL de un logo/imagen, o escribe una clase de Font Awesome (ej: <code>fas fa-wifi</code>).</p>
+        </td>
+    </tr>
+    <tr class="form-field">
+        <th><label>🌙 Ícono — Modo oscuro</label></th>
+        <td>
+            <input type="text" id="cat_custom_spec_icon_dark" name="cat_custom_spec_icon_dark" value="<?php echo esc_attr($custom_spec_icon_dark); ?>" placeholder="URL de imagen para modo oscuro (opcional)">
+            <button type="button" class="button button-secondary mc-spec-upload-btn" data-target="cat_custom_spec_icon_dark" style="margin-top:6px;">📁 Elegir imagen</button>
+            <?php if ($custom_spec_icon_dark && !str_starts_with($custom_spec_icon_dark, 'fas') && !str_starts_with($custom_spec_icon_dark, 'fab')) : ?>
+                <br><img src="<?php echo esc_url($custom_spec_icon_dark); ?>" style="height:40px;margin-top:6px;border-radius:4px;background:#333;padding:4px;">
+            <?php endif; ?>
+            <p class="description">Opcional. Si está vacío, usará el ícono del modo claro. Útil si el logo es oscuro/negro (sube la versión blanca aquí).</p>
+        </td>
+    </tr>
+    <script>
+    (function() {
+        document.querySelectorAll('.mc-spec-upload-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var targetId = this.getAttribute('data-target');
+                var frame = wp.media({ title: 'Seleccionar ícono', multiple: false, library: { type: 'image' } });
+                frame.on('select', function() {
+                    var att = frame.state().get('selection').first().toJSON();
+                    document.getElementById(targetId).value = att.url;
+                });
+                frame.open();
+            });
+        });
+    })();
+    </script>
     <?php
 }
 add_action('categoria_vehiculo_edit_form_fields', 'motocar_categoria_edit_fields', 10, 1);
 
 function motocar_save_categoria_meta($term_id) {
-    $fields = array('precio_dia', 'descripcion', 'descripcion_en', 'motor', 'transmision', 'pasajeros', 'abs', 'maletas', 'tipo', 'nombre_en');
+    $fields = array('precio_dia', 'descripcion', 'descripcion_en', 'motor', 'transmision', 'pasajeros', 'abs', 'maletas', 'tipo', 'nombre_en', 'custom_spec_label', 'custom_spec_label_en', 'custom_spec_value', 'custom_spec_value_en', 'custom_spec_icon', 'custom_spec_icon_dark');
     foreach ($fields as $f) {
         if (isset($_POST['cat_' . $f])) {
             update_term_meta($term_id, '_' . $f, sanitize_text_field($_POST['cat_' . $f]));
@@ -728,16 +792,22 @@ function motocar_get_category_data() {
     $precio_dia = get_term_meta($tid, '_precio_dia', true);
     wp_send_json_success(array(
         'nombre'                => html_entity_decode($term->name, ENT_QUOTES | ENT_HTML5, 'UTF-8'),
-        'nombre_en'             => get_term_meta($tid, '_nombre_en',    true) ?: '',
-        'descripcion'           => get_term_meta($tid, '_descripcion',    true) ?: '',
-        'descripcion_en'        => get_term_meta($tid, '_descripcion_en', true) ?: '',
+        'nombre_en'             => get_term_meta($tid, '_nombre_en',             true) ?: '',
+        'descripcion'           => get_term_meta($tid, '_descripcion',           true) ?: '',
+        'descripcion_en'        => get_term_meta($tid, '_descripcion_en',        true) ?: '',
         'precio_dia'            => $precio_dia ? intval($precio_dia) : 0,
-        'motor'                 => get_term_meta($tid, '_motor',       true) ?: '',
-        'transmision'           => get_term_meta($tid, '_transmision', true) ?: '',
-        'pasajeros'             => get_term_meta($tid, '_pasajeros',   true) ?: '',
-        'abs'                   => get_term_meta($tid, '_abs',         true) ?: '',
-        'maletas'               => get_term_meta($tid, '_maletas',     true) ?: '',
-        'tipo'                  => get_term_meta($tid, '_tipo',        true) ?: 'carro',
+        'motor'                 => get_term_meta($tid, '_motor',                 true) ?: '',
+        'transmision'           => get_term_meta($tid, '_transmision',           true) ?: '',
+        'pasajeros'             => get_term_meta($tid, '_pasajeros',             true) ?: '',
+        'abs'                   => get_term_meta($tid, '_abs',                   true) ?: '',
+        'maletas'               => get_term_meta($tid, '_maletas',               true) ?: '',
+        'tipo'                  => get_term_meta($tid, '_tipo',                  true) ?: 'carro',
+        'custom_spec_label'     => get_term_meta($tid, '_custom_spec_label',     true) ?: '',
+        'custom_spec_label_en'  => get_term_meta($tid, '_custom_spec_label_en',  true) ?: '',
+        'custom_spec_value'     => get_term_meta($tid, '_custom_spec_value',     true) ?: '',
+        'custom_spec_value_en'  => get_term_meta($tid, '_custom_spec_value_en',  true) ?: '',
+        'custom_spec_icon'      => get_term_meta($tid, '_custom_spec_icon',      true) ?: '',
+        'custom_spec_icon_dark' => get_term_meta($tid, '_custom_spec_icon_dark', true) ?: '',
         'imagenes'              => $imagenes,
         'fechas_no_disponibles' => $fechas_bloqueadas,
     ));
