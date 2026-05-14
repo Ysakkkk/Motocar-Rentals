@@ -1067,9 +1067,9 @@ function buildBookingPanel(catData, lang) {
                 '<div class="mc-catmodal__price-row"><span>' + (lang === 'en' ? 'Duration' : 'Duraci\u00f3n') + '</span><span>' + rentalDays + ' ' + daysLabel + '</span></div>' +
                 '<div class="mc-catmodal__price-divider"></div>' +
                 '<div class="mc-catmodal__price-row mc-catmodal__price-row--total"><span><i class="fas fa-money-bill-wave"></i> ' + (lang === 'en' ? 'Cash' : 'Efectivo') + '</span><span>$' + formatNumber(totalCash) + ' COP</span></div>' +
-                '<div class="mc-catmodal__price-row mc-catmodal__price-row--sub"><span></span><span class="mc-price-usd-note">~$' + totalCashUsd + ' USD <em>' + (lang === 'en' ? 'est. exchange rate' : 'seg\u00fan tasa de cambio') + '</em></span></div>' +
+                '<div class="mc-catmodal__price-row mc-catmodal__price-row--sub"><span></span><span class="mc-price-usd-note">~$' + totalCashUsd + ' USD <em>' + (lang === 'en' ? 'est. TIR' : 'Seg\u00fan TIR') + '</em></span></div>' +
                 '<div class="mc-catmodal__price-row mc-catmodal__price-row--total mc-catmodal__price-row--card"><span><i class="fas fa-credit-card"></i> ' + (lang === 'en' ? 'Card (IVA included)' : 'Tarjeta (IVA Incluido)') + '</span><span>$' + formatNumber(totalCard) + ' COP</span></div>' +
-                '<div class="mc-catmodal__price-row mc-catmodal__price-row--sub"><span><small>' + (lang === 'en' ? '+ additional charges may apply' : '+ pueden aplicar costos adicionales') + '</small></span><span class="mc-price-usd-note">~$' + totalCardUsd + ' USD <em>' + (lang === 'en' ? 'est. exchange rate' : 'seg\u00fan tasa de cambio') + '</em></span></div>' +
+                '<div class="mc-catmodal__price-row mc-catmodal__price-row--sub"><span><small>' + (lang === 'en' ? '* additional charges may apply' : '* pueden aplicar costos adicionales') + '</small></span><span class="mc-price-usd-note">~$' + totalCardUsd + ' USD <em>' + (lang === 'en' ? 'est. TIR' : 'Seg\u00fan TIR') + '</em></span></div>' +
                 '<p class="mc-catmodal__price-note">* ' + (lang === 'en' ? 'Estimated total. Final price confirmed at pickup.' : 'Total estimado. Precio final confirmado al momento de la entrega.') + '</p>' +
             '</div>';
     } else if (pricePerDay > 0) {
@@ -1078,7 +1078,7 @@ function buildBookingPanel(catData, lang) {
         priceHtml =
             '<div class="mc-catmodal__price-box">' +
                 '<div class="mc-catmodal__price-row mc-catmodal__price-row--total"><span>' + (lang === 'en' ? 'From' : 'Desde') + '</span><span>$' + formatNumber(pricePerDay) + ' ' + priceSuffix + '</span></div>' +
-                '<div class="mc-catmodal__price-row mc-catmodal__price-row--sub"><span></span><span class="mc-price-usd-note">~$' + priceUsdDay + ' USD/' + (lang === 'en' ? 'day' : 'd\u00eda') + ' <em>' + (lang === 'en' ? 'est. exchange rate' : 'seg\u00fan tasa de cambio') + '</em></span></div>' +
+                '<div class="mc-catmodal__price-row mc-catmodal__price-row--sub"><span></span><span class="mc-price-usd-note">~$' + priceUsdDay + ' USD/' + (lang === 'en' ? 'day' : 'd\u00eda') + ' <em>' + (lang === 'en' ? 'est. TIR' : 'Seg\u00fan TIR') + '</em></span></div>' +
                 '<p class="mc-catmodal__price-note">' + (lang === 'en' ? 'Select dates to see estimated total.' : 'Selecciona fechas para ver el precio estimado.') + '</p>' +
             '</div>';
     }

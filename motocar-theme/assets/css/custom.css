@@ -2544,10 +2544,58 @@ html.dark-mode .mc-catmodal__spec-img:not([data-src-dark]) {
     }
 }
 
-.mc-whatsapp-float {
+.mc-whatsapp-wrap {
     position: fixed;
     bottom: 25px;
     right: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    z-index: 999;
+}
+
+.mc-whatsapp-cta {
+    background: #ffffff;
+    color: #128C7E;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 5px 13px;
+    border-radius: 20px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+    white-space: nowrap;
+    animation: mcWaCta 0.5s ease 1.8s both;
+    position: relative;
+}
+
+.mc-whatsapp-cta::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #ffffff;
+    border-bottom: none;
+}
+
+html.dark-mode .mc-whatsapp-cta {
+    background: #1a2e1a;
+    color: #25D366;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+}
+
+html.dark-mode .mc-whatsapp-cta::after {
+    border-top-color: #1a2e1a;
+}
+
+@keyframes mcWaCta {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.mc-whatsapp-float {
     width: 60px;
     height: 60px;
     background: var(--mc-whatsapp);
@@ -2558,7 +2606,6 @@ html.dark-mode .mc-catmodal__spec-img:not([data-src-dark]) {
     justify-content: center;
     font-size: 1.8rem;
     box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
-    z-index: 999;
     transition: var(--mc-transition);
     animation: whatsappPulse 2s infinite;
 }

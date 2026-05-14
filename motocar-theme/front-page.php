@@ -1125,9 +1125,12 @@
 </div>
 
 <!-- WhatsApp Float Button -->
-<a href="https://wa.me/573202161156?text=Hola%20MotoCar%20Rentals!%20Quiero%20información%20sobre%20alquiler%20de%20vehículos" class="mc-whatsapp-float" target="_blank" aria-label="WhatsApp">
-    <i class="fab fa-whatsapp"></i>
-</a>
+<div class="mc-whatsapp-wrap">
+    <span class="mc-whatsapp-cta">¿Tienes dudas? ¡Contáctanos!</span>
+    <a href="https://wa.me/573202161156?text=Hola%20MotoCar%20Rentals!%20Quiero%20información%20sobre%20alquiler%20de%20vehículos" class="mc-whatsapp-float" target="_blank" aria-label="WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+</div>
 
 <?php wp_footer(); ?>
 </body>
