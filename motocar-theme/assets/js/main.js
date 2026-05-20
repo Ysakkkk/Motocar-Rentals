@@ -529,13 +529,10 @@ document.addEventListener('DOMContentLoaded', function() {
         var pickupMinHour = getCurrentMinimumHour(pickupDateValue);
         syncTimeSelect(pickupTimeEl, pickupMinHour);
 
-        var returnMinHour = getCurrentMinimumHour(returnDateValue);
-        var pickupDate = parseFilterDate(pickupDateValue);
-        var returnDate = parseFilterDate(returnDateValue);
-        if (pickupDate && returnDate && isSameDay(pickupDate, returnDate) && pickupTimeEl && pickupTimeEl.value) {
-            returnMinHour = Math.max(returnMinHour, parseInt(pickupTimeEl.value.split(':')[0], 10));
+        // Return time is always locked to pickup time
+        if (returnTimeEl && pickupTimeEl) {
+            returnTimeEl.value = pickupTimeEl.value;
         }
-        syncTimeSelect(returnTimeEl, returnMinHour);
     }
 
     if (typeof flatpickr !== 'undefined') {
@@ -566,13 +563,11 @@ document.addEventListener('DOMContentLoaded', function() {
         window._mcFlatpickr = { pickup: fpPickup, return: fpReturn };
     }
 
-    ['filterPickupTime', 'filterReturnTime'].forEach(function(id) {
-        var element = document.getElementById(id);
-        if (element) {
-            element.addEventListener('change', syncFilterTimes);
-            element.addEventListener('change', updateCategoryCardPrices);
-        }
-    });
+    var pickupTimeEl = document.getElementById('filterPickupTime');
+    if (pickupTimeEl) {
+        pickupTimeEl.addEventListener('change', syncFilterTimes);
+        pickupTimeEl.addEventListener('change', updateCategoryCardPrices);
+    }
 
     syncFilterTimes();
 
@@ -602,8 +597,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             var pickupTimeEl = document.getElementById('filterPickupTime');
             var returnTimeEl = document.getElementById('filterReturnTime');
-            if (pickupTimeEl) pickupTimeEl.value = '10:00';
-            if (returnTimeEl) returnTimeEl.value = '10:00';
+            if (pickupTimeEl) { pickupTimeEl.value = '10:00'; syncFilterTimes(); }
 
             ['filterPickupLocation', 'filterReturnLocation'].forEach(function(id) {
                 var select = document.getElementById(id);

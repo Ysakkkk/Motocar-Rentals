@@ -3,7 +3,131 @@
 <head>
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="MotoCar Rentals - Alquila la emoción, vive la experiencia. Alquiler de carros y motos en Antioquia, Colombia.">
+    <meta name="description" content="Renta y alquiler de carros y motos en Rionegro, Medellín y Aeropuerto José María Córdova. Sedan, SUV, Hatchback y motocicletas disponibles 24/7. Entrega gratis en el aeropuerto. Desde $80.000 COP/día.">
+    <link rel="canonical" href="<?php echo esc_url(home_url('/')); ?>">
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_CO">
+    <meta property="og:title" content="MotoCar Rentals – Renta de Carros y Motos | Aeropuerto JMC · Rionegro · Medellín">
+    <meta property="og:description" content="Alquiler de carros y motos 24/7 en Rionegro, Medellín y Aeropuerto JMC. Sedan, SUV 7 puestos, Hatchback y motos. Entrega gratis en el aeropuerto.">
+    <meta property="og:url" content="<?php echo esc_url(home_url('/')); ?>">
+    <meta property="og:image" content="<?php echo esc_url(get_template_directory_uri()); ?>/assets/img/logo.png">
+    <meta property="og:site_name" content="MotoCar Rentals">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MotoCar Rentals – Renta de Carros y Motos | Aeropuerto JMC">
+    <meta name="twitter:description" content="Alquiler de carros y motos 24/7 en Rionegro, Medellín y Aeropuerto JMC. Entrega gratis en el aeropuerto.">
+    <meta name="twitter:image" content="<?php echo esc_url(get_template_directory_uri()); ?>/assets/img/logo.png">
+
+    <!-- Structured Data: AutoRental + LocalBusiness -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": ["AutoRental", "LocalBusiness"],
+      "name": "MotoCar Rentals",
+      "description": "Alquiler y renta de carros y motos en Rionegro, Medellín y Aeropuerto Internacional José María Córdova. Servicio 24/7 con entrega a domicilio y en el aeropuerto.",
+      "url": "<?php echo esc_url(home_url('/')); ?>",
+      "telephone": "+573202161156",
+      "email": "motocarrentals@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Mall Terranova",
+        "addressLocality": "Rionegro",
+        "addressRegion": "Antioquia",
+        "addressCountry": "CO"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 6.1755508,
+        "longitude": -75.4348712
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+        "opens": "00:00",
+        "closes": "23:59"
+      },
+      "areaServed": [
+        {"@type": "City", "name": "Rionegro"},
+        {"@type": "City", "name": "Medellín"},
+        {"@type": "AdministrativeArea", "name": "Antioquia"}
+      ],
+      "priceRange": "$$",
+      "currenciesAccepted": "COP",
+      "paymentAccepted": "Tarjeta de crédito",
+      "image": "<?php echo esc_url(get_template_directory_uri()); ?>/assets/img/logo.png",
+      "logo": "<?php echo esc_url(get_template_directory_uri()); ?>/assets/img/logo.png",
+      "foundingDate": "2023",
+      "sameAs": [
+        "https://www.facebook.com/p/MotoCar-Rentals-61558707917054/",
+        "https://www.instagram.com/motocar_rentals/",
+        "https://www.tiktok.com/@motocar.rentals"
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Flota de Vehículos en Alquiler",
+        "itemListElement": [
+          {"@type": "Offer", "name": "Renta de Motocicleta Manual – Yamaha FZ o similar", "priceCurrency": "COP", "price": "80000"},
+          {"@type": "Offer", "name": "Renta de Moto Automática – Yamaha Aerox o similar", "priceCurrency": "COP", "price": "80000"},
+          {"@type": "Offer", "name": "Renta de Hatchback – Volkswagen Gol o similar", "priceCurrency": "COP", "price": "150000"},
+          {"@type": "Offer", "name": "Renta de Sedan – Renault Logan o similar", "priceCurrency": "COP", "price": "200000"},
+          {"@type": "Offer", "name": "Renta de SUV Compacto – Kia Seltos o similar", "priceCurrency": "COP", "price": "250000"},
+          {"@type": "Offer", "name": "Renta de SUV 7 Puestos – Toyota Fortuner o similar", "priceCurrency": "COP", "price": "350000"}
+        ]
+      }
+    }
+    </script>
+
+    <!-- Structured Data: FAQPage -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Qué es necesario para alquilar un vehículo o motocicleta en MotoCar Rentals?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Se requiere licencia de conducir vigente, tarjeta de crédito Visa/Mastercard con cupo mínimo de $1.500.000 COP, y cédula o pasaporte (extranjeros). Edad mínima: 20 años."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿Tienen servicio de entrega en el Aeropuerto Internacional José María Córdova de Rionegro?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Sí. MotoCar Rentals ofrece entrega y recogida del vehículo en el Aeropuerto JMC en Rionegro totalmente gratis. Para otras direcciones aplican tarifas según la distancia."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cuáles son los precios del alquiler de carros en Rionegro?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Hatchback (Volkswagen Gol) desde $150.000 COP/día, Sedan (Renault Logan) desde $200.000 COP/día, SUV Compacto (Kia Seltos) desde $250.000 COP/día, SUV 7 puestos (Toyota Fortuner) desde $350.000 COP/día. Incluye kilometraje ilimitado y asistencia 24/7."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cuál es el precio del alquiler de motos en Rionegro y Medellín?",
+          "acceptedAnswer": {"@type": "Answer", "text": "El alquiler de motos inicia desde $80.000 COP/día. Incluye dos cascos certificados y chalecos reflectivos. Disponibles motos manuales (Yamaha FZ) y automáticas (Yamaha Aerox)."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿Es posible alquilar un vehículo con licencia de conducir extranjera en Colombia?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Sí. Los extranjeros pueden alquilar presentando pasaporte vigente y licencia extranjera válida. Los colombianos residentes en el exterior deben presentar licencia colombiana vigente o tramitar la homologación."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cómo se hace la reserva para alquilar un auto o moto en MotoCar Rentals?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Puedes reservar por WhatsApp al +57 320 216 1156, a través de la página web motocarrentals.com.co, o por Instagram y Facebook. Se recomienda reservar con anticipación."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué incluye el precio del alquiler de vehículos?",
+          "acceptedAnswer": {"@type": "Answer", "text": "El precio incluye kilometraje ilimitado, asistencia en carretera las 24 horas los 7 días de la semana y cobertura básica obligatoria. El vehículo se entrega con tanque lleno y debe devolverse igual."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿Desde qué edad se puede alquilar un carro o moto en MotoCar Rentals?",
+          "acceptedAnswer": {"@type": "Answer", "text": "El servicio de alquiler está disponible para conductores de 20 a 75 años de edad."}
+        }
+      ]
+    }
+    </script>
+
     <!-- Dark mode: aplicar clase antes de que cargue el CSS para evitar FOUC -->
     <script>
     (function(){
@@ -194,9 +318,9 @@
                                 <i class="fas fa-calendar-alt"></i>
                                 <input type="text" id="filterReturn" placeholder="Fecha de devolución" data-i18n-placeholder="filter_return" readonly>
                             </div>
-                            <div class="mc-filter__time-field">
+                            <div class="mc-filter__time-field mc-filter__time-field--locked">
                                 <i class="fas fa-clock"></i>
-                                <select id="filterReturnTime">
+                                <select id="filterReturnTime" disabled>
                                     <option value="" data-i18n="filter_return_time">Hora devolución</option>
                                     <?php for ($hour = 0; $hour < 24; $hour++) : ?>
                                         <?php $time_value = sprintf('%02d:00', $hour); ?>
@@ -548,7 +672,7 @@
                 <div class="mc-lugares__slide active">
                     <div class="mc-lugares__card">
                         <div class="mc-lugares__image" style="grid-column: 1 / -1;">
-                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/santa-fe.jpg" alt="Santa Fé de Antioquia">
+                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/santa-fe.webp" alt="Santa Fé de Antioquia">
                         </div>
                         <div class="mc-lugares__info">
                             <h3 class="mc-lugares__name">Santa Fé de<br>Antioquia</h3>
@@ -561,7 +685,7 @@
                 <div class="mc-lugares__slide">
                     <div class="mc-lugares__card">
                         <div class="mc-lugares__image" style="grid-column: 1 / -1;">
-                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/guatape.jpg" alt="Guatapé">
+                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/guatape.webp" alt="Guatapé">
                         </div>
                         <div class="mc-lugares__info">
                             <h3 class="mc-lugares__name">Guatapé</h3>
@@ -574,7 +698,7 @@
                 <div class="mc-lugares__slide">
                     <div class="mc-lugares__card">
                         <div class="mc-lugares__image" style="grid-column: 1 / -1;">
-                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/jardin.jpg" alt="Jardín">
+                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/jardin.webp" alt="Jardín">
                         </div>
                         <div class="mc-lugares__info">
                             <h3 class="mc-lugares__name">Jardín</h3>
@@ -587,7 +711,7 @@
                 <div class="mc-lugares__slide">
                     <div class="mc-lugares__card">
                         <div class="mc-lugares__image" style="grid-column: 1 / -1;">
-                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/jerico.jpg" alt="Jericó">
+                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/jerico.webp" alt="Jericó">
                         </div>
                         <div class="mc-lugares__info">
                             <h3 class="mc-lugares__name">Jericó</h3>
