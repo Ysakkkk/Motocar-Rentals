@@ -529,10 +529,13 @@ document.addEventListener('DOMContentLoaded', function() {
         var pickupMinHour = getCurrentMinimumHour(pickupDateValue);
         syncTimeSelect(pickupTimeEl, pickupMinHour);
 
-        // Return time is always locked to pickup time
-        if (returnTimeEl && pickupTimeEl) {
-            returnTimeEl.value = pickupTimeEl.value;
+        var returnMinHour = getCurrentMinimumHour(returnDateValue);
+        var pickupDate = parseFilterDate(pickupDateValue);
+        var returnDate = parseFilterDate(returnDateValue);
+        if (pickupDate && returnDate && isSameDay(pickupDate, returnDate) && pickupTimeEl && pickupTimeEl.value) {
+            returnMinHour = Math.max(returnMinHour, parseInt(pickupTimeEl.value.split(':')[0], 10));
         }
+        syncTimeSelect(returnTimeEl, returnMinHour);
     }
 
     if (typeof flatpickr !== 'undefined') {
@@ -563,13 +566,34 @@ document.addEventListener('DOMContentLoaded', function() {
         window._mcFlatpickr = { pickup: fpPickup, return: fpReturn };
     }
 
-    var pickupTimeEl = document.getElementById('filterPickupTime');
-    if (pickupTimeEl) {
-        pickupTimeEl.addEventListener('change', syncFilterTimes);
-        pickupTimeEl.addEventListener('change', updateCategoryCardPrices);
-    }
+    ['filterPickupTime', 'filterReturnTime'].forEach(function(id) {
+        var element = document.getElementById(id);
+        if (element) {
+            element.addEventListener('change', syncFilterTimes);
+            element.addEventListener('change', updateCategoryCardPrices);
+        }
+    });
 
     syncFilterTimes();
+
+    // Show/hide "Otro" text input when location select changes
+    [
+        { selectId: 'filterPickupLocation', wrapId: 'filterPickupLocationOtherWrap' },
+        { selectId: 'filterReturnLocation', wrapId: 'filterReturnLocationOtherWrap' }
+    ].forEach(function(pair) {
+        var select = document.getElementById(pair.selectId);
+        var wrap   = document.getElementById(pair.wrapId);
+        if (!select || !wrap) return;
+        select.addEventListener('change', function() {
+            if (this.value === 'other') {
+                wrap.hidden = false;
+                wrap.querySelector('input').focus();
+            } else {
+                wrap.hidden = true;
+                wrap.querySelector('input').value = '';
+            }
+        });
+    });
 
     // Reset all visible filters to their default state
     var filterResetBtn = document.getElementById('filterReset');
@@ -597,7 +621,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             var pickupTimeEl = document.getElementById('filterPickupTime');
             var returnTimeEl = document.getElementById('filterReturnTime');
-            if (pickupTimeEl) { pickupTimeEl.value = '10:00'; syncFilterTimes(); }
+            if (pickupTimeEl) pickupTimeEl.value = '10:00';
+            if (returnTimeEl) returnTimeEl.value = '10:00';
 
             ['filterPickupLocation', 'filterReturnLocation'].forEach(function(id) {
                 var select = document.getElementById(id);
@@ -606,6 +631,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     select.dispatchEvent(new Event('change'));
                 }
             });
+
+            var pickupOtherInput = document.getElementById('filterPickupLocationOther');
+            var returnOtherInput = document.getElementById('filterReturnLocationOther');
+            if (pickupOtherInput) pickupOtherInput.value = '';
+            if (returnOtherInput) returnOtherInput.value = '';
 
             syncFilterTimes();
             updateCategoryCardPrices();
@@ -729,25 +759,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
 /**
  * Calculate rental days between two DD/MM/YYYY date strings.
- * Takes pickup/return times into account: if return time < pickup time,
- * an extra day is charged (same logic as most rental companies).
+ * A "day" is always a full 24-hour period from pickup datetime.
+ * Any extra hours beyond a complete day round UP to the next full day.
+ * Examples: 22h → 1 day, 24h → 1 day, 25h → 2 days, 47h → 2 days, 49h → 3 days.
  */
 function calcRentalDays(pickupDate, returnDate, pickupTime, returnTime) {
     if (!pickupDate || !returnDate) return 0;
     var p = pickupDate.split('/');
     var r = returnDate.split('/');
     if (p.length !== 3 || r.length !== 3) return 0;
-    var pickup = new Date(parseInt(p[2], 10), parseInt(p[1], 10) - 1, parseInt(p[0], 10));
-    var ret    = new Date(parseInt(r[2], 10), parseInt(r[1], 10) - 1, parseInt(r[0], 10));
-    var diffDays = Math.round((ret.getTime() - pickup.getTime()) / (1000 * 60 * 60 * 24));
-    if (diffDays <= 0) return 0;
-    // If rental is exactly 1 day and return time is before pickup time, charge an extra day
-    if (diffDays === 1 && pickupTime && returnTime) {
-        var ph = parseInt(pickupTime.split(':')[0], 10);
-        var rh = parseInt(returnTime.split(':')[0], 10);
-        if (rh < ph) diffDays += 1;
-    }
-    return diffDays;
+    var ph = (pickupTime && pickupTime.split(':').length === 2) ? parseInt(pickupTime.split(':')[0], 10) : 0;
+    var rh = (returnTime && returnTime.split(':').length === 2) ? parseInt(returnTime.split(':')[0], 10) : 0;
+    var pickup = new Date(parseInt(p[2], 10), parseInt(p[1], 10) - 1, parseInt(p[0], 10), ph, 0, 0);
+    var ret    = new Date(parseInt(r[2], 10), parseInt(r[1], 10) - 1, parseInt(r[0], 10), rh, 0, 0);
+    var diffMs = ret.getTime() - pickup.getTime();
+    if (diffMs <= 0) return 0;
+    return Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 }
 
 /** Format a number with dots as thousands separator (Colombian style: 150.000) */

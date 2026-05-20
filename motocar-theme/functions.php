@@ -954,24 +954,29 @@ function motocar_quote_notify() {
         wp_send_json_error('invalid');
     }
 
-    $cat     = sanitize_text_field($d['categoria']  ?? 'N/A');
-    $pDate   = sanitize_text_field($d['pickupDate'] ?? '');
-    $pTime   = sanitize_text_field($d['pickupTime'] ?? '');
-    $rDate   = sanitize_text_field($d['returnDate'] ?? '');
-    $rTime   = sanitize_text_field($d['returnTime'] ?? '');
-    $pLoc    = sanitize_text_field($d['pickupLoc']  ?? '');
-    $rLoc    = sanitize_text_field($d['returnLoc']  ?? '');
-    $days    = intval($d['rentalDays']  ?? 0);
-    $perDay  = intval($d['pricePerDay'] ?? 0);
-    $discPct = intval($d['discPct']     ?? 0);
-    $cash    = intval($d['totalCash']   ?? 0);
-    $card    = intval($d['totalCard']   ?? 0);
+    // JS sends { clientName, waMsg, waLink, data: { categoria, pickupDate, ... } }
+    $client  = sanitize_text_field($d['clientName'] ?? '');
+    $inner   = is_array($d['data'] ?? null) ? $d['data'] : $d;
+
+    $cat     = sanitize_text_field($inner['categoria']  ?? 'N/A');
+    $pDate   = sanitize_text_field($inner['pickupDate'] ?? '');
+    $pTime   = sanitize_text_field($inner['pickupTime'] ?? '');
+    $rDate   = sanitize_text_field($inner['returnDate'] ?? '');
+    $rTime   = sanitize_text_field($inner['returnTime'] ?? '');
+    $pLoc    = sanitize_text_field($inner['pickupLoc']  ?? '');
+    $rLoc    = sanitize_text_field($inner['returnLoc']  ?? '');
+    $days    = intval($inner['rentalDays']  ?? 0);
+    $perDay  = intval($inner['pricePerDay'] ?? 0);
+    $discPct = intval($inner['discPct']     ?? 0);
+    $cash    = intval($inner['totalCash']   ?? 0);
+    $card    = intval($inner['totalCard']   ?? 0);
 
     $fecha_solicitud = date_i18n('d/m/Y H:i:s', current_time('timestamp'));
 
     $body  = "Nueva solicitud de cotizacion desde motocarrentals.com.co\n";
-    $body .= "Fecha de solicitud: {$fecha_solicitud}\n\n";
-    $body .= "=== DETALLES DE LA RESERVA ===\n";
+    $body .= "Fecha de solicitud: {$fecha_solicitud}\n";
+    if ($client) $body .= "Cliente: {$client}\n";
+    $body .= "\n=== DETALLES DE LA RESERVA ===\n";
     $body .= "Categoria: {$cat}\n";
     if ($pDate) $body .= "Recogida:    {$pDate}" . ($pTime ? " - {$pTime}" : '') . "\n";
     if ($rDate) $body .= "Devolucion:  {$rDate}" . ($rTime ? " - {$rTime}" : '') . "\n";

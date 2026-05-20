@@ -318,9 +318,9 @@
                                 <i class="fas fa-calendar-alt"></i>
                                 <input type="text" id="filterReturn" placeholder="Fecha de devolución" data-i18n-placeholder="filter_return" readonly>
                             </div>
-                            <div class="mc-filter__time-field mc-filter__time-field--locked">
+                            <div class="mc-filter__time-field">
                                 <i class="fas fa-clock"></i>
-                                <select id="filterReturnTime" disabled>
+                                <select id="filterReturnTime">
                                     <option value="" data-i18n="filter_return_time">Hora devolución</option>
                                     <?php for ($hour = 0; $hour < 24; $hour++) : ?>
                                         <?php $time_value = sprintf('%02d:00', $hour); ?>
