@@ -751,6 +751,50 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // ==========================================
+    // AUTO-OPEN CATEGORY MODAL FROM URL ?cat=slug
+    // Usado por search.php y taxonomy-categoria_vehiculo.php
+    // ==========================================
+    (function() {
+        var params = new URLSearchParams(window.location.search);
+        var catSlug = params.get('cat');
+        if (!catSlug) return;
+
+        // Scroll a la sección de vehículos primero
+        var section = document.getElementById('vehiculos');
+        if (section) {
+            setTimeout(function() {
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 300);
+        }
+
+        // Esperar a que los cards estén renderizados y abrir el modal
+        var attempts = 0;
+        var maxAttempts = 20;
+        var interval = setInterval(function() {
+            attempts++;
+            var card = document.querySelector('.mc-catcard[data-category="' + catSlug + '"]');
+            if (card) {
+                clearInterval(interval);
+                // Pequeño delay adicional para que el scroll no compita con el modal
+                setTimeout(function() {
+                    // Obtener el nombre display del card
+                    var titleEl = card.querySelector('.mc-catcard__title');
+                    var catName = titleEl ? titleEl.textContent.trim() : catSlug;
+                    openCategoryModal(catSlug, catName);
+                }, 600);
+            } else if (attempts >= maxAttempts) {
+                clearInterval(interval);
+            }
+        }, 150);
+
+        // Limpiar el parámetro de la URL sin recargar la página
+        try {
+            var cleanUrl = window.location.pathname + window.location.hash;
+            window.history.replaceState(null, '', cleanUrl);
+        } catch(e) {}
+    })();
+
 });
 
 // ==========================================
